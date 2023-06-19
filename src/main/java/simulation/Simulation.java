@@ -119,7 +119,7 @@ public class Simulation {
         long nvg;
 
         GraphicsContext context = new GraphicsContext (m_window);
-        while (!glfwWindowShouldClose (m_window)) {
+        while (!glfwWindowShouldClose(m_window)) {
             // calculate delta time
             tick = System.currentTimeMillis();
             elapsed = tick - lastTick;

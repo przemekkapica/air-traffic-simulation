@@ -1,6 +1,6 @@
 import jade.wrapper.StaleProxyException;
 import simulation.Simulation;
-import util.ScenarioRunner;
+import util.ScenarioManager;
 import util.ScenarioEngine;
 
 import java.io.FileNotFoundException;
@@ -25,7 +25,7 @@ public class AirportManagementSimulation {
 
     private static void loadSimulation () {
         Simulation.restartScene ();
-        ScenarioRunner.RunScenario0();
+        ScenarioManager.RunScenario0();
 //        ScenarioRunner.RunScenario1(); //scenario 1 overview of messaging used for simulating movement
 //        ScenarioRunner.RunScenario2(); //scenario 2 showcase negotiation between agents regarding speed
 //        ScenarioRunner.RunScenario3(); // scenario 3 and 4. Comparison of pathfinding algorithm for cost and distance

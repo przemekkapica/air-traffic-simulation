@@ -15,10 +15,10 @@ import static org.lwjgl.nanovg.NanoVGGL3.*;
 import static org.lwjgl.opengl.GL33.*;
 
 public class GraphicsContext {
-    private final long m_window;
-    private final long m_nvg;
-    private final IntBuffer m_bufferWidth;
-    private final IntBuffer m_bufferHeight;
+    private final long window;
+    private final long nvg;
+    private final IntBuffer bufferWidth;
+    private final IntBuffer bufferHeight;
 
     public static NVGColor colorFromRgb(int r, int g, int b) {
         NVGColor color = NVGColor.create();
@@ -49,20 +49,20 @@ public class GraphicsContext {
         fontBuffer.put((byte) 0);
         fontBuffer.flip();
 
-        int font = nvgCreateFontMem(m_nvg, name, fontBuffer, 0);
+        int font = nvgCreateFontMem(nvg, name, fontBuffer, 0);
         if (font == -1) {
             throw new RuntimeException(String.format("failed to add font %s%n", name));
         }
     }
 
     public GraphicsContext(long window) {
-        m_window = window;
+        this.window = window;
 
         // allocate buffers for window width and height
-        m_bufferWidth = BufferUtils.createIntBuffer(1);
-        m_bufferHeight = BufferUtils.createIntBuffer(1);
+        bufferWidth = BufferUtils.createIntBuffer(1);
+        bufferHeight = BufferUtils.createIntBuffer(1);
 
-        m_nvg = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
+        nvg = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
 
         try {
             loadFont("font", "/font.otf");
@@ -70,13 +70,13 @@ public class GraphicsContext {
             e.printStackTrace();
         }
 
-        nvgFontFace(m_nvg, "font");
+        nvgFontFace(nvg, "font");
     }
 
     // private for this package
     void startFrame() {
-        glfwGetWindowSize(m_window, m_bufferWidth, m_bufferHeight);
-        glViewport(0, 0, m_bufferWidth.get(0), m_bufferHeight.get(0));
+        glfwGetWindowSize(window, bufferWidth, bufferHeight);
+        glViewport(0, 0, bufferWidth.get(0), bufferHeight.get(0));
 
         // clear the viewport
         glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
@@ -84,20 +84,20 @@ public class GraphicsContext {
     }
 
     long nvgBegin() {
-        nvgBeginFrame(m_nvg, m_bufferWidth.get(0), m_bufferHeight.get(0), 1);
-        return m_nvg;
+        nvgBeginFrame(nvg, bufferWidth.get(0), bufferHeight.get(0), 1);
+        return nvg;
     }
 
     void nvgEnd() {
-        nvgEndFrame(m_nvg);
+        nvgEndFrame(nvg);
     }
 
     void endFrame() {
-        glfwSwapBuffers(m_window);
+        glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
     void terminate() {
-        nvgDelete(m_nvg);
+        nvgDelete(nvg);
     }
 }

@@ -18,7 +18,7 @@ public class AirwayIntersection extends AirwayFragment implements IPositionedObj
     public float getLength() {
         return 10.0f;
     }
-    private static final NVGColor COlOR = GraphicsContext.colorFromRgb(255, 0, 0);
+    private static final NVGColor COlOR = GraphicsContext.colorFromRgb(19, 112, 145);
 
     private final Set<AirwaySegment> m_outbound;
     private final Set<AirwaySegment> m_inbound;
@@ -73,11 +73,6 @@ public class AirwayIntersection extends AirwayFragment implements IPositionedObj
 
         m_outbound = new HashSet<>();
         m_inbound = new HashSet<>();
-    }
-
-    @Override
-    public void setPosition(Vector2f position) {
-        m_position = position;
     }
 
     @Override

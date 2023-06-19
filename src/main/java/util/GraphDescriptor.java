@@ -20,7 +20,6 @@ public class GraphDescriptor {
 
             Pair<String, String> parsed = SegmentParser.parse(s);
 
-
             if (!plan.containsKey(INTERSECTION_PREFIX + parsed.getValue0()))
                 plan.put(INTERSECTION_PREFIX + parsed.getValue0(), new ArrayList<>() {});
 

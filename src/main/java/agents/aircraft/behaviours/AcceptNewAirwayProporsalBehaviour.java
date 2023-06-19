@@ -45,7 +45,7 @@ public class AcceptNewAirwayProporsalBehaviour extends CyclicBehaviour {
             myAgent.send(disqualifyRoute);
 
             aircraft.setSpeed(0);
-            aircraft.setColor(255,0,0);
+            aircraft.setColor(9,143,53);
             AirwayParams responseParams = new AirwayParams( aircraft.getMaxSpeed(), aircraft.getPreviousIntersection().getName(), destination, priority);
             ACLMessage response = new ACLMessage(CONFIRM);
 

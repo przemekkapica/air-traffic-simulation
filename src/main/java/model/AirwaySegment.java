@@ -8,7 +8,7 @@ import simulation.IRenderableObject;
 import static org.lwjgl.nanovg.NanoVG.*;
 
 public class AirwaySegment extends AirwayFragment implements IRenderableObject {
-    private static final NVGColor COlOR_WORKING = GraphicsContext.colorFromRgb(255, 128, 0);
+    private static final NVGColor COlOR_WORKING = GraphicsContext.colorFromRgb(127, 195, 219);
     private static final NVGColor COLOR_BROKEN = GraphicsContext.colorFromRgb(70, 70, 70);
 
     private final AirwayIntersection m_startIntersection;
