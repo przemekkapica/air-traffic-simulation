@@ -10,31 +10,31 @@ public class PlannerGraph {
         private boolean m_enabled;
         private final PlannerGraphNode m_endNode;
 
-        public float getDistance () {
+        public float getDistance() {
             return m_distance;
         }
 
-        public PlannerGraphNode getNode () {
+        public PlannerGraphNode getNode() {
             return m_endNode;
         }
 
-        public float getCost () {
+        public float getCost() {
             return m_cost;
         }
 
-        public float getLoad () {
+        public float getLoad() {
             return m_load;
         }
 
-        public boolean isEnabled () {
+        public boolean isEnabled() {
             return m_enabled;
         }
 
-        public void setLoad (float load) {
+        public void setLoad(float load) {
             m_load = load;
         }
 
-        public void setCost (float cost) {
+        public void setCost(float cost) {
             m_cost = cost;
         }
 

@@ -10,7 +10,7 @@ import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
-import planner.CentralizedPlanner;
+import planner.AirwaysManager;
 import util.GraphDescriptor;
 
 import java.util.ArrayList;
@@ -37,8 +37,8 @@ public class AirwaysAdministratorAgent extends Agent {
         }
 
         // register self as planner
-        DFAgentDescription dfDesc = new DFAgentDescription ();
-        dfDesc.setName (getAID ());
+        DFAgentDescription dfDesc = new DFAgentDescription();
+        dfDesc.setName(getAID());
 
         ServiceDescription sd = new ServiceDescription ();
         sd.setName (Constants.SERVICE_PLANNER);
@@ -51,8 +51,8 @@ public class AirwaysAdministratorAgent extends Agent {
         } catch (FIPAException exception) {
             exception.printStackTrace ();
         }
-        Map<String, List<CentralizedPlanner.RouteDescription>> graphDescription = GraphDescriptor.describeAirway(segments, costs);
-        CentralizedPlanner planner = new CentralizedPlanner(graphDescription);
+        Map<String, List<AirwaysManager.RouteDescription>> graphDescription = GraphDescriptor.describeAirway(segments, costs);
+        AirwaysManager planner = new AirwaysManager(graphDescription);
         addBehaviour(HandleMalfunctionBehaviour.create(planner));
         addBehaviour(ProposeNewAirwayBehaviour.create(planner));
         addBehaviour(AcceptAirwayBehaviour.create(planner));

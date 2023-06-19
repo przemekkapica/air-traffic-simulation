@@ -5,41 +5,41 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SimulationScene {
-    private final Map<String, SimulationObject> m_objects;
+    private final Map<String, SimulationObject> simulationObjects;
 
-    SimulationScene () {
-        m_objects = new LinkedHashMap<>();
+    SimulationScene() {
+        simulationObjects = new LinkedHashMap<>();
     }
 
-    Collection<SimulationObject> getAllObjects () {
-        return m_objects.values ();
+    Collection<SimulationObject> getAllObjects() {
+        return simulationObjects.values();
     }
 
-    public void addObject (SimulationObject object) {
-        String objectName = object.getName ();
-        if (m_objects.containsKey (objectName)) {
-            throw new RuntimeException (String.format ("object with name %s already exits", objectName));
+    public void addObject(SimulationObject object) {
+        String objectName = object.getName();
+        if (simulationObjects.containsKey (objectName)) {
+            throw new RuntimeException(String.format("%s with that name already exists", objectName));
         }
 
-        m_objects.put (objectName, object);
+        simulationObjects.put(objectName, object);
     }
 
-    public SimulationObject getObject (String name) {
-        if (m_objects.containsKey (name)) {
-            return m_objects.get (name);
+    public SimulationObject getObject(String name) {
+        if (simulationObjects.containsKey (name)) {
+            return simulationObjects.get(name);
         }
 
         return null;
     }
 
-    void update (float deltaTime) {
-        for (SimulationObject object : m_objects.values ()) {
-            object.update (deltaTime);
+    void update(float deltaTime) {
+        for (SimulationObject object : simulationObjects.values ()) {
+            object.update(deltaTime);
         }
     }
 
     void glRender (GraphicsContext context) {
-        for (SimulationObject object : m_objects.values ()) {
+        for (SimulationObject object : simulationObjects.values ()) {
             if (object instanceof IRenderableObject) {
                 ((IRenderableObject) object).glRender (context);
             }
@@ -47,7 +47,7 @@ public class SimulationScene {
     }
 
     void nvgRender (long nvg) {
-        for (SimulationObject object : m_objects.values ()) {
+        for (SimulationObject object : simulationObjects.values ()) {
             if (object instanceof IRenderableObject) {
                 ((IRenderableObject) object).nvgRender (nvg);
             }

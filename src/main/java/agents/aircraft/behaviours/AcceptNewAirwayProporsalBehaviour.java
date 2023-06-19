@@ -6,7 +6,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import model.Aircraft;
 import model.params.AirwayParams;
-import planner.CentralizedPlanner;
+import planner.AirwaysManager;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -17,16 +17,16 @@ public class AcceptNewAirwayProporsalBehaviour extends CyclicBehaviour {
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(PROPOSE);
     private final Aircraft aircraft;
     private String destination;
-    private CentralizedPlanner.RoutePriority priority;
+    private AirwaysManager.RoutePriority priority;
 
 
-    public AcceptNewAirwayProporsalBehaviour(Aircraft aircraft, String destination, CentralizedPlanner.RoutePriority priority) {
+    public AcceptNewAirwayProporsalBehaviour(Aircraft aircraft, String destination, AirwaysManager.RoutePriority priority) {
         this.aircraft = aircraft;
         this.destination = destination;
         this.priority = priority;
     }
 
-    public static AcceptNewAirwayProporsalBehaviour create(Aircraft aircraft, String destination, CentralizedPlanner.RoutePriority priority) {
+    public static AcceptNewAirwayProporsalBehaviour create(Aircraft aircraft, String destination, AirwaysManager.RoutePriority priority) {
         return new AcceptNewAirwayProporsalBehaviour(aircraft,  destination, priority);
     }
 

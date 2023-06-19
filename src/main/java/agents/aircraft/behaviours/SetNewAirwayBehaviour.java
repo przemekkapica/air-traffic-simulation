@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import static util.Constants.TRAIN_DESCRIPTION;
+import static util.Constants.PASSING;
 import static jade.lang.acl.ACLMessage.PROPAGATE;
 
 
@@ -43,7 +43,7 @@ public class SetNewAirwayBehaviour extends CyclicBehaviour {
         {
 
             try {
-                List<String> route = (List<String>) message.getContentObject();
+                List<String> route =(List<String>) message.getContentObject();
                 if (route.contains("Not_Found")) {
                     return; //this message is displayed if there is no route available for our aircraft
                 }
@@ -60,7 +60,7 @@ public class SetNewAirwayBehaviour extends CyclicBehaviour {
 
                 for (String segment : aircraft.segments) {
                     final ServiceDescription serviceDescription = new ServiceDescription();
-                    serviceDescription.setType(TRAIN_DESCRIPTION);
+                    serviceDescription.setType(PASSING);
                     serviceDescription.setName(segment);
                     description.addServices(serviceDescription);
 

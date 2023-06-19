@@ -1,6 +1,6 @@
 package model.params;
 
-import planner.CentralizedPlanner;
+import planner.AirwaysManager;
 
 import java.io.Serializable;
 
@@ -9,9 +9,9 @@ public class AirwayParams implements Serializable {
     private final String beginning;
     private final String end;
 
-    private final CentralizedPlanner.RoutePriority priority;
+    private final AirwaysManager.RoutePriority priority;
 
-    public AirwayParams(float maxSpeed, String beginning, String end, CentralizedPlanner.RoutePriority priority) {
+    public AirwayParams(float maxSpeed, String beginning, String end, AirwaysManager.RoutePriority priority) {
         this.maxSpeed = maxSpeed;
         this.beginning = beginning;
         this.end = end;
@@ -31,7 +31,7 @@ public class AirwayParams implements Serializable {
         return end;
     }
 
-    public CentralizedPlanner.RoutePriority getPriority() {
+    public AirwaysManager.RoutePriority getPriority() {
         return priority;
     }
 }

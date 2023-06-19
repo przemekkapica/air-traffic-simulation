@@ -12,53 +12,53 @@ import static org.lwjgl.opengl.GL33.GL_TRUE;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Simulation {
-    private static SimulationScene m_scene = new SimulationScene ();
+    private static SimulationScene m_scene = new SimulationScene();
 
-    public static void restartScene () {
-        m_scene = new SimulationScene ();
+    public static void restartScene() {
+        m_scene = new SimulationScene();
     }
 
-    public static SimulationScene getScene () {
+    public static SimulationScene getScene() {
         return m_scene;
     }
 
     private long m_window;
     private boolean m_initialized;
 
-    private void onMouseClick (long window, int button, int action, int mods) {
-        DoubleBuffer bufferPosX = BufferUtils.createDoubleBuffer (1);
-        DoubleBuffer bufferPosY = BufferUtils.createDoubleBuffer (1);
+    private void onMouseClick(long window, int button, int action, int mods) {
+        DoubleBuffer bufferPosX = BufferUtils.createDoubleBuffer(1);
+        DoubleBuffer bufferPosY = BufferUtils.createDoubleBuffer(1);
 
         // get cursor pos
-        glfwGetCursorPos (window, bufferPosX, bufferPosY);
+        glfwGetCursorPos(window, bufferPosX, bufferPosY);
 
-        double mouseX = bufferPosX.get (0);
-        double mouseY = bufferPosY.get (0);
+        double mouseX = bufferPosX.get(0);
+        double mouseY = bufferPosY.get(0);
 
-        boolean isShiftClick = (mods & GLFW_MOD_SHIFT) == GLFW_MOD_SHIFT;
-        boolean isAltClick = (mods & GLFW_MOD_ALT) == GLFW_MOD_ALT;
+        boolean isShiftClick =(mods & GLFW_MOD_SHIFT) == GLFW_MOD_SHIFT;
+        boolean isAltClick =(mods & GLFW_MOD_ALT) == GLFW_MOD_ALT;
 
 
         // lmb shift click deletes a segment
-        Vector2f p0 = new Vector2f ((float) mouseX, (float) mouseY);
+        Vector2f p0 = new Vector2f((float) mouseX,(float) mouseY);
 
         if (button == GLFW_MOUSE_BUTTON_LEFT && (isShiftClick || isAltClick)) {
             for (SimulationObject object : m_scene.getAllObjects ()) {
                 if (object instanceof AirwaySegment segment) {
-                    Vector2f p1 = segment.getStartIntersection ().getPosition ();
-                    Vector2f p2 = segment.getEndIntersection ().getPosition ();
+                    Vector2f p1 = segment.getStartIntersection().getPosition();
+                    Vector2f p2 = segment.getEndIntersection().getPosition();
 
-                    float numerator = Math.abs (((p2.x - p1.x) * (p1.y - p0.y)) - ((p2.y - p1.y) * (p1.x - p0.x)));
-                    float lengthSquared = ((p2.x - p1.x) * (p2.x - p1.x)) + ((p2.y - p1.y) * (p2.y - p1.y));
-                    float denominator = (float) Math.sqrt (lengthSquared);
+                    float numerator = Math.abs(((p2.x - p1.x) *(p1.y - p0.y)) -((p2.y - p1.y) *(p1.x - p0.x)));
+                    float lengthSquared =((p2.x - p1.x) *(p2.x - p1.x)) +((p2.y - p1.y) *(p2.y - p1.y));
+                    float denominator =(float) Math.sqrt(lengthSquared);
                     float distFromLine = numerator / denominator;
 
                     if (distFromLine < 7) {
                         if (isShiftClick) {
-                            System.out.printf ("break segment %s%n", segment.getName ());
-                            segment.setBroken (true);
+                            System.out.printf("break segment %s%n", segment.getName());
+                            segment.setBroken(true);
                         } else {
-                            System.out.printf ("repair segment %s%n", segment.getName ());
+                            System.out.printf("repair segment %s%n", segment.getName ());
                             segment.setBroken (false);
                         }
 
@@ -126,25 +126,25 @@ public class Simulation {
             lastTick = tick;
             deltaTime = elapsed / 1000f;
 
-            getScene ().update (deltaTime);
+            getScene().update(deltaTime);
 
-            context.startFrame ();
-            getScene ().glRender (context);
+            context.startFrame();
+            getScene().glRender(context);
 
             nvg = context.nvgBegin ();
-            getScene ().nvgRender (nvg);
-            context.nvgEnd ();
+            getScene().nvgRender(nvg);
+            context.nvgEnd();
 
             // end frame
-            context.endFrame ();
+            context.endFrame();
         }
 
-        context.terminate ();
-        terminate ();
+        context.terminate();
+        terminate();
     }
 
     private void terminate () {
         glfwDestroyWindow (m_window);
-        glfwTerminate ();
+        glfwTerminate();
     }
 }

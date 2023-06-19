@@ -7,10 +7,10 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import model.Aircraft;
-import planner.CentralizedPlanner;
+import planner.AirwaysManager;
 import simulation.Simulation;
 
-import static util.Constants.TRAIN_DESCRIPTION;
+import static util.Constants.PASSING;
 
 public class AircraftAgent extends Agent {
     private String finalDestination;
@@ -24,15 +24,15 @@ public class AircraftAgent extends Agent {
             doDelete();
         }
         String aircraftName = params[0].toString();
-        Aircraft aircraft = (Aircraft) Simulation.getScene().getObject(aircraftName);
+        Aircraft aircraft =(Aircraft) Simulation.getScene().getObject(aircraftName);
         String priorityName = params[1].toString();
 
-        CentralizedPlanner.RoutePriority priority;
+        AirwaysManager.RoutePriority priority;
         switch (priorityName) {
-            case "DISTANCE" -> priority = CentralizedPlanner.RoutePriority.DISTANCE;
-            case "COST" -> priority = CentralizedPlanner.RoutePriority.COST;
-            case "LOAD" -> priority = CentralizedPlanner.RoutePriority.LOAD;
-            default -> priority = CentralizedPlanner.RoutePriority.DEFAULT;
+            case "DISTANCE" -> priority = AirwaysManager.RoutePriority.DISTANCE;
+            case "COST" -> priority = AirwaysManager.RoutePriority.COST;
+            case "LOAD" -> priority = AirwaysManager.RoutePriority.LOAD;
+            default -> priority = AirwaysManager.RoutePriority.DEFAULT;
         }
 
         for (int i = 2; i < params.length; ++i) {
@@ -49,7 +49,7 @@ public class AircraftAgent extends Agent {
 
         for (String segment : aircraft.segments) {
             final ServiceDescription serviceDescription = new ServiceDescription();
-            serviceDescription.setType(TRAIN_DESCRIPTION);
+            serviceDescription.setType(PASSING);
             serviceDescription.setName(segment);
             description.addServices(serviceDescription);
         }

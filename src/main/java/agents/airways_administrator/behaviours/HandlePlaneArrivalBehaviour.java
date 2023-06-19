@@ -3,7 +3,7 @@ package agents.airways_administrator.behaviours;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import planner.CentralizedPlanner;
+import planner.AirwaysManager;
 
 import java.util.Objects;
 
@@ -13,15 +13,16 @@ public class HandlePlaneArrivalBehaviour extends CyclicBehaviour {
 
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(INFORM_IF);
 
-    private CentralizedPlanner plan;
+    private final AirwaysManager airwaysManager;
 
-    public static HandlePlaneArrivalBehaviour create(CentralizedPlanner airwayPlan) {
+    public static HandlePlaneArrivalBehaviour create(AirwaysManager airwayPlan) {
         return new HandlePlaneArrivalBehaviour(airwayPlan);
     }
 
-    private HandlePlaneArrivalBehaviour(CentralizedPlanner airwayPlan) {
-        plan = airwayPlan;
+    private HandlePlaneArrivalBehaviour(AirwaysManager airwaysManager) {
+        this.airwaysManager = airwaysManager;
     }
+
     @Override
     public void action() {
 
@@ -29,8 +30,8 @@ public class HandlePlaneArrivalBehaviour extends CyclicBehaviour {
 
         if (Objects.nonNull(message))
         {
-            String aircraftName =  message.getContent();
-            plan.notifyAircraftArrived(aircraftName);
+            String aircraftName = message.getContent();
+            airwaysManager.notifyAircraftArrived(aircraftName);
         }
     }
 }

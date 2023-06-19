@@ -27,26 +27,26 @@ public class AirportAgent extends Agent {
             doDelete();
         }
         String intersectionName = params[0].toString();
-        AirwayIntersection intersection = (AirwayIntersection) Simulation.getScene().getObject(intersectionName);
+        AirwayIntersection intersection =(AirwayIntersection) Simulation.getScene().getObject(intersectionName);
         for (int i = 1; i < params.length; ++i) {
 
             outgoing.add(params[i].toString());
         }
 
         // register self as intersection
-        DFAgentDescription dfDesc = new DFAgentDescription ();
-        dfDesc.setName (getAID ());
+        DFAgentDescription dfDesc = new DFAgentDescription();
+        dfDesc.setName(getAID());
 
-        ServiceDescription sd = new ServiceDescription ();
-        sd.setName (Constants.SERVICE_INTERSECTION);
-        sd.setType (Constants.SERVICE_INTERSECTION);
+        ServiceDescription sd = new ServiceDescription();
+        sd.setName(Constants.SERVICE_INTERSECTION);
+        sd.setType(Constants.SERVICE_INTERSECTION);
 
-        dfDesc.addServices (sd);
+        dfDesc.addServices(sd);
 
         try {
-            DFService.register (this, dfDesc);
+            DFService.register(this, dfDesc);
         } catch (FIPAException exception) {
-            exception.printStackTrace ();
+            exception.printStackTrace();
         }
 
         addBehaviour(ReceivePlaneArrivalBehaviour.create(intersection));
@@ -54,13 +54,13 @@ public class AirportAgent extends Agent {
     }
 
     @Override
-    protected void takeDown () {
+    protected void takeDown() {
         try {
-            DFService.deregister (this);
+            DFService.deregister(this);
         } catch (FIPAException fipaException) {
-            fipaException.printStackTrace ();
+            fipaException.printStackTrace();
         }
 
-        super.takeDown ();
+        super.takeDown();
     }
 }

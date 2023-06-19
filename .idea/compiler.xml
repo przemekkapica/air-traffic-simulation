@@ -8,8 +8,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="agent-trains" />
         <module name="Trains" />
-        <module name="trains" />
+        <module name="aircrafts" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="trains" target="16" />
+    </bytecodeTargetLevel>
   </component>
 </project>

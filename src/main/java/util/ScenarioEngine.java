@@ -17,7 +17,7 @@ public class ScenarioEngine {
     private ContainerController containerController;
 
     public ScenarioEngine() throws StaleProxyException {
-        runtime = Runtime.instance ();
+        runtime = Runtime.instance();
         profile = new ProfileImpl("localhost", 8888, null);
         containerController = runtime.createMainContainer(profile);
 
@@ -30,7 +30,7 @@ public class ScenarioEngine {
 
         Scanner sc = new Scanner(new File("src/main/resources/scenario" + scenario_id +".csv"));
         sc.useDelimiter(";");
-        while (sc.hasNext())
+        while(sc.hasNext())
         {
             String agentClass = sc.next();
             if (agentClass.equals("segment")) {

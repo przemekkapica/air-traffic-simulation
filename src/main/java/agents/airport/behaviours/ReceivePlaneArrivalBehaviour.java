@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static util.Constants.TRAIN_WINDOW;
+import static util.Constants.SIMULATION_WINOW;
 import static jade.lang.acl.ACLMessage.INFORM;
 
 public class ReceivePlaneArrivalBehaviour extends CyclicBehaviour {
@@ -41,9 +41,9 @@ public class ReceivePlaneArrivalBehaviour extends CyclicBehaviour {
         if (Objects.nonNull(message)) {
             try {
                 System.out.println("[" + message.getSender() + "] is approaching me");
-                final AircraftToIntersectionParams info = (AircraftToIntersectionParams) message.getContentObject();
+                final AircraftToIntersectionParams info =(AircraftToIntersectionParams) message.getContentObject();
 
-                AirwayIntersection secondIntersection = (AirwayIntersection) Simulation.getScene().getObject(info.getPreviousIntersection());
+                AirwayIntersection secondIntersection =(AirwayIntersection) Simulation.getScene().getObject(info.getPreviousIntersection());
 
                 Vector2f positionStart = intersection.getPosition();
                 Vector2f positionEnd = secondIntersection.getPosition();
@@ -54,8 +54,8 @@ public class ReceivePlaneArrivalBehaviour extends CyclicBehaviour {
                 long time = 1;
                 float i = 1;
                 for (; i != 0; i *= 0.99) {
-                    arrivalTime = distance / (info.getMaxSpeed() * i);
-                    time = System.currentTimeMillis() + (long) (arrivalTime * 1000);
+                    arrivalTime = distance /(info.getMaxSpeed() * i);
+                    time = System.currentTimeMillis() +(long)(arrivalTime * 1000);
                     if (checkForCollision(time))
                         break;
                 }
@@ -65,14 +65,14 @@ public class ReceivePlaneArrivalBehaviour extends CyclicBehaviour {
                 response.setContent(Float.toString(info.getMaxSpeed() * i));
                 myAgent.send(response);
 
-            } catch (UnreadableException e) {
+            } catch(UnreadableException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
     private boolean checkForCollision(final long time) {
-        return scheduledAircrafts.stream().filter(aircraft -> time - TRAIN_WINDOW <= aircraft.getValue1() || aircraft.getValue1() >= time + TRAIN_WINDOW).toList().isEmpty();
+        return scheduledAircrafts.stream().filter(aircraft -> time - SIMULATION_WINOW <= aircraft.getValue1() || aircraft.getValue1() >= time + SIMULATION_WINOW).toList().isEmpty();
     }
 
 }

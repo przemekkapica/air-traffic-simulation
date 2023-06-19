@@ -22,7 +22,7 @@ public class ManageAircraftMalfunctionBehaviour extends TickerBehaviour {
     @Override
     protected void onTick() {
 
-        if (!segment.isBroken()) {
+        if(!segment.isBroken()) {
             System.out.println(segment.getName() + " was repaired");
             ACLMessage message = new ACLMessage(INFORM);
             message.addReceiver(new AID("planner", AID.ISLOCALNAME));

@@ -13,12 +13,12 @@ public class SegmentAgent extends Agent {
         super.setup();
 
         final Object[] params = getArguments();
-        if (params.length < 1) {
+        if(params.length < 1) {
             System.out.println("Usage [segment name ]");
             doDelete();
         }
         String name = params[0].toString();
-        AirwaySegment segment = (AirwaySegment) Simulation.getScene().getObject("segment_" + name);
+        AirwaySegment segment =(AirwaySegment) Simulation.getScene().getObject("segment_" + name);
         addBehaviour(CheckAircraftConditionBehavious.create(this, 1000, segment));
     }
 }

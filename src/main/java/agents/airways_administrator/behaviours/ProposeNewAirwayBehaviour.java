@@ -5,7 +5,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import model.params.AirwayParams;
-import planner.CentralizedPlanner;
+import planner.AirwaysManager;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -19,13 +19,13 @@ public class ProposeNewAirwayBehaviour extends CyclicBehaviour {
 
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(CONFIRM);
 
-    private CentralizedPlanner plan;
+    private AirwaysManager plan;
 
-    public static ProposeNewAirwayBehaviour create(CentralizedPlanner airwayPlan) {
+    public static ProposeNewAirwayBehaviour create(AirwaysManager airwayPlan) {
         return new ProposeNewAirwayBehaviour(airwayPlan);
     }
 
-    private ProposeNewAirwayBehaviour(CentralizedPlanner airwayPlan) {
+    private ProposeNewAirwayBehaviour(AirwaysManager airwayPlan) {
         plan = airwayPlan;
     }
     @Override
@@ -36,7 +36,7 @@ public class ProposeNewAirwayBehaviour extends CyclicBehaviour {
         if (Objects.nonNull(message))
         {
             try {
-                AirwayParams aircraftParams = (AirwayParams) message.getContentObject();
+                AirwayParams aircraftParams =(AirwayParams) message.getContentObject();
                 List<String> newRoute = plan.findRoute(aircraftParams.getBeginning(), aircraftParams.getEnd(), aircraftParams.getMaxSpeed(), aircraftParams.getPriority());
                 ACLMessage routeProposal = new ACLMessage(PROPAGATE);
                 routeProposal.addReceiver(message.getSender());

@@ -9,7 +9,7 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import org.javatuples.Pair;
-import planner.CentralizedPlanner;
+import planner.AirwaysManager;
 import util.SegmentParser;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static util.Constants.INTERSECTION_PREFIX;
-import static util.Constants.TRAIN_DESCRIPTION;
+import static util.Constants.PASSING;
 import static jade.lang.acl.ACLMessage.INFORM;
 import static jade.lang.acl.ACLMessage.PROPOSE;
 
@@ -26,13 +26,13 @@ public class HandleMalfunctionBehaviour extends CyclicBehaviour {
 
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(INFORM);
 
-    private CentralizedPlanner plan;
+    private AirwaysManager plan;
 
-    public static HandleMalfunctionBehaviour create(CentralizedPlanner airwayPlan) {
+    public static HandleMalfunctionBehaviour create(AirwaysManager airwayPlan) {
         return new HandleMalfunctionBehaviour(airwayPlan);
     }
 
-    private HandleMalfunctionBehaviour(CentralizedPlanner airwayPlan) {
+    private HandleMalfunctionBehaviour(AirwaysManager airwayPlan) {
         plan = airwayPlan;
     }
 
@@ -74,7 +74,7 @@ public class HandleMalfunctionBehaviour extends CyclicBehaviour {
         final List<AID> affectedAircrafts = new ArrayList<>();
         final DFAgentDescription template = new DFAgentDescription();
         final ServiceDescription description = new ServiceDescription();
-        description.setType(TRAIN_DESCRIPTION);
+        description.setType(PASSING);
         description.setName(brokenSegment);
         template.addServices(description);
         final  DFAgentDescription[] agents = DFService.search(myAgent, template);

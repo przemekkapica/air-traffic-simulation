@@ -5,7 +5,7 @@ import org.javatuples.Pair;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
-public class CentralizedPlanner {
+public class AirwaysManager {
     public enum RoutePriority {
         DEFAULT, DISTANCE, COST, LOAD
     }
@@ -26,7 +26,7 @@ public class CentralizedPlanner {
     private final Map<String, List<String>> m_aircrafts = new HashMap<> ();
     private final Semaphore m_mutex = new Semaphore (1);
 
-    public CentralizedPlanner (Map<String, List<RouteDescription>> graphDescription) {
+    public AirwaysManager(Map<String, List<RouteDescription>> graphDescription) {
         // initialize the graph
         for (String node : graphDescription.keySet ()) {
             m_graph.addNode (node);
@@ -168,8 +168,8 @@ public class CentralizedPlanner {
                         continue; // edge is broken, ignore it
                     }
 
-                    PlannerGraph.PlannerGraphNode v = edge.getNode ();
-                    float vWeight = distance.get (v.getName ());
+                    PlannerGraph.PlannerGraphNode v = edge.getNode();
+                    float vWeight = distance.get (v.getName());
                     float dist = getDistance (edge, priority);
 
                     if (vWeight > uWeight + dist) {

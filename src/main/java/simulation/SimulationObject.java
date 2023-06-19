@@ -1,15 +1,15 @@
 package simulation;
 
 public abstract class SimulationObject {
-    private final String m_name;
+    private final String name;
 
-    public String getName () {
-        return m_name;
+    protected SimulationObject(String name) {
+        this.name = name;
     }
 
-    protected SimulationObject (String name) {
-        m_name = name;
+    public String getName() {
+        return name;
     }
 
-    public void update (float deltaTime) { }
+    public void update(float deltaTime) { }
 }
