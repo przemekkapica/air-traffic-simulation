@@ -3,27 +3,26 @@ package model;
 import simulation.SimulationObject;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
-public abstract class AirwayFragment extends SimulationObject {
-    private final Set<Aircraft> m_aircrafts;
+public abstract class AirwayElement extends SimulationObject {
+    private final Set<Aircraft> aircrafts;
 
     public abstract float getLength();
-    public abstract AirwayFragment getNextFragment();
+    public abstract AirwayElement getNextFragment();
 
-    protected AirwayFragment(String name) {
+    protected AirwayElement(String name) {
         super(name);
-        m_aircrafts = new HashSet<>();
+        aircrafts = new HashSet<>();
     }
 
     void enter(Aircraft aircraft) {
-        m_aircrafts.add(aircraft);
+        aircrafts.add(aircraft);
     }
 
     void leave(Aircraft aircraft) {
-        if (m_aircrafts.contains (aircraft)) {
-            m_aircrafts.remove(aircraft);
+        if (aircrafts.contains (aircraft)) {
+            aircrafts.remove(aircraft);
         } else {
             throw new RuntimeException(String.format("aircraft %s was not in %s%n", aircraft.getName(), getName()));
         }

@@ -1,4 +1,4 @@
-package agents.airport.behaviours;
+package agents.intersection.behaviours;
 
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;

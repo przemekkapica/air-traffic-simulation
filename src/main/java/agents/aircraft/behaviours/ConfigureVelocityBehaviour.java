@@ -29,7 +29,7 @@ public class ConfigureVelocityBehaviour extends CyclicBehaviour {
         if (Objects.nonNull(message)) {
             System.out.println("They know I'm coming. Time to wait now");
 
-            String speed =  message.getContent();
+            String speed = message.getContent();
             aircraft.setSpeed(Float.parseFloat(speed));
 
             while (!aircraft.isTraversingSegment()) {System.out.print("");}

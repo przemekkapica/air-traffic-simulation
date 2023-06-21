@@ -1,8 +1,8 @@
-package agents.airport;
+package agents.intersection;
 
 import util.Constants;
-import agents.airport.behaviours.ChangePlaneDirectionBehaviour;
-import agents.airport.behaviours.ReceivePlaneArrivalBehaviour;
+import agents.intersection.behaviours.ChangePlaneDirectionBehaviour;
+import agents.intersection.behaviours.ReceivePlaneArrivalBehaviour;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -14,7 +14,7 @@ import simulation.Simulation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AirportAgent extends Agent {
+public class IntersectionAgent extends Agent {
     final private List<String> outgoing = new ArrayList<>();
 
     @Override

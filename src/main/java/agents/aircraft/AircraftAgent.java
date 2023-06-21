@@ -26,6 +26,7 @@ public class AircraftAgent extends Agent {
         }
         String aircraftName = params[0].toString();
         String priorityName = params[1].toString();
+
         Aircraft aircraft = (Aircraft)Simulation.getScene().getObject(aircraftName);
 
         AirwaysManager.AirwayPriority priority = getPriority(priorityName);

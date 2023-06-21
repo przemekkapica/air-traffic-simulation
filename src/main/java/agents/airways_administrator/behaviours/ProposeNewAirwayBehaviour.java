@@ -25,10 +25,9 @@ public class ProposeNewAirwayBehaviour extends CyclicBehaviour {
     public void action() {
         final ACLMessage message = myAgent.receive(messageTemplate);
 
-        if (Objects.nonNull(message))
-        {
+        if (Objects.nonNull(message)) {
             try {
-                AirwayParams aircraftParams =(AirwayParams) message.getContentObject();
+                AirwayParams aircraftParams = (AirwayParams)message.getContentObject();
 
                 List<String> newRoute = airwaysManager.findRoute(
                         aircraftParams.getBeginning(),
@@ -37,6 +36,7 @@ public class ProposeNewAirwayBehaviour extends CyclicBehaviour {
                         aircraftParams.getPriority()
                 );
                 ACLMessage routeProposal = new ACLMessage(PROPAGATE);
+                System.out.println(message.getSender().getName());
                 routeProposal.addReceiver(message.getSender());
                 routeProposal.setContentObject((Serializable) newRoute);
 

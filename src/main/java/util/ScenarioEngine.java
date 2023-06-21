@@ -51,7 +51,7 @@ public class ScenarioEngine {
 
     private void CreateIntersection(String agentParams) throws StaleProxyException {
         Object[] params = GetAgentParams(agentParams);
-        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.airport.AirportAgent", params ).start();
+        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.intersection.IntersectionAgent", params ).start();
     }
     private void CreateAircraft(String agentParams) throws StaleProxyException {
         Object[] params = GetAgentParams(agentParams);

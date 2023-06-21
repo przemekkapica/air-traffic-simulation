@@ -37,7 +37,7 @@ public class AirportManagementSimulation {
 
         // now, we want to start the simulation
         Simulation simulation = new Simulation ();
-        simulation.initialize (1280, 800, "aircrafts agents project");
+        simulation.initialize (1280, 800, "Airport management simulation");
 
         simulation.run ();
     }

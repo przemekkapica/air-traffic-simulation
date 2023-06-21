@@ -4,86 +4,86 @@ import java.util.*;
 
 public class PlannerGraph {
     public static class PlannerGraphEdge {
-        private final float m_distance;
-        private float m_cost;
-        private float m_load;
-        private boolean m_enabled;
-        private final PlannerGraphNode m_endNode;
+        private final float distance;
+        private final float cost;
+        private float load;
+        private boolean isEnabled;
+        private final PlannerGraphNode endNode;
 
         public float getDistance() {
-            return m_distance;
+            return distance;
         }
 
         public PlannerGraphNode getNode() {
-            return m_endNode;
+            return endNode;
         }
 
         public float getCost() {
-            return m_cost;
+            return cost;
         }
 
         public float getLoad() {
-            return m_load;
+            return load;
         }
 
         public boolean isEnabled() {
-            return m_enabled;
+            return isEnabled;
         }
 
         public void setLoad(float load) {
-            m_load = load;
+            this.load = load;
         }
 
         public void setEnabled (boolean enabled) {
-            m_enabled = enabled;
+            isEnabled = enabled;
         }
 
         public PlannerGraphEdge (PlannerGraphNode node, float distance, float cost) {
-            m_distance = distance;
-            m_cost = cost;
-            m_load = 0.0f;
-            m_enabled = true;
-            m_endNode = node;
+            this.distance = distance;
+            this.cost = cost;
+            load = 0.0f;
+            isEnabled = true;
+            endNode = node;
         }
     }
 
     public static class PlannerGraphNode {
-        private final String m_name;
-        private final List<PlannerGraphEdge> m_neighbors = new ArrayList<> ();
+        private final String name;
+        private final List<PlannerGraphEdge> neighbors = new ArrayList<> ();
 
         public PlannerGraphNode (String name) {
-            m_name = name;
+            this.name = name;
         }
 
         public String getName () {
-            return m_name;
+            return name;
         }
 
         public void addNeighbor (PlannerGraphNode node, float distance, float cost) {
-            m_neighbors.add (new PlannerGraphEdge (node, distance, cost));
+            neighbors.add (new PlannerGraphEdge (node, distance, cost));
         }
 
         public List<PlannerGraphEdge> getNeighbors () {
-            return m_neighbors;
+            return neighbors;
         }
     }
 
-    private final Map<String, PlannerGraphNode> m_graph = new HashMap<> ();
+    private final Map<String, PlannerGraphNode> graph = new HashMap<> ();
 
     public void addNode(String name) {
         PlannerGraphNode node = new PlannerGraphNode (name);
-        m_graph.put (name, node);
+        graph.put (name, node);
 
     }
 
     public PlannerGraphNode getNode (String name) {
-        if (m_graph.containsKey (name)) {
-            return m_graph.get (name);
+        if (graph.containsKey (name)) {
+            return graph.get (name);
         }
         return null;
     }
 
     public Set<String> getNodeNames () {
-        return m_graph.keySet ();
+        return graph.keySet ();
     }
 }

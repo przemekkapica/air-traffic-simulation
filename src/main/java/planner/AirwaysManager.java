@@ -22,22 +22,22 @@ public class AirwaysManager {
         }
     }
 
-    private final PlannerGraph m_graph = new PlannerGraph ();
-    private final Map<String, List<String>> m_aircrafts = new HashMap<> ();
-    private final Semaphore m_mutex = new Semaphore (1);
+    private final PlannerGraph plannerGraph = new PlannerGraph ();
+    private final Map<String, List<String>> aircrafts = new HashMap<> ();
+    private final Semaphore mutex = new Semaphore(1);
 
     public AirwaysManager(Map<String, List<RouteDescription>> graphDescription) {
         // initialize the graph
         for (String node : graphDescription.keySet ()) {
-            m_graph.addNode (node);
+            plannerGraph.addNode (node);
         }
 
         for (Map.Entry<String, List<RouteDescription>> entry : graphDescription.entrySet ()) {
-            PlannerGraph.PlannerGraphNode begin = m_graph.getNode (entry.getKey ());
+            PlannerGraph.PlannerGraphNode begin = plannerGraph.getNode(entry.getKey ());
             for (RouteDescription route : entry.getValue ()) {
-                PlannerGraph.PlannerGraphNode end = m_graph.getNode (route.endIntersectionName);
+                PlannerGraph.PlannerGraphNode end = plannerGraph.getNode(route.endIntersectionName);
                 if (end != null) {
-                    begin.addNeighbor (end, route.length, route.baseCost);
+                    begin.addNeighbor(end, route.length, route.baseCost);
                 }
             }
         }
@@ -45,12 +45,12 @@ public class AirwaysManager {
 
     private void setBroken (String from, String to, boolean broken) {
         try {
-            m_mutex.acquire ();
-            PlannerGraph.PlannerGraphNode node = m_graph.getNode (from);
+            mutex.acquire ();
+            PlannerGraph.PlannerGraphNode node = plannerGraph.getNode(from);
 
             if (node != null) {
                 for (PlannerGraph.PlannerGraphEdge edge : node.getNeighbors ()) {
-                    if (edge.getNode ().getName ().equals (to)) {
+                    if (edge.getNode().getName ().equals (to)) {
                         edge.setEnabled (!broken);
                     }
                 }
@@ -58,7 +58,7 @@ public class AirwaysManager {
         } catch (InterruptedException e) {
             e.printStackTrace ();
         } finally {
-            m_mutex.release ();
+            mutex.release ();
         }
     }
 
@@ -72,15 +72,15 @@ public class AirwaysManager {
 
     public void notifyAircraftArrived (String aircraftName) {
         try {
-            m_mutex.acquire ();
-            List<String> route = m_aircrafts.get (aircraftName);
+            mutex.acquire ();
+            List<String> route = aircrafts.get (aircraftName);
 
             if (route != null) {
                 for (int i = 0; i < route.size () - 1; ++i) {
                     String first = route.get (i);
                     String second = route.get (i + 1);
 
-                    PlannerGraph.PlannerGraphNode node = m_graph.getNode (first);
+                    PlannerGraph.PlannerGraphNode node = plannerGraph.getNode(first);
                     for (PlannerGraph.PlannerGraphEdge edge : node.getNeighbors ()) {
                         if (edge.getNode ().getName ().equals (second)) {
                             float load = Math.max (0.0f, edge.getLoad () - 100.0f);
@@ -92,20 +92,20 @@ public class AirwaysManager {
         } catch (InterruptedException e) {
             e.printStackTrace ();
         } finally {
-            m_mutex.release ();
+            mutex.release ();
         }
 
-        m_aircrafts.remove (aircraftName);
+        aircrafts.remove (aircraftName);
     }
 
-    public void acceptRoute (List<String> route, String aircraftName, float maxSpeed) {
+    public void acceptRoute(List<String> route, String aircraftName, float maxSpeed) {
         try {
-            m_mutex.acquire ();
+            mutex.acquire ();
             for (int i = 0; i < route.size () - 1; ++i) {
                 String first = route.get (i);
                 String second = route.get (i + 1);
 
-                PlannerGraph.PlannerGraphNode node = m_graph.getNode (first);
+                PlannerGraph.PlannerGraphNode node = plannerGraph.getNode (first);
                 for (PlannerGraph.PlannerGraphEdge edge : node.getNeighbors ()) {
                     if (edge.getNode ().getName ().equals (second)) {
                         float load = edge.getLoad () + 100.0f;
@@ -116,13 +116,13 @@ public class AirwaysManager {
         } catch (InterruptedException e) {
             e.printStackTrace ();
         } finally {
-            m_mutex.release ();
+            mutex.release ();
         }
 
-        m_aircrafts.put (aircraftName, route);
+        aircrafts.put (aircraftName, route);
     }
 
-    private float getDistance (PlannerGraph.PlannerGraphEdge edge, AirwayPriority priority) {
+    private float getDistance(PlannerGraph.PlannerGraphEdge edge, AirwayPriority priority) {
         float weight = 0.0f;
 
         switch (priority) {
@@ -135,18 +135,18 @@ public class AirwaysManager {
         return weight;
     }
 
-    public List<String> findRoute (String from, String to, float maxSpeed, AirwayPriority priority) {
+    public List<String> findRoute(String from, String to, float maxSpeed, AirwayPriority priority) {
         // dijkstra algoritm
         List<String> route = null;
 
         try {
-            m_mutex.acquire ();
+            mutex.acquire();
             Map<String, Float> distance = new HashMap<> ();
             Map<String, String> prevNode = new HashMap<> ();
 
             final float INF = 100000000.0f;
 
-            for (String node : m_graph.getNodeNames ()) {
+            for (String node : plannerGraph.getNodeNames ()) {
                 if (node.equals (from)) {
                     distance.put (node, 0.0f);
                 } else {
@@ -160,7 +160,7 @@ public class AirwaysManager {
             while (!queue.isEmpty ()) {
                 Pair<String, Float> pair = queue.poll ();
                 String currName = pair.getValue0 ();
-                PlannerGraph.PlannerGraphNode u = m_graph.getNode (currName);
+                PlannerGraph.PlannerGraphNode u = plannerGraph.getNode (currName);
                 float uWeight = distance.get (currName);
 
                 for (PlannerGraph.PlannerGraphEdge edge : u.getNeighbors ()) {
@@ -198,7 +198,7 @@ public class AirwaysManager {
         } catch (InterruptedException e) {
             e.printStackTrace ();
         } finally {
-            m_mutex.release ();
+            mutex.release ();
         }
         if (route != null)
         {

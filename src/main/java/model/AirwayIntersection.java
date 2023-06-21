@@ -7,12 +7,11 @@ import simulation.IPositionedObject;
 import simulation.IRenderableObject;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import static org.lwjgl.nanovg.NanoVG.*;
 
-public class AirwayIntersection extends AirwayFragment implements IPositionedObject, IRenderableObject {
+public class AirwayIntersection extends AirwayElement implements IPositionedObject, IRenderableObject {
 
     @Override
     public float getLength() {
@@ -48,7 +47,7 @@ public class AirwayIntersection extends AirwayFragment implements IPositionedObj
         nvgFontFace(nvg, "font");
         nvgTextAlign(nvg, NVG_ALIGN_MIDDLE | NVG_ALIGN_BOTTOM);
         nvgText(nvg, position.x, position.y - 30, String.format("%s", getName()));
-        nvgText(nvg, position.x, position.y - 15, String.format("to: %s", getNextFragment().getNextFragment().getName()));
+        // nvgText(nvg, position.x, position.y - 15, String.format("to: %s", getNextFragment().getNextFragment().getName()));
     }
 
     @Override
