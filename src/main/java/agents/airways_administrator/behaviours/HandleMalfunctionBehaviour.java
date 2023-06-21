@@ -26,47 +26,54 @@ public class HandleMalfunctionBehaviour extends CyclicBehaviour {
 
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(INFORM);
 
-    private AirwaysManager plan;
-
-    public static HandleMalfunctionBehaviour create(AirwaysManager airwayPlan) {
-        return new HandleMalfunctionBehaviour(airwayPlan);
-    }
-
-    private HandleMalfunctionBehaviour(AirwaysManager airwayPlan) {
-        plan = airwayPlan;
-    }
+    private AirwaysManager airwaysManager;
 
     @Override
     public void action() {
         final ACLMessage message = myAgent.receive(messageTemplate);
 
-        if (Objects.nonNull(message))
-        {
+        if (Objects.nonNull(message)) {
             String[] information = message.getContent().split(";");
-            String affactedSegment = information[0];
+            String affectedSegment = information[0];
             String status = information[1];
-            Pair<String, String> parsedSegment = SegmentParser.parseFullName(affactedSegment);
-            if (status.contains("Broken"))
-                plan.notifyRouteBroken(INTERSECTION_PREFIX + parsedSegment.getValue0(), INTERSECTION_PREFIX + parsedSegment.getValue1());
-            else
-                plan.notifyRouteRepaired(INTERSECTION_PREFIX + parsedSegment.getValue0(), INTERSECTION_PREFIX + parsedSegment.getValue1());
+
+            Pair<String, String> parsedSegment = SegmentParser.parseFullName(affectedSegment);
+
+            if (status.contains("Broken")) {
+                airwaysManager.notifyRouteBroken(INTERSECTION_PREFIX + parsedSegment.getValue0(), INTERSECTION_PREFIX + parsedSegment.getValue1());
+            } else {
+                airwaysManager.notifyRouteRepaired(INTERSECTION_PREFIX + parsedSegment.getValue0(), INTERSECTION_PREFIX + parsedSegment.getValue1());
+            }
 
             List<AID> affectedAircrafts = null;
             try {
                 affectedAircrafts = findAffectedAircrafts(parsedSegment.getValue0() + "-" + parsedSegment.getValue1());
             }
-            catch (FIPAException e)
-            {
+            catch (FIPAException e) {
                 throw new RuntimeException(e);
             }
 
-            for (AID id : affectedAircrafts) {
-                ACLMessage newRouteProposal = new ACLMessage(PROPOSE);
-                newRouteProposal.addReceiver(id);
-                newRouteProposal.setContent(parsedSegment.getValue0() + "-" + parsedSegment.getValue1());
-                myAgent.send(newRouteProposal);
-            }
+            sendNewRouteProposals(parsedSegment, affectedAircrafts);
 
+        }
+    }
+
+    public static HandleMalfunctionBehaviour create(AirwaysManager manager) {
+        return new HandleMalfunctionBehaviour(manager);
+    }
+
+
+    private HandleMalfunctionBehaviour(AirwaysManager manager) {
+        airwaysManager = manager;
+    }
+
+    private void sendNewRouteProposals(Pair<String, String> parsedSegment, List<AID> affectedAircrafts) {
+        for (AID id : affectedAircrafts) {
+            ACLMessage newRouteProposal = new ACLMessage(PROPOSE);
+            newRouteProposal.addReceiver(id);
+            newRouteProposal.setContent(parsedSegment.getValue0() + "-" + parsedSegment.getValue1());
+
+            myAgent.send(newRouteProposal);
         }
     }
 
@@ -74,11 +81,14 @@ public class HandleMalfunctionBehaviour extends CyclicBehaviour {
         final List<AID> affectedAircrafts = new ArrayList<>();
         final DFAgentDescription template = new DFAgentDescription();
         final ServiceDescription description = new ServiceDescription();
+
         description.setType(PASSING);
         description.setName(brokenSegment);
         template.addServices(description);
-        final  DFAgentDescription[] agents = DFService.search(myAgent, template);
+
+        final DFAgentDescription[] agents = DFService.search(myAgent, template);
         Arrays.stream(agents).forEach(aircraft -> affectedAircrafts.add(aircraft.getName()));
+
         return affectedAircrafts;
     }
 

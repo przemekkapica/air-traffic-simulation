@@ -9,9 +9,9 @@ public class AirwayParams implements Serializable {
     private final String beginning;
     private final String end;
 
-    private final AirwaysManager.RoutePriority priority;
+    private final AirwaysManager.AirwayPriority priority;
 
-    public AirwayParams(float maxSpeed, String beginning, String end, AirwaysManager.RoutePriority priority) {
+    public AirwayParams(float maxSpeed, String beginning, String end, AirwaysManager.AirwayPriority priority) {
         this.maxSpeed = maxSpeed;
         this.beginning = beginning;
         this.end = end;
@@ -31,7 +31,7 @@ public class AirwayParams implements Serializable {
         return end;
     }
 
-    public AirwaysManager.RoutePriority getPriority() {
+    public AirwaysManager.AirwayPriority getPriority() {
         return priority;
     }
 }

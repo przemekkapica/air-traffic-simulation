@@ -18,12 +18,56 @@ import java.util.List;
 import java.util.Map;
 
 public class AirwaysAdministratorAgent extends Agent {
-    private List<String> segments = new ArrayList<>();
-    private List<String> costs = new ArrayList<>();
+    final private List<String> segments = new ArrayList<>();
+    final private List<String> costs = new ArrayList<>();
 
     @Override
     protected void setup() {
         super.setup();
+
+        extractParams();
+
+        // register self as planner
+        DFAgentDescription dfDesc = new DFAgentDescription();
+        dfDesc.setName(getAID());
+
+        ServiceDescription serviceDescription = new ServiceDescription ();
+        serviceDescription.setName(Constants.SERVICE_PLANNER);
+        serviceDescription.setType(Constants.SERVICE_PLANNER);
+
+        dfDesc.addServices(serviceDescription);
+
+        try {
+            DFService.register (this, dfDesc);
+        } catch (FIPAException exception) {
+            exception.printStackTrace ();
+        }
+
+        Map<String, List<AirwaysManager.RouteDescription>> graphDescription = GraphDescriptor.describeAirway(segments, costs);
+        AirwaysManager planner = new AirwaysManager(graphDescription);
+
+        addBehaviors(planner);
+    }
+
+    @Override
+    protected void takeDown() {
+        try {
+            DFService.deregister (this);
+        } catch (FIPAException fipaException) {
+            fipaException.printStackTrace ();
+        }
+
+        super.takeDown ();
+    }
+
+    private void addBehaviors(AirwaysManager planner) {
+        addBehaviour(HandleMalfunctionBehaviour.create(planner));
+        addBehaviour(ProposeNewAirwayBehaviour.create(planner));
+        addBehaviour(AcceptAirwayBehaviour.create(planner));
+        addBehaviour(HandlePlaneArrivalBehaviour.create(planner));
+    }
+
+    private void extractParams() {
         final Object[] params = getArguments();
         if (params.length < 2) {
             System.out.println("Usage [planner name ], [pairs of segments and costs separated by comas]");
@@ -35,38 +79,7 @@ public class AirwaysAdministratorAgent extends Agent {
             else
                 costs.add(params[i].toString());
         }
-
-        // register self as planner
-        DFAgentDescription dfDesc = new DFAgentDescription();
-        dfDesc.setName(getAID());
-
-        ServiceDescription sd = new ServiceDescription ();
-        sd.setName (Constants.SERVICE_PLANNER);
-        sd.setType (Constants.SERVICE_PLANNER);
-
-        dfDesc.addServices (sd);
-
-        try {
-            DFService.register (this, dfDesc);
-        } catch (FIPAException exception) {
-            exception.printStackTrace ();
-        }
-        Map<String, List<AirwaysManager.RouteDescription>> graphDescription = GraphDescriptor.describeAirway(segments, costs);
-        AirwaysManager planner = new AirwaysManager(graphDescription);
-        addBehaviour(HandleMalfunctionBehaviour.create(planner));
-        addBehaviour(ProposeNewAirwayBehaviour.create(planner));
-        addBehaviour(AcceptAirwayBehaviour.create(planner));
-        addBehaviour(HandlePlaneArrivalBehaviour.create(planner));
     }
 
-    @Override
-    protected void takeDown () {
-        try {
-            DFService.deregister (this);
-        } catch (FIPAException fipaException) {
-            fipaException.printStackTrace ();
-        }
 
-        super.takeDown ();
-    }
 }

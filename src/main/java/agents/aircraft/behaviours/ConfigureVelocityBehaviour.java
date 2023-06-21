@@ -7,7 +7,7 @@ import model.Aircraft;
 
 import java.util.Objects;
 
-import static util.Constants.FINAL_STATION;
+import static util.Constants.FINAL_DESTINATION;
 import static jade.lang.acl.ACLMessage.ACCEPT_PROPOSAL;
 
 public class ConfigureVelocityBehaviour extends CyclicBehaviour {
@@ -38,7 +38,7 @@ public class ConfigureVelocityBehaviour extends CyclicBehaviour {
             ACLMessage response =  new ACLMessage(ACLMessage.AGREE);
             response.addReceiver(message.getSender());
             if (aircraft.segments.isEmpty())
-                response.setContent(FINAL_STATION);
+                response.setContent(FINAL_DESTINATION);
             else
                 response.setContent(aircraft.segments.remove());
             myAgent.send(response);

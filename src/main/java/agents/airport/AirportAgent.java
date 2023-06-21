@@ -15,33 +15,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AirportAgent extends Agent {
-    private List<String>  outgoing = new ArrayList<>();
+    final private List<String> outgoing = new ArrayList<>();
 
     @Override
     protected void setup() {
         super.setup();
 
-        final Object[] params = getArguments();
-        if (params.length < 2) {
-            System.out.println("Usage [intersection name ], [intersections separated by comas]");
-            doDelete();
-        }
-        String intersectionName = params[0].toString();
-        AirwayIntersection intersection =(AirwayIntersection) Simulation.getScene().getObject(intersectionName);
-        for (int i = 1; i < params.length; ++i) {
+        AirwayIntersection intersection = extractParams();
 
-            outgoing.add(params[i].toString());
-        }
-
-        // register self as intersection
         DFAgentDescription dfDesc = new DFAgentDescription();
         dfDesc.setName(getAID());
 
-        ServiceDescription sd = new ServiceDescription();
-        sd.setName(Constants.SERVICE_INTERSECTION);
-        sd.setType(Constants.SERVICE_INTERSECTION);
+        ServiceDescription serviceDescription = new ServiceDescription();
+        serviceDescription.setName(Constants.SERVICE_INTERSECTION);
+        serviceDescription.setType(Constants.SERVICE_INTERSECTION);
 
-        dfDesc.addServices(sd);
+        dfDesc.addServices(serviceDescription);
 
         try {
             DFService.register(this, dfDesc);
@@ -49,8 +38,7 @@ public class AirportAgent extends Agent {
             exception.printStackTrace();
         }
 
-        addBehaviour(ReceivePlaneArrivalBehaviour.create(intersection));
-        addBehaviour(ChangePlaneDirectionBehaviour.create(intersection));
+        addBehaviors(intersection);
     }
 
     @Override
@@ -62,5 +50,25 @@ public class AirportAgent extends Agent {
         }
 
         super.takeDown();
+    }
+
+    private void addBehaviors(AirwayIntersection intersection) {
+        addBehaviour(ReceivePlaneArrivalBehaviour.create(intersection));
+        addBehaviour(ChangePlaneDirectionBehaviour.create(intersection));
+    }
+
+    private AirwayIntersection extractParams() {
+        final Object[] params = getArguments();
+        if (params.length < 2) {
+            System.out.println("Usage [intersection name ], [intersections separated by comas]");
+            doDelete();
+        }
+        String intersectionName = params[0].toString();
+        AirwayIntersection intersection = (AirwayIntersection) Simulation.getScene().getObject(intersectionName);
+
+        for (int i = 1; i < params.length; ++i) {
+            outgoing.add(params[i].toString());
+        }
+        return intersection;
     }
 }

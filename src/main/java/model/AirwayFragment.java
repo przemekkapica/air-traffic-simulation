@@ -17,10 +17,6 @@ public abstract class AirwayFragment extends SimulationObject {
         m_aircrafts = new HashSet<>();
     }
 
-    public Iterator<Aircraft> aircrafts() {
-        return m_aircrafts.iterator();
-    }
-
     void enter(Aircraft aircraft) {
         m_aircrafts.add(aircraft);
     }

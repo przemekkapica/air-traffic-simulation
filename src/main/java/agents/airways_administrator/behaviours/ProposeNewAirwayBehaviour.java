@@ -19,34 +19,39 @@ public class ProposeNewAirwayBehaviour extends CyclicBehaviour {
 
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(CONFIRM);
 
-    private AirwaysManager plan;
+    private AirwaysManager airwaysManager;
 
-    public static ProposeNewAirwayBehaviour create(AirwaysManager airwayPlan) {
-        return new ProposeNewAirwayBehaviour(airwayPlan);
-    }
-
-    private ProposeNewAirwayBehaviour(AirwaysManager airwayPlan) {
-        plan = airwayPlan;
-    }
     @Override
     public void action() {
-
         final ACLMessage message = myAgent.receive(messageTemplate);
 
         if (Objects.nonNull(message))
         {
             try {
                 AirwayParams aircraftParams =(AirwayParams) message.getContentObject();
-                List<String> newRoute = plan.findRoute(aircraftParams.getBeginning(), aircraftParams.getEnd(), aircraftParams.getMaxSpeed(), aircraftParams.getPriority());
+
+                List<String> newRoute = airwaysManager.findRoute(
+                        aircraftParams.getBeginning(),
+                        aircraftParams.getEnd(),
+                        aircraftParams.getMaxSpeed(),
+                        aircraftParams.getPriority()
+                );
                 ACLMessage routeProposal = new ACLMessage(PROPAGATE);
                 routeProposal.addReceiver(message.getSender());
                 routeProposal.setContentObject((Serializable) newRoute);
+
                 myAgent.send(routeProposal);
             } catch (UnreadableException | IOException e) {
                 throw new RuntimeException(e);
             }
-
-
         }
+    }
+
+    public static ProposeNewAirwayBehaviour create(AirwaysManager manager) {
+        return new ProposeNewAirwayBehaviour(manager);
+    }
+
+    private ProposeNewAirwayBehaviour(AirwaysManager manager) {
+        airwaysManager = manager;
     }
 }

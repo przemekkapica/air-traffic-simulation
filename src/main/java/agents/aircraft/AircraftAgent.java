@@ -18,35 +18,38 @@ public class AircraftAgent extends Agent {
     @Override
     protected void setup() {
         super.setup();
+
         final Object[] params = getArguments();
         if (params.length < 4) {
-            System.out.println("Usage [aircraft name], [priority], [starting station], [pair <segment name, intersection name>]");
+            System.out.println("Usage [aircraft name], [priority], [starting point], [pair <segment name, intersection name>]");
             doDelete();
         }
         String aircraftName = params[0].toString();
-        Aircraft aircraft =(Aircraft) Simulation.getScene().getObject(aircraftName);
         String priorityName = params[1].toString();
+        Aircraft aircraft = (Aircraft)Simulation.getScene().getObject(aircraftName);
 
-        AirwaysManager.RoutePriority priority;
-        switch (priorityName) {
-            case "DISTANCE" -> priority = AirwaysManager.RoutePriority.DISTANCE;
-            case "COST" -> priority = AirwaysManager.RoutePriority.COST;
-            case "LOAD" -> priority = AirwaysManager.RoutePriority.LOAD;
-            default -> priority = AirwaysManager.RoutePriority.DEFAULT;
-        }
+        AirwaysManager.AirwayPriority priority = getPriority(priorityName);
 
-        for (int i = 2; i < params.length; ++i) {
-            if (i % 2 == 0) {
-                aircraft.intersections.add(params[i].toString());
-                finalDestination = params[i].toString();
-            }
-            else
-                aircraft.segments.add(params[i].toString());
-        }
+        setSegmentsAndDestination(params, aircraft);
 
         final DFAgentDescription description = new DFAgentDescription();
         description.setName(getAID());
 
+        addServicesForSegments(aircraft, description);
+
+        addBehaviors(aircraft, priority, description);
+    }
+
+    private static AirwaysManager.AirwayPriority getPriority(String priorityName) {
+        return switch (priorityName) {
+            case "DISTANCE" -> AirwaysManager.AirwayPriority.DISTANCE;
+            case "COST" -> AirwaysManager.AirwayPriority.COST;
+            case "LOAD" -> AirwaysManager.AirwayPriority.LOAD;
+            default -> AirwaysManager.AirwayPriority.DEFAULT;
+        };
+    }
+
+    private void addServicesForSegments(Aircraft aircraft, DFAgentDescription description) {
         for (String segment : aircraft.segments) {
             final ServiceDescription serviceDescription = new ServiceDescription();
             serviceDescription.setType(PASSING);
@@ -58,17 +61,24 @@ public class AircraftAgent extends Agent {
         } catch (FIPAException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    private void setSegmentsAndDestination(Object[] params, Aircraft aircraft) {
+        for (int i = 2; i < params.length; ++i) {
+            if (i % 2 == 0) {
+                aircraft.intersections.add(params[i].toString());
+                finalDestination = params[i].toString();
+            }
+            else
+                aircraft.segments.add(params[i].toString());
+        }
+    }
 
+    private void addBehaviors(Aircraft aircraft, AirwaysManager.AirwayPriority priority, DFAgentDescription description) {
         addBehaviour(ForwardArrivalInfoToIntersectionBehaviour.create(aircraft));
         addBehaviour(ConfigureVelocityBehaviour.create(aircraft));
         addBehaviour(TakeOffBehaviour.create(aircraft));
-        addBehaviour(AcceptNewAirwayProporsalBehaviour.create(aircraft, finalDestination, priority));
+        addBehaviour(AcceptNewAirwayProposalBehaviour.create(aircraft, finalDestination, priority));
         addBehaviour(SetNewAirwayBehaviour.create(aircraft, description));
-
-
-
-
-
     }
 }

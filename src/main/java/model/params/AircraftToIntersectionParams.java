@@ -6,7 +6,6 @@ public class AircraftToIntersectionParams implements Serializable {
     private String previousIntersection;
     private Float maxSpeed;
 
-
     public String getPreviousIntersection() {
         return previousIntersection;
     }

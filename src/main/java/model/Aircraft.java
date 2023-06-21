@@ -18,6 +18,8 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     private float m_speed;
     private NVGColor m_color;
 
+    private float currentAttitude;
+
     public Queue<String> intersections = new ArrayDeque<>();
 
     public Queue<String> segments = new ArrayDeque<>();
@@ -29,71 +31,6 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     private float m_location;
 
     private AirwayIntersection previousIntersection;
-
-    void setLocation(float location) {
-        m_location = location;
-    }
-
-    void setAirwayFragment(AirwayFragment fragment) {
-        m_airwayFragment = fragment;
-    }
-
-    public void setColor(int r, int g, int b) {
-        m_color = GraphicsContext.colorFromRgb(r, g, b);
-    }
-
-    public NVGColor getColor() {
-        return m_color;
-    }
-
-    public AirwayFragment getAirwayFragment() {
-        return m_airwayFragment;
-    }
-
-    public float getLocation() {
-        return m_location;
-    }
-
-    public float getMaxSpeed() {
-        return m_maxSpeed;
-    }
-
-    public float getSpeed() {return  m_speed;}
-
-    public void setSpeed(float speed) {
-        m_speed = Math.min(Math.abs(speed), m_maxSpeed);
-    }
-
-    public boolean isRoadStable() {
-        return isRoadStable;
-    }
-
-    public void setRoadStable(boolean roadStable) {
-        isRoadStable = roadStable;
-    }
-
-    public AirwayIntersection getPreviousIntersection() {
-        return previousIntersection;
-    }
-
-    public void setPreviousIntersection(AirwayIntersection previousIntersection) {
-        this.previousIntersection = previousIntersection;
-    }
-
-    public boolean isTraversingSegment() {
-        return m_airwayFragment.getName().contains("segment");
-    }
-
-    public Aircraft(String name, float maxSpeed, AirwayFragment fragment) {
-        super(name);
-
-        m_maxSpeed = Math.abs(maxSpeed);
-        m_airwayFragment = fragment;
-        m_location = 0.0f;
-        m_color = Aircraft.COlOR;
-
-        m_airwayFragment.enter(this);
-    }
 
     @Override
     public void update(float deltaTime) {
@@ -144,5 +81,83 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         nvgTextAlign(nvg, NVG_ALIGN_MIDDLE | NVG_ALIGN_BOTTOM);
         nvgText(nvg, pos.x, pos.y - 30, String.format("aircraft: %s", getName()));
         nvgText(nvg, pos.x, pos.y - 15, String.format("speed: %.2f", m_speed));
+    }
+
+    void setLocation(float location) {
+        m_location = location;
+    }
+
+    void setCurrentAttitude(float attitude) {
+        currentAttitude = attitude;
+    }
+
+    void setAirwayFragment(AirwayFragment fragment) {
+        m_airwayFragment = fragment;
+    }
+
+    public void setColor(int r, int g, int b) {
+        m_color = GraphicsContext.colorFromRgb(r, g, b);
+    }
+
+    public NVGColor getColor() {
+        return m_color;
+    }
+
+    public AirwayFragment getAirwayFragment() {
+        return m_airwayFragment;
+    }
+
+    public float getLocation() {
+        return m_location;
+    }
+
+    public float getCurrentAttitude() {
+        return currentAttitude;
+    }
+
+    public float getMaxSpeed() {
+        return m_maxSpeed;
+    }
+
+    public float getSpeed() {return  m_speed;}
+
+    public void setSpeed(float speed) {
+        m_speed = Math.min(Math.abs(speed), m_maxSpeed);
+    }
+
+    public boolean isRoadStable() {
+        return isRoadStable;
+    }
+
+    public void setRoadStable(boolean roadStable) {
+        isRoadStable = roadStable;
+    }
+
+    public AirwayIntersection getPreviousIntersection() {
+        return previousIntersection;
+    }
+
+    public void setPreviousIntersection(AirwayIntersection previousIntersection) {
+        this.previousIntersection = previousIntersection;
+    }
+
+    public boolean isTraversingSegment() {
+        return m_airwayFragment.getName().contains("segment");
+    }
+
+    public Aircraft(String name, float maxSpeed, float initialAttitude, AirwayFragment fragment) {
+        super(name);
+
+        currentAttitude = initialAttitude;
+        m_maxSpeed = Math.abs(maxSpeed);
+        m_airwayFragment = fragment;
+        m_location = 0.0f;
+        m_color = Aircraft.COlOR;
+
+        m_airwayFragment.enter(this);
+    }
+
+    public void setAttitude(float attitude) {
+        currentAttitude = attitude;
     }
 }

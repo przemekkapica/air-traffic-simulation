@@ -19,7 +19,6 @@ public class TakeOffBehaviour extends OneShotBehaviour {
     private final Aircraft aircraft;
 
     public TakeOffBehaviour(Aircraft aircraft) {
-
         this.aircraft = aircraft;
     }
 
@@ -29,38 +28,41 @@ public class TakeOffBehaviour extends OneShotBehaviour {
 
     @Override
     public void action() {
-;
         try {
-            ACLMessage message = new ACLMessage(ACCEPT_PROPOSAL);
-            message.addReceiver(new AID("planner", AID.ISLOCALNAME));
-            AirwayRegistrationParams plannerParams = new AirwayRegistrationParams(aircraft.intersections.stream().toList(), aircraft.getName(), aircraft.getMaxSpeed());
-            message.setContentObject(plannerParams);
-            myAgent.send(message);
-
+            sendMessage();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         aircraft.setRoadStable(true);
 
-        AirwayIntersection intersection =(AirwayIntersection) Simulation.getScene().getObject(aircraft.intersections.remove());
+        AirwayIntersection intersection = (AirwayIntersection) Simulation.getScene().getObject(aircraft.intersections.remove());
         aircraft.setPreviousIntersection(intersection);
         intersection.setNextSegmentByName(aircraft.segments.remove());
 
-        System.out.println("sending message to next intersection:" + aircraft.intersections.peek());
-            final ACLMessage proposal = new ACLMessage(ACLMessage.INFORM);
-            AircraftToIntersectionParams messageContent = new AircraftToIntersectionParams();
-            messageContent.setMaxSpeed(aircraft.getMaxSpeed());
-            messageContent.setPreviousIntersection(aircraft.getPreviousIntersection().getName());
-            aircraft.setPreviousIntersection((AirwayIntersection) getScene().getObject(aircraft.intersections.peek()));
+        System.out.println("Sending message to next intersection:" + aircraft.intersections.peek());
 
-            proposal.addReceiver(new AID(aircraft.intersections.remove(), AID.ISLOCALNAME));
-            try {
-                proposal.setContentObject(messageContent);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            myAgent.send(proposal);
+        final ACLMessage proposal = new ACLMessage(ACLMessage.INFORM);
+        AircraftToIntersectionParams messageContent = new AircraftToIntersectionParams();
+        messageContent.setMaxSpeed(aircraft.getMaxSpeed());
+        messageContent.setPreviousIntersection(aircraft.getPreviousIntersection().getName());
+        aircraft.setPreviousIntersection((AirwayIntersection) getScene().getObject(aircraft.intersections.peek()));
 
+        proposal.addReceiver(new AID(aircraft.intersections.remove(), AID.ISLOCALNAME));
+        try {
+            proposal.setContentObject(messageContent);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        myAgent.send(proposal);
+
+    }
+
+    private void sendMessage() throws IOException {
+        ACLMessage message = new ACLMessage(ACCEPT_PROPOSAL);
+        message.addReceiver(new AID("planner", AID.ISLOCALNAME));
+        AirwayRegistrationParams plannerParams = new AirwayRegistrationParams(aircraft.intersections.stream().toList(), aircraft.getName(), aircraft.getMaxSpeed());
+        message.setContentObject(plannerParams);
+        myAgent.send(message);
     }
 }

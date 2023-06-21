@@ -34,10 +34,6 @@ public class PlannerGraph {
             m_load = load;
         }
 
-        public void setCost(float cost) {
-            m_cost = cost;
-        }
-
         public void setEnabled (boolean enabled) {
             m_enabled = enabled;
         }
@@ -74,11 +70,10 @@ public class PlannerGraph {
 
     private final Map<String, PlannerGraphNode> m_graph = new HashMap<> ();
 
-    public PlannerGraphNode addNode (String name) {
+    public void addNode(String name) {
         PlannerGraphNode node = new PlannerGraphNode (name);
         m_graph.put (name, node);
 
-        return node;
     }
 
     public PlannerGraphNode getNode (String name) {

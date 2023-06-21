@@ -12,7 +12,7 @@ import simulation.Simulation;
 import java.io.IOException;
 import java.util.Objects;
 
-import static util.Constants.FINAL_STATION;
+import static util.Constants.FINAL_DESTINATION;
 import static jade.lang.acl.ACLMessage.CONFIRM;
 import static jade.lang.acl.ACLMessage.INFORM_IF;
 
@@ -20,32 +20,23 @@ public class ForwardArrivalInfoToIntersectionBehaviour extends CyclicBehaviour {
     private final Aircraft aircraft;
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(CONFIRM);
 
-    public ForwardArrivalInfoToIntersectionBehaviour(Aircraft aircraft) {
-        this.aircraft = aircraft;
-    }
-
-    public static ForwardArrivalInfoToIntersectionBehaviour create(Aircraft aircraft) {
-        return new ForwardArrivalInfoToIntersectionBehaviour(aircraft);
-     }
-
     @Override
     public void action() {
         final ACLMessage message = myAgent.receive(messageTemplate);
 
         if (Objects.nonNull(message) && aircraft.isRoadStable()) {
 
-            if (message.getContent().equals(FINAL_STATION))
-            {
+            if (message.getContent().equals(FINAL_DESTINATION)) {
                 aircraft.setSpeed(0);
+                aircraft.setAttitude(0);
                 aircraft.setColor(9,143,53);
+
                 ACLMessage disqualifyRoute = new ACLMessage(INFORM_IF);
                 disqualifyRoute.addReceiver(new AID("planner", AID.ISLOCALNAME));
                 disqualifyRoute.setContent(aircraft.getName());
                 myAgent.send(disqualifyRoute);
                 myAgent.doDelete();
-            }
-            else
-            {
+            } else {
                 System.out.println("sending message to next intersection:" + aircraft.intersections.peek());
                 final ACLMessage proposal = new ACLMessage(ACLMessage.INFORM);
                 AircraftToIntersectionParams messageContent = new AircraftToIntersectionParams();
@@ -64,5 +55,13 @@ public class ForwardArrivalInfoToIntersectionBehaviour extends CyclicBehaviour {
                 myAgent.send(proposal);
             }
         }
+    }
+
+    public ForwardArrivalInfoToIntersectionBehaviour(Aircraft aircraft) {
+        this.aircraft = aircraft;
+    }
+
+    public static ForwardArrivalInfoToIntersectionBehaviour create(Aircraft aircraft) {
+        return new ForwardArrivalInfoToIntersectionBehaviour(aircraft);
     }
 }

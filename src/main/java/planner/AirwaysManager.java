@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.concurrent.Semaphore;
 
 public class AirwaysManager {
-    public enum RoutePriority {
+    public enum AirwayPriority {
         DEFAULT, DISTANCE, COST, LOAD
     }
 
@@ -122,7 +122,7 @@ public class AirwaysManager {
         m_aircrafts.put (aircraftName, route);
     }
 
-    private float getDistance (PlannerGraph.PlannerGraphEdge edge, RoutePriority priority) {
+    private float getDistance (PlannerGraph.PlannerGraphEdge edge, AirwayPriority priority) {
         float weight = 0.0f;
 
         switch (priority) {
@@ -135,7 +135,7 @@ public class AirwaysManager {
         return weight;
     }
 
-    public List<String> findRoute (String from, String to, float maxSpeed, RoutePriority priority) {
+    public List<String> findRoute (String from, String to, float maxSpeed, AirwayPriority priority) {
         // dijkstra algoritm
         List<String> route = null;
 

@@ -10,15 +10,11 @@ import static org.lwjgl.nanovg.NanoVG.*;
 public class AirwaySegment extends AirwayFragment implements IRenderableObject {
     private static final NVGColor COlOR_WORKING = GraphicsContext.colorFromRgb(127, 195, 219);
     private static final NVGColor COLOR_BROKEN = GraphicsContext.colorFromRgb(70, 70, 70);
-
     private final AirwayIntersection m_startIntersection;
     private final AirwayIntersection m_endIntersection;
-
     private final Vector2f m_startPosition;
     private final Vector2f m_endPosition;
-
     private final float m_length;
-
     private boolean broken;
 
     Vector2f getDirection() {
@@ -34,6 +30,27 @@ public class AirwaySegment extends AirwayFragment implements IRenderableObject {
     @Override
     public AirwayFragment getNextFragment() {
         return m_endIntersection;
+    }
+
+    @Override
+    public void glRender(GraphicsContext context) {
+    }
+
+    @Override
+    public void nvgRender(long nvg) {
+        nvgBeginPath(nvg);
+        nvgMoveTo(nvg, m_startPosition.x, m_startPosition.y);
+        nvgLineTo(nvg, m_endPosition.x, m_endPosition.y);
+
+        if (broken) {
+            nvgStrokeColor(nvg, COLOR_BROKEN);
+        } else {
+            nvgStrokeColor(nvg, COlOR_WORKING);
+        }
+
+        nvgStrokeWidth(nvg, 5.0f);
+        nvgStroke(nvg);
+        nvgClosePath(nvg);
     }
 
     public AirwayIntersection getEndIntersection() {
@@ -66,28 +83,6 @@ public class AirwaySegment extends AirwayFragment implements IRenderableObject {
         m_startIntersection.addOutboundSegment(this);
         m_endIntersection.addInboundSegment(this);
 
-
-            broken = false;
-    }
-
-    @Override
-    public void glRender(GraphicsContext context) {
-    }
-
-    @Override
-    public void nvgRender(long nvg) {
-        nvgBeginPath(nvg);
-        nvgMoveTo(nvg, m_startPosition.x, m_startPosition.y);
-        nvgLineTo(nvg, m_endPosition.x, m_endPosition.y);
-
-        if (broken) {
-            nvgStrokeColor(nvg, COLOR_BROKEN);
-        } else {
-            nvgStrokeColor(nvg, COlOR_WORKING);
-        }
-
-        nvgStrokeWidth(nvg, 5.0f);
-        nvgStroke(nvg);
-        nvgClosePath(nvg);
+        broken = false;
     }
 }

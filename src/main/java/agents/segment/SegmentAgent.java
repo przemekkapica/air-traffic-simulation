@@ -1,6 +1,6 @@
 package agents.segment;
 
-import agents.segment.behaviours.CheckAircraftConditionBehavious;
+import agents.segment.behaviours.CheckAircraftConditionBehavior;
 import jade.core.Agent;
 import model.AirwaySegment;
 import simulation.Simulation;
@@ -19,6 +19,6 @@ public class SegmentAgent extends Agent {
         }
         String name = params[0].toString();
         AirwaySegment segment =(AirwaySegment) Simulation.getScene().getObject("segment_" + name);
-        addBehaviour(CheckAircraftConditionBehavious.create(this, 1000, segment));
+        addBehaviour(CheckAircraftConditionBehavior.create(this, 1000, segment));
     }
 }

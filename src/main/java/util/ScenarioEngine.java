@@ -12,22 +12,15 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class ScenarioEngine {
-    private Runtime runtime;
-    private Profile profile;
-    private ContainerController containerController;
+    private final ContainerController containerController;
 
     public ScenarioEngine() throws StaleProxyException {
-        runtime = Runtime.instance();
-        profile = new ProfileImpl("localhost", 8888, null);
+        Runtime runtime = Runtime.instance();
+        Profile profile = new ProfileImpl("localhost", 8888, null);
         containerController = runtime.createMainContainer(profile);
-
-
     }
 
-
     public void runScenario(int scenario_id) throws FileNotFoundException, StaleProxyException {
-
-
         Scanner sc = new Scanner(new File("src/main/resources/scenario" + scenario_id +".csv"));
         sc.useDelimiter(";");
         while(sc.hasNext())
@@ -48,8 +41,6 @@ public class ScenarioEngine {
 
         }
         sc.close();
-        //containerController.createNewAgent("Gui Guy", "jade.tools.rma.rma", null).start();
-
     }
 
     private void CreateSegment(String agentParams) throws StaleProxyException {
@@ -72,7 +63,7 @@ public class ScenarioEngine {
     }
 
     private Object[] GetAgentParams(String agentParams) {
-        return agentParams.split("\\,");
+        return agentParams.split(",");
     }
 
 }

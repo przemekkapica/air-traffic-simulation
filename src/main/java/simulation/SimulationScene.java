@@ -38,18 +38,18 @@ public class SimulationScene {
         }
     }
 
-    void glRender (GraphicsContext context) {
+    void glRender(GraphicsContext context) {
         for (SimulationObject object : simulationObjects.values ()) {
             if (object instanceof IRenderableObject) {
-                ((IRenderableObject) object).glRender (context);
+                ((IRenderableObject)object).glRender (context);
             }
         }
     }
 
-    void nvgRender (long nvg) {
+    void nvgRender(long nvg) {
         for (SimulationObject object : simulationObjects.values ()) {
             if (object instanceof IRenderableObject) {
-                ((IRenderableObject) object).nvgRender (nvg);
+                ((IRenderableObject)object).nvgRender (nvg);
             }
         }
     }

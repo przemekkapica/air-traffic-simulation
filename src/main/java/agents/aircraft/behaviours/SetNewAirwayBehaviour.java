@@ -24,33 +24,21 @@ public class SetNewAirwayBehaviour extends CyclicBehaviour {
     Aircraft aircraft;
     DFAgentDescription oldDescription;
 
-    public static SetNewAirwayBehaviour create(Aircraft aircraft, DFAgentDescription description) {
-        return new SetNewAirwayBehaviour(aircraft, description);
-    }
-
-    public SetNewAirwayBehaviour(Aircraft aircraft, DFAgentDescription desc) {
-        this.aircraft = aircraft;
-        oldDescription = desc;
-
-    }
-
     @Override
     public void action() {
-
         final ACLMessage message = myAgent.receive(messageTemplate);
 
         if (Objects.nonNull(message))
         {
-
             try {
-                List<String> route =(List<String>) message.getContentObject();
+                List<String> route = (List<String>) message.getContentObject();
                 if (route.contains("Not_Found")) {
                     return; //this message is displayed if there is no route available for our aircraft
                 }
 
                 aircraft.intersections = new LinkedList<>(route);
-                aircraft.segments = new LinkedList<>(parseRoad(route));
-                aircraft.setColor(0,255,0);
+                aircraft.segments = new LinkedList<>(parseAirway(route));
+                aircraft.setColor(0,180,0);
                 myAgent.addBehaviour(TakeOffBehaviour.create(aircraft));
 
                 DFService.deregister(myAgent, oldDescription);
@@ -70,18 +58,25 @@ public class SetNewAirwayBehaviour extends CyclicBehaviour {
             } catch (UnreadableException | FIPAException e) {
                 throw new RuntimeException(e);
             }
-
         }
     }
 
-    private  List<String> parseRoad(List<String> route) {
+    public static SetNewAirwayBehaviour create(Aircraft aircraft, DFAgentDescription description) {
+        return new SetNewAirwayBehaviour(aircraft, description);
+    }
+
+    public SetNewAirwayBehaviour(Aircraft aircraft, DFAgentDescription description) {
+        this.aircraft = aircraft;
+        oldDescription = description;
+    }
+
+    private List<String> parseAirway(List<String> airway) {
         List<String> segments = new ArrayList<>();
-        for (int i = 0; i < route.size() - 1 ; ++i) {
-            segments.add(
-                    route.get(i).split("_")[1]
-                    + "-" +
-                    route.get(i + 1).split("_")[1]
-            );
+        for (int i = 0; i < airway.size() - 1 ; ++i) {
+            var airwayCurrentPart = airway.get(i).split("_")[1];
+            var airwayFollowingPart = airway.get(i + 1).split("_")[1];
+
+            segments.add(airwayCurrentPart + "-" + airwayFollowingPart);
         }
         return segments;
     }

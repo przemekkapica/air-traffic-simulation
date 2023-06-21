@@ -15,23 +15,21 @@ public class HandlePlaneArrivalBehaviour extends CyclicBehaviour {
 
     private final AirwaysManager airwaysManager;
 
+    @Override
+    public void action() {
+        final ACLMessage message = myAgent.receive(messageTemplate);
+
+        if (Objects.nonNull(message)) {
+            String aircraftName = message.getContent();
+            airwaysManager.notifyAircraftArrived(aircraftName);
+        }
+    }
+
     public static HandlePlaneArrivalBehaviour create(AirwaysManager airwayPlan) {
         return new HandlePlaneArrivalBehaviour(airwayPlan);
     }
 
     private HandlePlaneArrivalBehaviour(AirwaysManager airwaysManager) {
         this.airwaysManager = airwaysManager;
-    }
-
-    @Override
-    public void action() {
-
-        final ACLMessage message = myAgent.receive(messageTemplate);
-
-        if (Objects.nonNull(message))
-        {
-            String aircraftName = message.getContent();
-            airwaysManager.notifyAircraftArrived(aircraftName);
-        }
     }
 }

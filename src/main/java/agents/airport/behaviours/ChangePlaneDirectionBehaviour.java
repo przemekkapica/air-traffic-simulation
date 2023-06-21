@@ -7,7 +7,7 @@ import model.AirwayIntersection;
 
 import java.util.Objects;
 
-import static util.Constants.FINAL_STATION;
+import static util.Constants.FINAL_DESTINATION;
 import static jade.lang.acl.ACLMessage.AGREE;
 
 public class ChangePlaneDirectionBehaviour extends CyclicBehaviour {
@@ -15,14 +15,6 @@ public class ChangePlaneDirectionBehaviour extends CyclicBehaviour {
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(AGREE);
 
     private final AirwayIntersection intersection;
-
-    public ChangePlaneDirectionBehaviour(AirwayIntersection intersection) {
-        this.intersection = intersection;
-    }
-
-    public static ChangePlaneDirectionBehaviour create(AirwayIntersection intersection) {
-        return new ChangePlaneDirectionBehaviour(intersection);
-    }
 
     @Override
     public void action() {
@@ -32,21 +24,34 @@ public class ChangePlaneDirectionBehaviour extends CyclicBehaviour {
             final ACLMessage response = new ACLMessage(ACLMessage.CONFIRM);
             final String segment = message.getContent();
 
-            if (segment.equals(FINAL_STATION))
-            {
-                System.out.println("[" + myAgent.getLocalName() + "] This aircraft will be stopping here ");
-                response.setContent(FINAL_STATION);
-            }
-            else
-            {
-                intersection.setNextSegmentByName(segment);
-                System.out.println("[" + myAgent.getLocalName() + "] Switching to " + segment);
-                response.setContent("Not final station");
-            }
-            response.addReceiver(message.getSender());
-            myAgent.send(response);
+            checkIfFinalDestinationAndSetResponse(response, segment);
 
-
+            sendMessage(message, response);
         }
+    }
+
+    public ChangePlaneDirectionBehaviour(AirwayIntersection intersection) {
+        this.intersection = intersection;
+    }
+
+    public static ChangePlaneDirectionBehaviour create(AirwayIntersection intersection) {
+        return new ChangePlaneDirectionBehaviour(intersection);
+    }
+
+    private void checkIfFinalDestinationAndSetResponse(ACLMessage response, String segment) {
+        if (segment.equals(FINAL_DESTINATION)) {
+            System.out.println("[" + myAgent.getLocalName() + "] This aircraft will be stopping here ");
+            response.setContent(FINAL_DESTINATION);
+        }
+        else  {
+            intersection.setNextSegmentByName(segment);
+            System.out.println("[" + myAgent.getLocalName() + "] Switching to " + segment);
+            response.setContent("Not final station");
+        }
+    }
+
+    private void sendMessage(ACLMessage message, ACLMessage response) {
+        response.addReceiver(message.getSender());
+        myAgent.send(response);
     }
 }

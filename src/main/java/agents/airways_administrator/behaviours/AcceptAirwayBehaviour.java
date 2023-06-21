@@ -15,30 +15,28 @@ public class AcceptAirwayBehaviour extends CyclicBehaviour {
 
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(ACCEPT_PROPOSAL);
 
-    private AirwaysManager plan;
+    private AirwaysManager airwaysManager;
 
-    public static AcceptAirwayBehaviour create(AirwaysManager airwayPlan) {
-        return new AcceptAirwayBehaviour(airwayPlan);
-    }
-
-    private AcceptAirwayBehaviour(AirwaysManager airwayPlan) {
-        plan = airwayPlan;
-    }
     @Override
     public void action() {
-
         final ACLMessage message = myAgent.receive(messageTemplate);
 
-        if (Objects.nonNull(message))
-        {
+        if (Objects.nonNull(message)) {
             try {
-                AirwayRegistrationParams aircraft =(AirwayRegistrationParams) message.getContentObject();
-                plan.acceptRoute(aircraft.getRoute(), aircraft.getName(), aircraft.getMaxSpeed());
+                AirwayRegistrationParams aircraft = (AirwayRegistrationParams)message.getContentObject();
+
+                airwaysManager.acceptRoute(aircraft.route(), aircraft.name(), aircraft.maxSpeed());
             } catch (UnreadableException e) {
                 throw new RuntimeException(e);
             }
-
-
         }
+    }
+
+    public static AcceptAirwayBehaviour create(AirwaysManager manager) {
+        return new AcceptAirwayBehaviour(manager);
+    }
+
+    private AcceptAirwayBehaviour(AirwaysManager manager) {
+        airwaysManager = manager;
     }
 }
