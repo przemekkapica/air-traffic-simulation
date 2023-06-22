@@ -5,10 +5,9 @@ import util.ScenarioEngine;
 
 import java.io.FileNotFoundException;
 
-
-
 public class Main {
-    private static final int simulationNumber = 0;
+    private static final int simulationNumber = 1;
+
 
     // this is the main jade entry point function
     // it can be used to set up the platform, there is no need to use any additional agents for setup

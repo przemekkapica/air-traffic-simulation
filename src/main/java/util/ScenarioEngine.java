@@ -26,19 +26,12 @@ public class ScenarioEngine {
         while(sc.hasNext())
         {
             String agentClass = sc.next();
-            if (agentClass.equals("segment")) {
-                CreateSegment(sc.next());
+            switch (agentClass) {
+                case "segment" -> CreateSegment(sc.next());
+                case "intersection" -> CreateIntersection(sc.next());
+                case "aircraft" -> CreateAircraft(sc.next());
+                case "planner" -> CreatePlanner(sc.next());
             }
-            else if (agentClass.equals("intersection")) {
-                CreateIntersection(sc.next());
-            }
-            else if (agentClass.equals("aircraft")) {
-                CreateAircraft(sc.next());
-            }
-            else if (agentClass.equals("planner")) {
-                CreatePlanner(sc.next());
-            }
-
         }
         sc.close();
     }

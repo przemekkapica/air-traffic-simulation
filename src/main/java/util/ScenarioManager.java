@@ -12,15 +12,15 @@ public class ScenarioManager {
     public static void RunScenario1() {
 
         final AirwayIntersection[] intersections = {
-                new AirwayIntersection("intersection_1", new Vector2f(200, 300)),
-                new AirwayIntersection("intersection_2", new Vector2f(200, 100)),
-                new AirwayIntersection("intersection_3", new Vector2f(600, 300)),
-                new AirwayIntersection("intersection_4", new Vector2f(800, 100)),
-                new AirwayIntersection("intersection_5", new Vector2f(100, 500)),
-                new AirwayIntersection("intersection_6", new Vector2f(400, 300)),
-                new AirwayIntersection("intersection_7", new Vector2f(600, 500)),
-                new AirwayIntersection("intersection_8", new Vector2f(800, 500)),
-                new AirwayIntersection("intersection_9", new Vector2f(250, 600))
+                new AirwayIntersection("INT_1", new Vector2f(200, 300)),
+                new AirwayIntersection("INT_2", new Vector2f(200, 100)),
+                new AirwayIntersection("INT_3", new Vector2f(600, 300)),
+                new AirwayIntersection("INT_4", new Vector2f(800, 100)),
+                new AirwayIntersection("INT_5", new Vector2f(100, 500)),
+                new AirwayIntersection("INT_6", new Vector2f(400, 300)),
+                new AirwayIntersection("INT_7", new Vector2f(600, 500)),
+                new AirwayIntersection("INT_8", new Vector2f(800, 500)),
+                new AirwayIntersection("INT_9", new Vector2f(250, 600))
         };
 
         final String[] segments = { "1-2", "2-3", "3-4", "1-6", "3-6", "3-7", "4-8", "5-1", "5-6", "6-7", "7-8", "7-9", "8-3", "9-5", "8-7", "7-3" };
@@ -31,7 +31,7 @@ public class ScenarioManager {
             String from = parsed.getValue0(), to = parsed.getValue1();
             Simulation.getScene().addObject(new AirwaySegment(
                     String.format("segment_%s", segment),
-                    intersections[ Integer.parseInt(from) - 1],
+                    intersections[Integer.parseInt(from) - 1],
                     intersections[Integer.parseInt(to) - 1]
             ));
         }
@@ -40,7 +40,7 @@ public class ScenarioManager {
             Simulation.getScene().addObject(intersection);
         }
 
-        Aircraft aircraft = new Aircraft("aircraft_1", 100.0f, 100.0f, intersections[0]);
+        Aircraft aircraft = new Aircraft("A_1", 100.0f, 100.0f, intersections[0]);
         aircraft.setSpeed(0.0f);
         aircraft.setColor(44, 16, 130);
         Simulation.getScene().addObject(aircraft);
