@@ -8,6 +8,7 @@ import model.Aircraft;
 import model.params.AirwayRegistrationParams;
 import model.params.AircraftToIntersectionParams;
 import simulation.Simulation;
+import util.Constants;
 
 import java.io.IOException;
 
@@ -23,7 +24,7 @@ public class TakeOffBehaviour extends OneShotBehaviour {
     }
 
     public static TakeOffBehaviour create(Aircraft aircraft) {
-        return new TakeOffBehaviour( aircraft);
+        return new TakeOffBehaviour(aircraft);
     }
 
     @Override
@@ -35,6 +36,7 @@ public class TakeOffBehaviour extends OneShotBehaviour {
         }
 
         aircraft.setRoadStable(true);
+        aircraft.accelerate(Constants.TAKE_OFF_DESTINATION_SPEED);
 
         AirwayIntersection intersection = (AirwayIntersection) Simulation.getScene().getObject(aircraft.intersections.remove());
         aircraft.setPreviousIntersection(intersection);
@@ -60,7 +62,7 @@ public class TakeOffBehaviour extends OneShotBehaviour {
 
     private void sendMessage() throws IOException {
         ACLMessage message = new ACLMessage(ACCEPT_PROPOSAL);
-        message.addReceiver(new AID("planner", AID.ISLOCALNAME));
+        message.addReceiver(new AID("airways_administrator", AID.ISLOCALNAME));
         AirwayRegistrationParams plannerParams = new AirwayRegistrationParams(aircraft.intersections.stream().toList(), aircraft.getName(), aircraft.getMaxSpeed());
         message.setContentObject(plannerParams);
         myAgent.send(message);

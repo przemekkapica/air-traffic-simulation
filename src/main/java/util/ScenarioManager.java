@@ -40,7 +40,7 @@ public class ScenarioManager {
             Simulation.getScene().addObject(intersection);
         }
 
-        Aircraft aircraft = new Aircraft("A_1", 100.0f, 100.0f, intersections[0]);
+        Aircraft aircraft = new Aircraft("A_1", 700.0f, 0.0f, intersections[0]);
         aircraft.setSpeed(0.0f);
         aircraft.setColor(44, 16, 130);
         Simulation.getScene().addObject(aircraft);

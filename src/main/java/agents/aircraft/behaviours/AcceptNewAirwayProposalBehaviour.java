@@ -58,7 +58,7 @@ public class AcceptNewAirwayProposalBehaviour extends CyclicBehaviour {
 
     private void _sendMessage() {
         ACLMessage disqualifyRoute = new ACLMessage(INFORM_IF);
-        disqualifyRoute.addReceiver(new AID("planner", AID.ISLOCALNAME));
+        disqualifyRoute.addReceiver(new AID("airways_administrator", AID.ISLOCALNAME));
         disqualifyRoute.setContent(aircraft.getName());
         myAgent.send(disqualifyRoute);
     }

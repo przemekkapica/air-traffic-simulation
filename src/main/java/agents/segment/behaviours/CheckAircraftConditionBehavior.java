@@ -32,7 +32,7 @@ public class CheckAircraftConditionBehavior extends TickerBehaviour {
 
     private void sendMessage() {
         ACLMessage message = new ACLMessage(INFORM);
-        message.addReceiver(new AID("planner", AID.ISLOCALNAME));
+        message.addReceiver(new AID("airways_administrator", AID.ISLOCALNAME));
         message.setContent(segment.getName() + "; got Broken");
         myAgent.send(message);
     }

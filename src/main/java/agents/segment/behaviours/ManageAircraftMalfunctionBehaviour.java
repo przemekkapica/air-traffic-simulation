@@ -33,7 +33,7 @@ public class ManageAircraftMalfunctionBehaviour extends TickerBehaviour {
     private void sendMessage() {
         System.out.println(segment.getName() + " was repaired");
         ACLMessage message = new ACLMessage(INFORM);
-        message.addReceiver(new AID("planner", AID.ISLOCALNAME));
+        message.addReceiver(new AID("airways_administrator", AID.ISLOCALNAME));
         message.setContent(segment.getName()  + "; got Repaired");
         myAgent.send(message);
     }

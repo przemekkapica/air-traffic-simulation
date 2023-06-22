@@ -32,7 +32,7 @@ public class ForwardArrivalInfoToIntersectionBehaviour extends CyclicBehaviour {
                 aircraft.setColor(9,143,53);
 
                 ACLMessage disqualifyRoute = new ACLMessage(INFORM_IF);
-                disqualifyRoute.addReceiver(new AID("planner", AID.ISLOCALNAME));
+                disqualifyRoute.addReceiver(new AID("airways_administrator", AID.ISLOCALNAME));
                 disqualifyRoute.setContent(aircraft.getName());
                 myAgent.send(disqualifyRoute);
                 myAgent.doDelete();

@@ -8,15 +8,15 @@ import simulation.SimulationObject;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
-
+import java.util.concurrent.TimeUnit;
 import static org.lwjgl.nanovg.NanoVG.*;
 
 public class Aircraft extends SimulationObject implements IRenderableObject {
     private static final NVGColor COlOR = GraphicsContext.colorFromRgb(11, 102, 52);
 
-    private final float m_maxSpeed;
+    private final float maxSpeed;
     private float speed;
-    private NVGColor m_color;
+    private NVGColor color;
 
     private float attitude;
 
@@ -71,7 +71,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
         nvgBeginPath(nvg);
         nvgCircle(nvg, pos.x, pos.y, 10.0f);
-        nvgFillColor(nvg, m_color);
+        nvgFillColor(nvg, color);
         nvgFill(nvg);
         nvgClosePath(nvg);
 
@@ -84,28 +84,12 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         nvgText(nvg, pos.x + 12, pos.y + 15, String.format("attitude: %.2f", attitude));
     }
 
-    void setLocation(float location) {
-        this.location = location;
-    }
-
     public void setColor(int r, int g, int b) {
-        m_color = GraphicsContext.colorFromRgb(r, g, b);
-    }
-
-    public AirwayElement getAirwayFragment() {
-        return airwayFragment;
-    }
-
-    public float getLocation() {
-        return location;
-    }
-
-    public float getAttitude() {
-        return attitude;
+        color = GraphicsContext.colorFromRgb(r, g, b);
     }
 
     public float getMaxSpeed() {
-        return m_maxSpeed;
+        return maxSpeed;
     }
 
     public float getSpeed() {
@@ -113,7 +97,21 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     }
 
     public void setSpeed(float speed) {
-        this.speed = Math.min(Math.abs(speed), m_maxSpeed);
+        this.speed = Math.min(Math.abs(speed), maxSpeed);
+    }
+
+    public void accelerate(float destinationSpeed) {
+        if (speed >= destinationSpeed) {
+            return;
+        }
+        while (speed < destinationSpeed) {
+            setSpeed(speed + 10);
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     public boolean isRoadStable() {
@@ -140,10 +138,10 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         super(name);
 
         attitude = initialAttitude;
-        m_maxSpeed = Math.abs(maxSpeed);
+        this.maxSpeed = Math.abs(maxSpeed);
         airwayFragment = fragment;
         location = 0.0f;
-        m_color = Aircraft.COlOR;
+        color = Aircraft.COlOR;
 
         airwayFragment.enter(this);
     }

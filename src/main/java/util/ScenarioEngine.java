@@ -30,7 +30,7 @@ public class ScenarioEngine {
                 case "segment" -> CreateSegment(sc.next());
                 case "intersection" -> CreateIntersection(sc.next());
                 case "aircraft" -> CreateAircraft(sc.next());
-                case "planner" -> CreatePlanner(sc.next());
+                case "airways_administrator" -> CreatePlanner(sc.next());
             }
         }
         sc.close();
