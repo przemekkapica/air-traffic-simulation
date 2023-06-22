@@ -23,7 +23,7 @@ public class GraphDescriptor {
             if (!plan.containsKey(INTERSECTION_PREFIX + parsed.getValue0()))
                 plan.put(INTERSECTION_PREFIX + parsed.getValue0(), new ArrayList<>() {});
 
-            AirwaySegment segment =(AirwaySegment) Simulation.getScene().getObject("segment_" + s);
+            AirwaySegment segment = (AirwaySegment)Simulation.getScene().getObject("segment_" + s);
 
             AirwaysManager.RouteDescription description = new AirwaysManager.RouteDescription(
                     INTERSECTION_PREFIX + parsed.getValue1(),
