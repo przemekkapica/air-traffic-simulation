@@ -32,7 +32,6 @@ public class GraphicsContext {
 
         return color;
     }
-
     public void loadFont(String name, String file) throws RuntimeException, IOException {
         byte[] fontBytes = null;
 
