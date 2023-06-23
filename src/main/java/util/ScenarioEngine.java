@@ -20,8 +20,8 @@ public class ScenarioEngine {
         containerController = runtime.createMainContainer(profile);
     }
 
-    public void runScenario(int scenario_id) throws FileNotFoundException, StaleProxyException {
-        Scanner sc = new Scanner(new File("src/main/resources/scenarios/scenario" + scenario_id +".csv"));
+    public void runScenario() throws FileNotFoundException, StaleProxyException {
+        Scanner sc = new Scanner(new File("src/main/resources/scenarios/scenario.csv"));
         sc.useDelimiter(";");
         while(sc.hasNext())
         {
@@ -39,7 +39,6 @@ public class ScenarioEngine {
     private void CreateSegment(String agentParams) throws StaleProxyException {
         Object[] params = GetAgentParams(agentParams);
         containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.segment.SegmentAgent", params ).start();
-
     }
 
     private void CreateIntersection(String agentParams) throws StaleProxyException {
