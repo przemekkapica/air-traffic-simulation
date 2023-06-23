@@ -3,12 +3,11 @@ package agents.aircraft.behaviours;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
-import model.AirwayIntersection;
+import model.Airport;
 import model.Aircraft;
 import model.params.AirwayRegistrationParams;
 import model.params.AircraftToIntersectionParams;
 import simulation.Simulation;
-import util.Constants;
 
 import java.io.IOException;
 
@@ -39,7 +38,7 @@ public class TakeOffBehaviour extends OneShotBehaviour {
         aircraft.accelerate();
         //aircraft.ascend();
 
-        AirwayIntersection intersection = (AirwayIntersection) Simulation.getScene().getObject(aircraft.intersections.remove());
+        Airport intersection = (Airport) Simulation.getScene().getObject(aircraft.intersections.remove());
         aircraft.setPreviousIntersection(intersection);
         intersection.setNextSegmentByName(aircraft.segments.remove());
 
@@ -49,7 +48,7 @@ public class TakeOffBehaviour extends OneShotBehaviour {
         AircraftToIntersectionParams messageContent = new AircraftToIntersectionParams();
         messageContent.setMaxSpeed(aircraft.getMaxSpeed());
         messageContent.setPreviousIntersection(aircraft.getPreviousIntersection().getName());
-        aircraft.setPreviousIntersection((AirwayIntersection) getScene().getObject(aircraft.intersections.peek()));
+        aircraft.setPreviousIntersection((Airport) getScene().getObject(aircraft.intersections.peek()));
 
         proposal.addReceiver(new AID(aircraft.intersections.remove(), AID.ISLOCALNAME));
         try {

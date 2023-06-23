@@ -7,17 +7,17 @@ import simulation.IRenderableObject;
 
 import static org.lwjgl.nanovg.NanoVG.*;
 
-public class AirwaySegment extends AirwayElement implements IRenderableObject {
-    private static final NVGColor COlOR_WORKING = GraphicsContext.colorFromRgb(127, 195, 219);
+public class Airway extends GraphicalElement implements IRenderableObject {
+    private static final NVGColor COlOR_WORKING = GraphicsContext.colorFromRgb(67, 138, 236);
     private static final NVGColor COLOR_BROKEN = GraphicsContext.colorFromRgb(70, 70, 70);
-    private final AirwayIntersection startIntersection;
-    private final AirwayIntersection endIntersection;
+    private final Airport startIntersection;
+    private final Airport endIntersection;
     private final Vector2f startPosition;
     private final Vector2f endPosition;
     private final float length;
     private boolean broken;
 
-    public AirwaySegment(String name, AirwayIntersection start, AirwayIntersection end) {
+    public Airway(String name, Airport start, Airport end) {
         super(name);
 
         startIntersection = start;
@@ -40,7 +40,7 @@ public class AirwaySegment extends AirwayElement implements IRenderableObject {
     }
 
     @Override
-    public AirwayElement getNextFragment() {
+    public GraphicalElement getNextFragment() {
         return endIntersection;
     }
 
@@ -59,7 +59,7 @@ public class AirwaySegment extends AirwayElement implements IRenderableObject {
             nvgStrokeColor(nvg, COlOR_WORKING);
         }
 
-        nvgStrokeWidth(nvg, 5.0f);
+        nvgStrokeWidth(nvg, 2.0f);
         nvgStroke(nvg);
         nvgClosePath(nvg);
     }
@@ -69,11 +69,11 @@ public class AirwaySegment extends AirwayElement implements IRenderableObject {
         return pos.sub(startPosition).normalize();
     }
 
-    public AirwayIntersection getEndIntersection() {
+    public Airport getEndIntersection() {
         return endIntersection;
     }
 
-    public AirwayIntersection getStartIntersection() {
+    public Airport getStartIntersection() {
         return startIntersection;
     }
 

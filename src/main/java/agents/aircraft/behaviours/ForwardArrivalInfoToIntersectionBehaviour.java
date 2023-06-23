@@ -4,7 +4,7 @@ import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import model.AirwayIntersection;
+import model.Airport;
 import model.Aircraft;
 import model.params.AircraftToIntersectionParams;
 import simulation.Simulation;
@@ -43,7 +43,7 @@ public class ForwardArrivalInfoToIntersectionBehaviour extends CyclicBehaviour {
                 messageContent.setMaxSpeed(aircraft.getMaxSpeed());
                 messageContent.setPreviousIntersection(aircraft.getPreviousIntersection().getName());
 
-                AirwayIntersection last = (AirwayIntersection) Simulation.getScene().getObject(aircraft.intersections.peek());
+                Airport last = (Airport) Simulation.getScene().getObject(aircraft.intersections.peek());
                 aircraft.setPreviousIntersection(last);
                 proposal.addReceiver(new AID(aircraft.intersections.remove(), AID.ISLOCALNAME));
 

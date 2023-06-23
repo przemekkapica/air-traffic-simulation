@@ -11,18 +11,18 @@ import java.util.Set;
 
 import static org.lwjgl.nanovg.NanoVG.*;
 
-public class AirwayIntersection extends AirwayElement implements IPositionedObject, IRenderableObject {
+public class Airport extends GraphicalElement implements IPositionedObject, IRenderableObject {
 
     @Override
     public float getLength() {
         return 10.0f;
     }
-    private static final NVGColor COlOR = GraphicsContext.colorFromRgb(19, 112, 145);
+    private static final NVGColor COlOR = GraphicsContext.colorFromRgb(67, 138, 236);
 
-    private final Set<AirwaySegment> m_outbound;
-    private final Set<AirwaySegment> m_inbound;
+    private final Set<Airway> m_outbound;
+    private final Set<Airway> inbound;
 
-    private AirwaySegment nextSegment;
+    private Airway nextSegment;
     private final Vector2f position;
 
     @Override
@@ -37,25 +37,25 @@ public class AirwayIntersection extends AirwayElement implements IPositionedObje
     @Override
     public void nvgRender(long nvg) {
         nvgBeginPath(nvg);
-        nvgCircle(nvg, position.x, position.y, 10.0f);
+        nvgCircle(nvg, position.x, position.y, 7.0f);
         nvgFillColor(nvg, COlOR);
         nvgFill(nvg);
         nvgClosePath(nvg);
 
         // render label
         nvgFontSize(nvg, 16.0f);
+        nvgFillColor(nvg,  GraphicsContext.colorFromRgb(0, 0, 0));
         nvgFontFace(nvg, "font");
         nvgTextAlign(nvg, NVG_ALIGN_MIDDLE | NVG_ALIGN_BOTTOM);
-        nvgText(nvg, position.x, position.y - 30, String.format("%s", getName()));
-        // nvgText(nvg, position.x, position.y - 15, String.format("to: %s", getNextFragment().getNextFragment().getName()));
+        nvgText(nvg, position.x + 15, position.y + 2, String.format("%s", getName()));
     }
 
     @Override
-    public AirwaySegment getNextFragment() {
+    public Airway getNextFragment() {
         return nextSegment;
     }
 
-    void addOutboundSegment(AirwaySegment segment) {
+    void addOutboundSegment(Airway segment) {
         m_outbound.add(segment);
 
         if (nextSegment == null) {
@@ -63,12 +63,12 @@ public class AirwayIntersection extends AirwayElement implements IPositionedObje
         }
     }
 
-    void addInboundSegment(AirwaySegment segment) {
-        m_inbound.add(segment);
+    void addInboundSegment(Airway segment) {
+        inbound.add(segment);
     }
 
     public void setNextSegmentByName(String name) {
-        for (AirwaySegment segment : m_outbound) {
+        for (Airway segment : m_outbound) {
             if (segment.getName().equals("segment_" + name)) {
                 nextSegment = segment;
                 return;
@@ -77,11 +77,11 @@ public class AirwayIntersection extends AirwayElement implements IPositionedObje
         System.out.println("ERROR You cannot go in that direction");
     }
 
-    public AirwayIntersection(String name, Vector2f position) {
+    public Airport(String name, Vector2f position) {
         super(name);
         this.position = new Vector2f(position.x, position.y);
 
         m_outbound = new HashSet<>();
-        m_inbound = new HashSet<>();
+        inbound = new HashSet<>();
     }
 }

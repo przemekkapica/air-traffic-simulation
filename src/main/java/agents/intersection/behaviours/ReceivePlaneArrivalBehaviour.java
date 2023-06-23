@@ -4,7 +4,7 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
-import model.AirwayIntersection;
+import model.Airport;
 import model.params.AircraftToIntersectionParams;
 import org.javatuples.Pair;
 import org.joml.Vector2f;
@@ -21,7 +21,7 @@ public class ReceivePlaneArrivalBehaviour extends CyclicBehaviour {
 
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(INFORM);
 
-    private final AirwayIntersection intersection;
+    private final Airport intersection;
 
     private final List<Pair<String, Long>> scheduledAircrafts = new ArrayList<>();
 
@@ -35,7 +35,7 @@ public class ReceivePlaneArrivalBehaviour extends CyclicBehaviour {
 
                 final AircraftToIntersectionParams info =(AircraftToIntersectionParams) message.getContentObject();
 
-                AirwayIntersection secondIntersection =(AirwayIntersection) Simulation.getScene().getObject(info.getPreviousIntersection());
+                Airport secondIntersection =(Airport) Simulation.getScene().getObject(info.getPreviousIntersection());
 
                 Vector2f positionStart = intersection.getPosition();
                 Vector2f positionEnd = secondIntersection.getPosition();
@@ -62,11 +62,11 @@ public class ReceivePlaneArrivalBehaviour extends CyclicBehaviour {
         }
     }
 
-    public ReceivePlaneArrivalBehaviour(AirwayIntersection intersection) {
+    public ReceivePlaneArrivalBehaviour(Airport intersection) {
         this.intersection = intersection;
     }
 
-    public static ReceivePlaneArrivalBehaviour create(AirwayIntersection intersection) {
+    public static ReceivePlaneArrivalBehaviour create(Airport intersection) {
         return new ReceivePlaneArrivalBehaviour(intersection);
     }
 

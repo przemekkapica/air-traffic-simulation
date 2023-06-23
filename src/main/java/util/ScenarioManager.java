@@ -1,7 +1,7 @@
 package util;
 
-import model.AirwayIntersection;
-import model.AirwaySegment;
+import model.Airport;
+import model.Airway;
 import model.Aircraft;
 import org.javatuples.Pair;
 import org.joml.Vector2f;
@@ -11,33 +11,38 @@ public class ScenarioManager {
 
     public static void RunScenario1() {
 
-        final AirwayIntersection[] intersections = {
-                new AirwayIntersection("INT_1", new Vector2f(200, 300)),
-                new AirwayIntersection("INT_2", new Vector2f(200, 100)),
-                new AirwayIntersection("INT_3", new Vector2f(600, 300)),
-                new AirwayIntersection("INT_4", new Vector2f(800, 100)),
-                new AirwayIntersection("INT_5", new Vector2f(100, 500)),
-                new AirwayIntersection("INT_6", new Vector2f(400, 300)),
-                new AirwayIntersection("INT_7", new Vector2f(600, 500)),
-                new AirwayIntersection("INT_8", new Vector2f(800, 500)),
-                new AirwayIntersection("INT_9", new Vector2f(250, 600)),
-                new AirwayIntersection("INT_10", new Vector2f(400, 600))
+        final Airport[] intersections = {
+                new Airport(":New Delhi", new Vector2f(872.42f, 416.3f)),
+                new Airport(":Tokyo", new Vector2f(1079.76f, 377.48f)),
+                new Airport(":Seoul", new Vector2f(1076.14f, 301.46f)),
+                new Airport(":Istanbul", new Vector2f(717.76f, 359.38f)),
+                new Airport(":New York", new Vector2f(383.72f, 340.28f)),
+                new Airport(":Mexico City", new Vector2f(289.6f, 434.4f)),
+                new Airport(":Rio de Janeiro", new Vector2f(452.5f, 579.2f)),
+                new Airport(":Lagos", new Vector2f(626.26f, 471.6f)),
+                new Airport(":London", new Vector2f(615.4f, 304.08f)),
+                new Airport(":Cairo", new Vector2f(709.52f, 409.06f)),
+                new Airport(":Moscow", new Vector2f(752.96f, 287.98f))
         };
 
-        final String[] segments = { "1-2", "2-3", "3-4", "1-6", "3-6", "3-7", "4-8", "5-1", "5-6", "6-7", "7-8", "7-9", "8-3", "9-5", "8-7", "7-3", "6-10" };
+        final String[] segments = {
+                "1-2", "2-3", "3-4", "1-6", "3-6", "3-7", "4-8", "5-1",
+                "5-6", "6-7", "7-8", "7-9", "8-3", "9-5", "8-7", "7-3", "6-10",
+                "9-11", "3-11", "1-11", "7-11", "9-2", "5-7", "8-5", "9-10"
+        };
 
 
         for (String segment : segments) {
             Pair<String, String> parsed = SegmentParser.parse(segment);
             String from = parsed.getValue0(), to = parsed.getValue1();
-            Simulation.getScene().addObject(new AirwaySegment(
+            Simulation.getScene().addObject(new Airway(
                     String.format("segment_%s", segment),
                     intersections[Integer.parseInt(from) - 1],
                     intersections[Integer.parseInt(to) - 1]
             ));
         }
 
-        for (AirwayIntersection intersection : intersections) {
+        for (Airport intersection : intersections) {
             Simulation.getScene().addObject(intersection);
         }
 
@@ -84,14 +89,14 @@ public class ScenarioManager {
 
     public static void RunScenario2() {
 
-        final AirwayIntersection[] intersections = {
-                new AirwayIntersection("intersection_1", new Vector2f(600, 200)),
-                new AirwayIntersection("intersection_2", new Vector2f(600, 400)),
-                new AirwayIntersection("intersection_3", new Vector2f(250, 400)),
-                new AirwayIntersection("intersection_4", new Vector2f(300, 500)),
-                new AirwayIntersection("intersection_5", new Vector2f(600, 750)),
-                new AirwayIntersection("intersection_6", new Vector2f(900, 500)),
-                new AirwayIntersection("intersection_7", new Vector2f(950, 400)),
+        final Airport[] intersections = {
+                new Airport("intersection_1", new Vector2f(600, 200)),
+                new Airport("intersection_2", new Vector2f(600, 400)),
+                new Airport("intersection_3", new Vector2f(250, 400)),
+                new Airport("intersection_4", new Vector2f(300, 500)),
+                new Airport("intersection_5", new Vector2f(600, 750)),
+                new Airport("intersection_6", new Vector2f(900, 500)),
+                new Airport("intersection_7", new Vector2f(950, 400)),
 
 
         };
@@ -100,14 +105,14 @@ public class ScenarioManager {
         for (String segment : segments) {
             Pair<String, String> parsed = SegmentParser.parse(segment);
             String from = parsed.getValue0(), to = parsed.getValue1();
-            Simulation.getScene().addObject(new AirwaySegment(
+            Simulation.getScene().addObject(new Airway(
                     String.format("segment_%s", segment),
                     intersections[ Integer.parseInt(from) - 1],
                     intersections[Integer.parseInt(to) - 1]
             ));
         }
 
-        for(AirwayIntersection intersection : intersections) {
+        for(Airport intersection : intersections) {
             Simulation.getScene().addObject(intersection);
         }
 
@@ -139,29 +144,29 @@ public class ScenarioManager {
     }
 
     public static void RunScenario3() {
-        final AirwayIntersection[] intersections = {
-                new AirwayIntersection("intersection_1", new Vector2f(100, 360)),
-                new AirwayIntersection("intersection_2", new Vector2f(300, 380)),
-                new AirwayIntersection("intersection_3", new Vector2f(500, 400)),
-                new AirwayIntersection("intersection_4", new Vector2f(600, 200)),
-                new AirwayIntersection("intersection_5", new Vector2f(500, 600)),
-                new AirwayIntersection("intersection_6", new Vector2f(700, 600)),
-                new AirwayIntersection("intersection_7", new Vector2f(700, 400)),
-                new AirwayIntersection("intersection_8", new Vector2f(900, 420)),
+        final Airport[] intersections = {
+                new Airport("intersection_1", new Vector2f(100, 360)),
+                new Airport("intersection_2", new Vector2f(300, 380)),
+                new Airport("intersection_3", new Vector2f(500, 400)),
+                new Airport("intersection_4", new Vector2f(600, 200)),
+                new Airport("intersection_5", new Vector2f(500, 600)),
+                new Airport("intersection_6", new Vector2f(700, 600)),
+                new Airport("intersection_7", new Vector2f(700, 400)),
+                new Airport("intersection_8", new Vector2f(900, 420)),
         };
         final String[] segments = { "2-1", "1-2", "3-2", "2-3", "3-4", "4-3", "3-7", "4-7", "7-4", "3-5", "5-3", "5-6", "6-5", "6-7", "7-6", "7-8", "8-7"};
 
         for (String segment : segments) {
             Pair<String, String> parsed = SegmentParser.parse(segment);
             String from = parsed.getValue0(), to = parsed.getValue1();
-            Simulation.getScene().addObject(new AirwaySegment(
+            Simulation.getScene().addObject(new Airway(
                     String.format("segment_%s", segment),
                     intersections[ Integer.parseInt(from) - 1],
                     intersections[Integer.parseInt(to) - 1]
             ));
         }
 
-        for (AirwayIntersection intersection : intersections) {
+        for (Airport intersection : intersections) {
             Simulation.getScene().addObject(intersection);
         }
 
@@ -172,27 +177,27 @@ public class ScenarioManager {
     }
 
     public static void RunScenario4() {
-        final AirwayIntersection[] intersections = {
-                new AirwayIntersection("intersection_1", new Vector2f(100, 400)),
-                new AirwayIntersection("intersection_2", new Vector2f(300, 600)),
-                new AirwayIntersection("intersection_3", new Vector2f(300, 400)),
-                new AirwayIntersection("intersection_4", new Vector2f(600, 200)),
-                new AirwayIntersection("intersection_5", new Vector2f(900, 400)),
-                new AirwayIntersection("intersection_6", new Vector2f(600, 600)),
+        final Airport[] intersections = {
+                new Airport("intersection_1", new Vector2f(100, 400)),
+                new Airport("intersection_2", new Vector2f(300, 600)),
+                new Airport("intersection_3", new Vector2f(300, 400)),
+                new Airport("intersection_4", new Vector2f(600, 200)),
+                new Airport("intersection_5", new Vector2f(900, 400)),
+                new Airport("intersection_6", new Vector2f(600, 600)),
         };
         final String[] segments = { "3-1", "1-3", "3-2", "2-3", "3-4", "4-5", "3-5", "5-6", "3-6", "6-5"};
 
         for (String segment : segments) {
             Pair<String, String> parsed = SegmentParser.parse(segment);
             String from = parsed.getValue0(), to = parsed.getValue1();
-            Simulation.getScene().addObject(new AirwaySegment(
+            Simulation.getScene().addObject(new Airway(
                     String.format("segment_%s", segment),
                     intersections[ Integer.parseInt(from) - 1],
                     intersections[Integer.parseInt(to) - 1]
             ));
         }
 
-        for (AirwayIntersection intersection : intersections) {
+        for (Airport intersection : intersections) {
             Simulation.getScene().addObject(intersection);
         }
 
@@ -208,27 +213,27 @@ public class ScenarioManager {
     }
 
     public static void RunScenario0() {
-        final AirwayIntersection[] intersections = {
-                new AirwayIntersection("intersection_1", new Vector2f(200, 100)),
-                new AirwayIntersection("intersection_2", new Vector2f(400, 100)),
-                new AirwayIntersection("intersection_3", new Vector2f(600, 100)),
-                new AirwayIntersection("intersection_4", new Vector2f(800, 100)),
-                new AirwayIntersection("intersection_5", new Vector2f(1000, 100)),
-                new AirwayIntersection("intersection_6", new Vector2f(200, 300)),
-                new AirwayIntersection("intersection_7", new Vector2f(400, 300)),
-                new AirwayIntersection("intersection_8", new Vector2f(600, 300)),
-                new AirwayIntersection("intersection_9", new Vector2f(800, 300)),
-                new AirwayIntersection("intersection_10", new Vector2f(1000, 300)),
-                new AirwayIntersection("intersection_11", new Vector2f(200, 500)),
-                new AirwayIntersection("intersection_12", new Vector2f(400, 500)),
-                new AirwayIntersection("intersection_13", new Vector2f(600, 500)),
-                new AirwayIntersection("intersection_14", new Vector2f(800, 500)),
-                new AirwayIntersection("intersection_15", new Vector2f(1000, 500)),
-                new AirwayIntersection("intersection_16", new Vector2f(200, 700)),
-                new AirwayIntersection("intersection_17", new Vector2f(400, 700)),
-                new AirwayIntersection("intersection_18", new Vector2f(600, 700)),
-                new AirwayIntersection("intersection_19", new Vector2f(800, 700)),
-                new AirwayIntersection("intersection_20", new Vector2f(1000, 700)),
+        final Airport[] intersections = {
+                new Airport("intersection_1", new Vector2f(200, 100)),
+                new Airport("intersection_2", new Vector2f(400, 100)),
+                new Airport("intersection_3", new Vector2f(600, 100)),
+                new Airport("intersection_4", new Vector2f(800, 100)),
+                new Airport("intersection_5", new Vector2f(1000, 100)),
+                new Airport("intersection_6", new Vector2f(200, 300)),
+                new Airport("intersection_7", new Vector2f(400, 300)),
+                new Airport("intersection_8", new Vector2f(600, 300)),
+                new Airport("intersection_9", new Vector2f(800, 300)),
+                new Airport("intersection_10", new Vector2f(1000, 300)),
+                new Airport("intersection_11", new Vector2f(200, 500)),
+                new Airport("intersection_12", new Vector2f(400, 500)),
+                new Airport("intersection_13", new Vector2f(600, 500)),
+                new Airport("intersection_14", new Vector2f(800, 500)),
+                new Airport("intersection_15", new Vector2f(1000, 500)),
+                new Airport("intersection_16", new Vector2f(200, 700)),
+                new Airport("intersection_17", new Vector2f(400, 700)),
+                new Airport("intersection_18", new Vector2f(600, 700)),
+                new Airport("intersection_19", new Vector2f(800, 700)),
+                new Airport("intersection_20", new Vector2f(1000, 700)),
 
         };
         final String[] segments = {
@@ -257,14 +262,14 @@ public class ScenarioManager {
         for (String segment : segments) {
             Pair<String, String> parsed = SegmentParser.parse(segment);
             String from = parsed.getValue0(), to = parsed.getValue1();
-            Simulation.getScene().addObject(new AirwaySegment(
+            Simulation.getScene().addObject(new Airway(
                     String.format("segment_%s", segment),
                     intersections[ Integer.parseInt(from) - 1],
                     intersections[Integer.parseInt(to) - 1]
             ));
         }
 
-        for (AirwayIntersection intersection : intersections) {
+        for (Airport intersection : intersections) {
             Simulation.getScene().addObject(intersection);
         }
 

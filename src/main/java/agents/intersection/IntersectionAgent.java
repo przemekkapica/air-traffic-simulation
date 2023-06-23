@@ -8,7 +8,7 @@ import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
-import model.AirwayIntersection;
+import model.Airport;
 import simulation.Simulation;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class IntersectionAgent extends Agent {
     protected void setup() {
         super.setup();
 
-        AirwayIntersection intersection = extractParams();
+        Airport intersection = extractParams();
 
         DFAgentDescription dfDesc = new DFAgentDescription();
         dfDesc.setName(getAID());
@@ -52,19 +52,19 @@ public class IntersectionAgent extends Agent {
         super.takeDown();
     }
 
-    private void addBehaviors(AirwayIntersection intersection) {
+    private void addBehaviors(Airport intersection) {
         addBehaviour(ReceivePlaneArrivalBehaviour.create(intersection));
         addBehaviour(ChangePlaneDirectionBehaviour.create(intersection));
     }
 
-    private AirwayIntersection extractParams() {
+    private Airport extractParams() {
         final Object[] params = getArguments();
         if (params.length < 2) {
             System.out.println("Usage [intersection name ], [intersections separated by comas]");
             doDelete();
         }
         String intersectionName = params[0].toString();
-        AirwayIntersection intersection = (AirwayIntersection) Simulation.getScene().getObject(intersectionName);
+        Airport intersection = (Airport) Simulation.getScene().getObject(intersectionName);
 
         for (int i = 1; i < params.length; ++i) {
             outgoing.add(params[i].toString());

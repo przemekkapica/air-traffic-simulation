@@ -29,10 +29,10 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     private  boolean isRoadStable = true;
 
     // location data
-    private AirwayElement airwayFragment;
+    private GraphicalElement airwayFragment;
     private float location;
 
-    private AirwayIntersection previousIntersection;
+    private Airport previousIntersection;
 
     @Override
     public void update(float deltaTime) {
@@ -61,14 +61,12 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
     @Override
     public void nvgRender(long nvg) {
-
-
-        if (airwayFragment instanceof AirwaySegment segment) {
+        if (airwayFragment instanceof Airway segment) {
             Vector2f dir = segment.getDirection();
 
             pos = segment.getStartIntersection().getPosition();
             pos = pos.add(dir.mul(location));
-        } else if (airwayFragment instanceof AirwayIntersection intersection) {
+        } else if (airwayFragment instanceof Airport intersection) {
             pos = intersection.getPosition();
         }
 
@@ -79,7 +77,8 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         nvgClosePath(nvg);
 
         // render label
-        nvgFontSize(nvg, 16.0f);
+        nvgFillColor(nvg, GraphicsContext.colorFromRgb(0, 0, 0));
+        nvgFontSize(nvg, 13.0f);
         nvgFontFace(nvg, "font");
         nvgTextAlign(nvg, NVG_ALIGN_MIDDLE | NVG_ALIGN_BOTTOM);
         nvgText(nvg, pos.x + 12, pos.y - 15, String.format("%s", getName()));
@@ -95,14 +94,9 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         return maxSpeed;
     }
 
-    public float getSpeed() {
-        return speed;
-    }
-
     public void setSpeed(float speed) {
         this.speed = Math.min(Math.abs(speed), maxSpeed);
     }
-
 
     public void accelerate() {
         while (speed < maxSpeed) {
@@ -115,7 +109,6 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         }
     }
     public void accelerate_decelerate() {
-
         while (speed < maxSpeed) {
             setSpeed(speed + 10);
             try {
@@ -144,7 +137,6 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     }
 
     public void ascend_descend() {
-
         while (attitude < Constants.MAX_ATTITUDE) {
             setSpeed(attitude + 100);
             try {
@@ -173,8 +165,6 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
     }
 
-
-
     public boolean isRoadStable() {
         return isRoadStable;
     }
@@ -183,11 +173,11 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         isRoadStable = roadStable;
     }
 
-    public AirwayIntersection getPreviousIntersection() {
+    public Airport getPreviousIntersection() {
         return previousIntersection;
     }
 
-    public void setPreviousIntersection(AirwayIntersection previousIntersection) {
+    public void setPreviousIntersection(Airport previousIntersection) {
         this.previousIntersection = previousIntersection;
     }
 
@@ -195,7 +185,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         return airwayFragment.getName().contains("segment");
     }
 
-    public Aircraft(String name, float maxSpeed, float initialAttitude, AirwayElement fragment) {
+    public Aircraft(String name, float maxSpeed, float initialAttitude, GraphicalElement fragment) {
         super(name);
 
         attitude = initialAttitude;

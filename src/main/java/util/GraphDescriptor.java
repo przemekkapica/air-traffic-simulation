@@ -1,6 +1,6 @@
 package util;
 
-import model.AirwaySegment;
+import model.Airway;
 import org.javatuples.Pair;
 import planner.AirwaysManager;
 import simulation.Simulation;
@@ -23,7 +23,7 @@ public class GraphDescriptor {
             if (!plan.containsKey(INTERSECTION_PREFIX + parsed.getValue0()))
                 plan.put(INTERSECTION_PREFIX + parsed.getValue0(), new ArrayList<>() {});
 
-            AirwaySegment segment = (AirwaySegment)Simulation.getScene().getObject("segment_" + s);
+            Airway segment = (Airway)Simulation.getScene().getObject("segment_" + s);
 
             AirwaysManager.RouteDescription description = new AirwaysManager.RouteDescription(
                     INTERSECTION_PREFIX + parsed.getValue1(),

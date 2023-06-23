@@ -1,6 +1,6 @@
 package simulation;
 
-import model.AirwaySegment;
+import model.Airway;
 import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
@@ -44,7 +44,7 @@ public class Simulation {
 
         if (button == GLFW_MOUSE_BUTTON_LEFT && (isShiftClick || isAltClick)) {
             for (SimulationObject object : m_scene.getAllObjects ()) {
-                if (object instanceof AirwaySegment segment) {
+                if (object instanceof Airway segment) {
                     Vector2f p1 = segment.getStartIntersection().getPosition();
                     Vector2f p2 = segment.getEndIntersection().getPosition();
 
