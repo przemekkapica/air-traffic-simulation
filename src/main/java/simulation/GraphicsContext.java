@@ -4,6 +4,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NVGPaint;
 import org.lwjgl.system.MemoryUtil;
+import util.GraphicsUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +21,7 @@ public class GraphicsContext {
     private final long nvg;
     private final IntBuffer bufferWidth;
     private final IntBuffer bufferHeight;
+    private final GraphicsUtil graphicsUtil;
     private int bgImage;
 
     public static NVGColor colorFromRgb(int r, int g, int b) {
@@ -56,30 +58,6 @@ public class GraphicsContext {
         }
     }
 
-    public void loadImage(String file) throws RuntimeException, IOException {
-        byte[] imageBytes = null;
-
-        try (InputStream stream = getClass().getResourceAsStream(file)) {
-            if (stream != null) {
-                imageBytes = stream.readAllBytes();
-            }
-        }
-
-        if (imageBytes == null) {
-            throw new RuntimeException(String.format("failed to load image %s", file));
-        }
-
-        ByteBuffer imageBuffer = MemoryUtil.memCalloc(imageBytes.length + 1);
-        imageBuffer.put(imageBytes);
-        imageBuffer.put((byte) 0);
-        imageBuffer.flip();
-
-        bgImage = nvgCreateImageMem(nvg, 0, imageBuffer);
-        if (bgImage == -1) {
-            throw new RuntimeException(String.format("failed to add image %s%n", file));
-        }
-    }
-
     public GraphicsContext(long window) {
         this.window = window;
 
@@ -87,11 +65,13 @@ public class GraphicsContext {
         bufferWidth = BufferUtils.createIntBuffer(1);
         bufferHeight = BufferUtils.createIntBuffer(1);
 
+        graphicsUtil = new GraphicsUtil();
+
         nvg = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
 
         try {
             loadFont("font", "/font.otf");
-            loadImage("/map.jpg");  // Load the background image
+            bgImage = graphicsUtil.loadImage("/images/map.jpg", nvg);  // Load the background image
         } catch (Exception e) {
             e.printStackTrace();
         }

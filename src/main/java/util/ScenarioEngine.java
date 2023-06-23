@@ -21,7 +21,7 @@ public class ScenarioEngine {
     }
 
     public void runScenario(int scenario_id) throws FileNotFoundException, StaleProxyException {
-        Scanner sc = new Scanner(new File("src/main/resources/scenario" + scenario_id +".csv"));
+        Scanner sc = new Scanner(new File("src/main/resources/scenarios/scenario" + scenario_id +".csv"));
         sc.useDelimiter(";");
         while(sc.hasNext())
         {

@@ -124,7 +124,7 @@ public class Simulation {
             tick = System.currentTimeMillis();
             elapsed = tick - lastTick;
             lastTick = tick;
-            deltaTime = elapsed / 3000f;
+            deltaTime = elapsed / 6000f;
 
             getScene().update(deltaTime);
 

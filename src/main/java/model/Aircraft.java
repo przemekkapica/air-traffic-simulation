@@ -2,10 +2,12 @@ package model;
 
 import org.joml.Vector2f;
 import org.lwjgl.nanovg.NVGColor;
+import org.lwjgl.nanovg.NVGPaint;
 import simulation.GraphicsContext;
 import simulation.IRenderableObject;
 import simulation.SimulationObject;
 import util.Constants;
+import util.GraphicsUtil;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -14,13 +16,12 @@ import static org.lwjgl.nanovg.NanoVG.*;
 
 public class Aircraft extends SimulationObject implements IRenderableObject {
     private static final NVGColor COlOR = GraphicsContext.colorFromRgb(11, 102, 52);
-
     private final float maxSpeed;
     private float speed;
     private NVGColor color;
 
     private float attitude;
-    public Vector2f pos = new Vector2f();
+    public Vector2f position = new Vector2f();
 
     public Queue<String> intersections = new ArrayDeque<>();
 
@@ -60,30 +61,54 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     public void glRender(GraphicsContext context) { }
 
     @Override
-    public void nvgRender(long nvg) {
+    public void nvgRender(long nvg)  {
         if (airwayFragment instanceof Airway segment) {
             Vector2f dir = segment.getDirection();
 
-            pos = segment.getStartIntersection().getPosition();
-            pos = pos.add(dir.mul(location));
+            position = segment.getStartIntersection().getPosition();
+            position = position.add(dir.mul(location));
         } else if (airwayFragment instanceof Airport intersection) {
-            pos = intersection.getPosition();
+            position = intersection.getPosition();
         }
 
-        nvgBeginPath(nvg);
-        nvgCircle(nvg, pos.x, pos.y, 10.0f);
-        nvgFillColor(nvg, color);
-        nvgFill(nvg);
-        nvgClosePath(nvg);
+        _renderIcon(nvg);
 
-        // render label
+        _renderLabel(nvg);
+    }
+
+    private void _renderIcon(long nvg) {
+        final GraphicsUtil graphicsUtil = new GraphicsUtil();
+
+        int aircraftIcon = -1;
+        try {
+             aircraftIcon = graphicsUtil.loadImage("/images/aircraft.png", nvg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // render aircraft icon
+        try (NVGPaint paint = NVGPaint.calloc()) {
+            nvgImagePattern(nvg, position.x - 8, position.y - 16, 30, 30, 0, aircraftIcon, 1, paint);
+            nvgBeginPath(nvg);
+            nvgRect(nvg, position.x - 8, position.y - 16, 30, 30);
+            nvgFillPaint(nvg, paint);
+            nvgFill(nvg);
+        } catch (Exception e) {
+            nvgCircle(nvg, position.x, position.y, 5.0f);
+            nvgBeginPath(nvg);
+            nvgFillColor(nvg, color);
+            nvgFill(nvg);
+            nvgClosePath(nvg);
+        }
+    }
+
+    private void _renderLabel(long nvg) {
         nvgFillColor(nvg, GraphicsContext.colorFromRgb(0, 0, 0));
         nvgFontSize(nvg, 13.0f);
         nvgFontFace(nvg, "font");
         nvgTextAlign(nvg, NVG_ALIGN_MIDDLE | NVG_ALIGN_BOTTOM);
-        nvgText(nvg, pos.x + 12, pos.y - 15, String.format("%s", getName()));
-        nvgText(nvg, pos.x + 12, pos.y, String.format("speed: %.2f", speed));
-        nvgText(nvg, pos.x + 12, pos.y + 15, String.format("attitude: %.2f", attitude));
+        nvgText(nvg, position.x + 14, position.y, String.format("%s", getName()));
+//        nvgText(nvg, position.x + 14, position.y, String.format("speed: %.2f", speed));
+//        nvgText(nvg, position.x + 14, position.y + 15, String.format("attitude: %.2f", attitude));
     }
 
     public void setColor(int r, int g, int b) {

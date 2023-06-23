@@ -24,6 +24,17 @@ public class SimulationScene {
         simulationObjects.put(objectName, object);
     }
 
+    public void addObjects(SimulationObject[] objects) {
+        for (var object : objects) {
+            String objectName = object.getName();
+            if (simulationObjects.containsKey (objectName)) {
+                throw new RuntimeException(String.format("%s with that name already exists", objectName));
+            }
+
+            simulationObjects.put(objectName, object);
+        }
+    }
+
     public SimulationObject getObject(String name) {
         if (simulationObjects.containsKey (name)) {
             return simulationObjects.get(name);
