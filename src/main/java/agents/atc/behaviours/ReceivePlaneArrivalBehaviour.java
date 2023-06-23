@@ -81,6 +81,7 @@ public class ReceivePlaneArrivalBehaviour extends CyclicBehaviour {
         response.addReceiver(message.getSender());
         response.setContent(Float.toString(info.getMaxSpeed() * i));
         myAgent.send(response);
+        System.out.println(info.toString());
     }
 
 }

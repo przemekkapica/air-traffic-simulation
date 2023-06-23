@@ -35,8 +35,8 @@ public class TakeOffBehaviour extends OneShotBehaviour {
         }
 
         aircraft.setRoadStable(true);
-        aircraft.accelerate();
-        //aircraft.ascend();
+        //aircraft.accelerate_decelerate();
+        //aircraft.ascend_descend();
 
         Airport airport = (Airport) Simulation.getScene().getObject(aircraft.airports.remove());
         aircraft.setPreviousAirport(airport);
