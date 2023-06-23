@@ -1,4 +1,4 @@
-package model;
+package model.ui_elements;
 
 import org.joml.Vector2f;
 import org.lwjgl.nanovg.NVGColor;
@@ -7,11 +7,11 @@ import simulation.IRenderableObject;
 
 import static org.lwjgl.nanovg.NanoVG.*;
 
-public class Airway extends GraphicalElement implements IRenderableObject {
+public class Airway extends UIElement implements IRenderableObject {
     private static final NVGColor COlOR_WORKING = GraphicsContext.colorFromRgb(67, 138, 236);
     private static final NVGColor COLOR_BROKEN = GraphicsContext.colorFromRgb(70, 70, 70);
-    private final Airport startIntersection;
-    private final Airport endIntersection;
+    private final Airport startAirport;
+    private final Airport endAirport;
     private final Vector2f startPosition;
     private final Vector2f endPosition;
     private final float length;
@@ -20,16 +20,16 @@ public class Airway extends GraphicalElement implements IRenderableObject {
     public Airway(String name, Airport start, Airport end) {
         super(name);
 
-        startIntersection = start;
-        endIntersection = end;
+        startAirport = start;
+        endAirport = end;
 
-        startPosition = startIntersection.getPosition();
-        endPosition = endIntersection.getPosition();
+        startPosition = startAirport.getPosition();
+        endPosition = endAirport.getPosition();
 
-        length = startIntersection.getPosition().distance(endIntersection.getPosition());
+        length = startAirport.getPosition().distance(endAirport.getPosition());
 
-        startIntersection.addOutboundSegment(this);
-        endIntersection.addInboundSegment(this);
+        startAirport.addOutboundSegment(this);
+        endAirport.addInboundSegment(this);
 
         broken = false;
     }
@@ -40,8 +40,8 @@ public class Airway extends GraphicalElement implements IRenderableObject {
     }
 
     @Override
-    public GraphicalElement getNextFragment() {
-        return endIntersection;
+    public UIElement getNextFragment() {
+        return endAirport;
     }
 
     @Override
@@ -69,12 +69,12 @@ public class Airway extends GraphicalElement implements IRenderableObject {
         return pos.sub(startPosition).normalize();
     }
 
-    public Airport getEndIntersection() {
-        return endIntersection;
+    public Airport getEndAirport() {
+        return endAirport;
     }
 
-    public Airport getStartIntersection() {
-        return startIntersection;
+    public Airport getStartAirport() {
+        return startAirport;
     }
 
     public boolean isBroken() {

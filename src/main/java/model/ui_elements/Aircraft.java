@@ -1,4 +1,4 @@
-package model;
+package model.ui_elements;
 
 import org.joml.Vector2f;
 import org.lwjgl.nanovg.NVGColor;
@@ -23,17 +23,17 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     private float attitude;
     public Vector2f position = new Vector2f();
 
-    public Queue<String> intersections = new ArrayDeque<>();
+    public Queue<String> airports = new ArrayDeque<>();
 
     public Queue<String> segments = new ArrayDeque<>();
 
     private  boolean isRoadStable = true;
 
     // location data
-    private GraphicalElement airwayFragment;
+    private UIElement airwayFragment;
     private float location;
 
-    private Airport previousIntersection;
+    private Airport previousAirport;
 
     @Override
     public void update(float deltaTime) {
@@ -65,10 +65,10 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         if (airwayFragment instanceof Airway segment) {
             Vector2f dir = segment.getDirection();
 
-            position = segment.getStartIntersection().getPosition();
+            position = segment.getStartAirport().getPosition();
             position = position.add(dir.mul(location));
-        } else if (airwayFragment instanceof Airport intersection) {
-            position = intersection.getPosition();
+        } else if (airwayFragment instanceof Airport airport) {
+            position = airport.getPosition();
         }
 
         _renderIcon(nvg);
@@ -198,19 +198,19 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         isRoadStable = roadStable;
     }
 
-    public Airport getPreviousIntersection() {
-        return previousIntersection;
+    public Airport getPreviousAirport() {
+        return previousAirport;
     }
 
-    public void setPreviousIntersection(Airport previousIntersection) {
-        this.previousIntersection = previousIntersection;
+    public void setPreviousAirport(Airport previousAirport) {
+        this.previousAirport = previousAirport;
     }
 
     public boolean isTraversingSegment() {
         return airwayFragment.getName().contains("segment");
     }
 
-    public Aircraft(String name, float maxSpeed, float initialAttitude, GraphicalElement fragment) {
+    public Aircraft(String name, float maxSpeed, float initialAttitude, UIElement fragment) {
         super(name);
 
         attitude = initialAttitude;

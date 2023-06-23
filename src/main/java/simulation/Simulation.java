@@ -1,6 +1,6 @@
 package simulation;
 
-import model.Airway;
+import model.ui_elements.Airway;
 import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
@@ -45,8 +45,8 @@ public class Simulation {
         if (button == GLFW_MOUSE_BUTTON_LEFT && (isShiftClick || isAltClick)) {
             for (SimulationObject object : m_scene.getAllObjects ()) {
                 if (object instanceof Airway segment) {
-                    Vector2f p1 = segment.getStartIntersection().getPosition();
-                    Vector2f p2 = segment.getEndIntersection().getPosition();
+                    Vector2f p1 = segment.getStartAirport().getPosition();
+                    Vector2f p2 = segment.getEndAirport().getPosition();
 
                     float numerator = Math.abs(((p2.x - p1.x) *(p1.y - p0.y)) -((p2.y - p1.y) *(p1.x - p0.x)));
                     float lengthSquared =((p2.x - p1.x) *(p2.x - p1.x)) +((p2.y - p1.y) *(p2.y - p1.y));

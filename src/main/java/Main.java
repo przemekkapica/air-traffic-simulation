@@ -9,7 +9,6 @@ public class Main {
     // this is the main jade entry point function
     // it can be used to set up the platform, there is no need to use any additional agents for setup
     private static void jadeThread () {
-
         try {
             ScenarioEngine scenarioEngine = new ScenarioEngine();
             scenarioEngine.runScenario();

@@ -2,7 +2,7 @@ package agents.segment;
 
 import agents.segment.behaviours.CheckAircraftConditionBehavior;
 import jade.core.Agent;
-import model.Airway;
+import model.ui_elements.Airway;
 import simulation.Simulation;
 
 

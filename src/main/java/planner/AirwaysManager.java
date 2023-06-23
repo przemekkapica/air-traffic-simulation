@@ -11,12 +11,12 @@ public class AirwaysManager {
     }
 
     public static class RouteDescription {
-        public String endIntersectionName;
+        public String endAirportName;
         public float baseCost;
         public float length;
 
-        public RouteDescription(String endIntersectionName, float baseCost, float length) {
-            this.endIntersectionName = endIntersectionName;
+        public RouteDescription(String endAirportName, float baseCost, float length) {
+            this.endAirportName = endAirportName;
             this.baseCost = baseCost;
             this.length = length;
         }
@@ -35,7 +35,7 @@ public class AirwaysManager {
         for (Map.Entry<String, List<RouteDescription>> entry : graphDescription.entrySet ()) {
             PlannerGraph.PlannerGraphNode begin = plannerGraph.getNode(entry.getKey ());
             for (RouteDescription route : entry.getValue ()) {
-                PlannerGraph.PlannerGraphNode end = plannerGraph.getNode(route.endIntersectionName);
+                PlannerGraph.PlannerGraphNode end = plannerGraph.getNode(route.endAirportName);
                 if (end != null) {
                     begin.addNeighbor(end, route.length, route.baseCost);
                 }

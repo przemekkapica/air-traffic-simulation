@@ -1,11 +1,11 @@
-package agents.intersection.behaviours;
+package agents.atc.behaviours;
 
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
-import model.Airport;
-import model.params.AircraftToIntersectionParams;
+import model.ui_elements.Airport;
+import model.params.AircraftToAirportParams;
 import org.javatuples.Pair;
 import org.joml.Vector2f;
 import simulation.Simulation;
@@ -21,7 +21,7 @@ public class ReceivePlaneArrivalBehaviour extends CyclicBehaviour {
 
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(INFORM);
 
-    private final Airport intersection;
+    private final Airport airport;
 
     private final List<Pair<String, Long>> scheduledAircrafts = new ArrayList<>();
 
@@ -33,12 +33,12 @@ public class ReceivePlaneArrivalBehaviour extends CyclicBehaviour {
             try {
                 System.out.println("[" + message.getSender() + "] is approaching me");
 
-                final AircraftToIntersectionParams info =(AircraftToIntersectionParams) message.getContentObject();
+                final AircraftToAirportParams info =(AircraftToAirportParams) message.getContentObject();
 
-                Airport secondIntersection =(Airport) Simulation.getScene().getObject(info.getPreviousIntersection());
+                Airport secondAirport =(Airport) Simulation.getScene().getObject(info.getPreviousAirport());
 
-                Vector2f positionStart = intersection.getPosition();
-                Vector2f positionEnd = secondIntersection.getPosition();
+                Vector2f positionStart = airport.getPosition();
+                Vector2f positionEnd = secondAirport.getPosition();
 
                 final float distance = positionStart.distance(positionEnd);
 
@@ -62,12 +62,12 @@ public class ReceivePlaneArrivalBehaviour extends CyclicBehaviour {
         }
     }
 
-    public ReceivePlaneArrivalBehaviour(Airport intersection) {
-        this.intersection = intersection;
+    public ReceivePlaneArrivalBehaviour(Airport airport) {
+        this.airport = airport;
     }
 
-    public static ReceivePlaneArrivalBehaviour create(Airport intersection) {
-        return new ReceivePlaneArrivalBehaviour(intersection);
+    public static ReceivePlaneArrivalBehaviour create(Airport airport) {
+        return new ReceivePlaneArrivalBehaviour(airport);
     }
 
     private boolean checkForCollision(final long time) {
@@ -76,7 +76,7 @@ public class ReceivePlaneArrivalBehaviour extends CyclicBehaviour {
         ).toList().isEmpty();
     }
 
-    private void sendMessage(ACLMessage message, AircraftToIntersectionParams info, float i) {
+    private void sendMessage(ACLMessage message, AircraftToAirportParams info, float i) {
         final ACLMessage response = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
         response.addReceiver(message.getSender());
         response.setContent(Float.toString(info.getMaxSpeed() * i));

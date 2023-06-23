@@ -4,7 +4,7 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
-import model.Airway;
+import model.ui_elements.Airway;
 
 import static jade.lang.acl.ACLMessage.INFORM;
 

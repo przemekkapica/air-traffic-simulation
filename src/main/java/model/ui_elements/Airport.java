@@ -1,4 +1,4 @@
-package model;
+package model.ui_elements;
 
 import org.joml.Vector2f;
 import org.lwjgl.nanovg.NVGColor;
@@ -11,7 +11,7 @@ import java.util.Set;
 
 import static org.lwjgl.nanovg.NanoVG.*;
 
-public class Airport extends GraphicalElement implements IPositionedObject, IRenderableObject {
+public class Airport extends UIElement implements IPositionedObject, IRenderableObject {
 
     @Override
     public float getLength() {
