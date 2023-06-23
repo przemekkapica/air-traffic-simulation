@@ -2,6 +2,7 @@ package simulation;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.nanovg.NVGColor;
+import org.lwjgl.nanovg.NVGPaint;
 import org.lwjgl.system.MemoryUtil;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ public class GraphicsContext {
     private final long nvg;
     private final IntBuffer bufferWidth;
     private final IntBuffer bufferHeight;
+    private int bgImage;
 
     public static NVGColor colorFromRgb(int r, int g, int b) {
         NVGColor color = NVGColor.create();
@@ -32,9 +34,9 @@ public class GraphicsContext {
     }
 
     public void loadFont(String name, String file) throws RuntimeException, IOException {
-        byte [] fontBytes = null;
+        byte[] fontBytes = null;
 
-        try(InputStream stream = getClass().getResourceAsStream(file)) {
+        try (InputStream stream = getClass().getResourceAsStream(file)) {
             if (stream != null) {
                 fontBytes = stream.readAllBytes();
             }
@@ -55,6 +57,30 @@ public class GraphicsContext {
         }
     }
 
+    public void loadImage(String file) throws RuntimeException, IOException {
+        byte[] imageBytes = null;
+
+        try (InputStream stream = getClass().getResourceAsStream(file)) {
+            if (stream != null) {
+                imageBytes = stream.readAllBytes();
+            }
+        }
+
+        if (imageBytes == null) {
+            throw new RuntimeException(String.format("failed to load image %s", file));
+        }
+
+        ByteBuffer imageBuffer = MemoryUtil.memCalloc(imageBytes.length + 1);
+        imageBuffer.put(imageBytes);
+        imageBuffer.put((byte) 0);
+        imageBuffer.flip();
+
+        bgImage = nvgCreateImageMem(nvg, 0, imageBuffer);
+        if (bgImage == -1) {
+            throw new RuntimeException(String.format("failed to add image %s%n", file));
+        }
+    }
+
     public GraphicsContext(long window) {
         this.window = window;
 
@@ -66,6 +92,7 @@ public class GraphicsContext {
 
         try {
             loadFont("font", "/font.otf");
+            loadImage("/map.jpg");  // Load the background image
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,6 +108,15 @@ public class GraphicsContext {
         // clear the viewport
         glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+        // Draw the background image
+        try (NVGPaint paint = NVGPaint.calloc()) {
+            nvgImagePattern(nvg, 0, 0, bufferWidth.get(0), bufferHeight.get(0), 0, bgImage, 1, paint);
+            nvgBeginPath(nvg);
+            nvgRect(nvg, 0, 0, bufferWidth.get(0), bufferHeight.get(0));
+            nvgFillPaint(nvg, paint);
+            nvgFill(nvg);
+        }
     }
 
     long nvgBegin() {
