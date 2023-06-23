@@ -10,6 +10,14 @@ public class PlannerGraph {
         private boolean isEnabled;
         private final PlannerGraphNode endNode;
 
+        public PlannerGraphEdge (PlannerGraphNode node, float distance, float cost) {
+            this.distance = distance;
+            this.cost = cost;
+            load = 0.0f;
+            isEnabled = true;
+            endNode = node;
+        }
+
         public float getDistance() {
             return distance;
         }
@@ -38,13 +46,7 @@ public class PlannerGraph {
             isEnabled = enabled;
         }
 
-        public PlannerGraphEdge (PlannerGraphNode node, float distance, float cost) {
-            this.distance = distance;
-            this.cost = cost;
-            load = 0.0f;
-            isEnabled = true;
-            endNode = node;
-        }
+
     }
 
     public static class PlannerGraphNode {

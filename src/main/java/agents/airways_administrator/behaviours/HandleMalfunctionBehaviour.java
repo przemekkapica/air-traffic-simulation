@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static util.Constants.INTERSECTION_PREFIX;
+import static util.Constants.AIRPORT_PREFIX;
 import static util.Constants.PASSING;
 import static jade.lang.acl.ACLMessage.INFORM;
 import static jade.lang.acl.ACLMessage.PROPOSE;
@@ -40,9 +40,9 @@ public class HandleMalfunctionBehaviour extends CyclicBehaviour {
             Pair<String, String> parsedSegment = SegmentParser.parseFullName(affectedSegment);
 
             if (status.contains("Broken")) {
-                airwaysManager.notifyRouteBroken(INTERSECTION_PREFIX + parsedSegment.getValue0(), INTERSECTION_PREFIX + parsedSegment.getValue1());
+                airwaysManager.notifyRouteBroken(AIRPORT_PREFIX + parsedSegment.getValue0(), AIRPORT_PREFIX + parsedSegment.getValue1());
             } else {
-                airwaysManager.notifyRouteRepaired(INTERSECTION_PREFIX + parsedSegment.getValue0(), INTERSECTION_PREFIX + parsedSegment.getValue1());
+                airwaysManager.notifyRouteRepaired(AIRPORT_PREFIX + parsedSegment.getValue0(), AIRPORT_PREFIX + parsedSegment.getValue1());
             }
 
             List<AID> affectedAircrafts = null;

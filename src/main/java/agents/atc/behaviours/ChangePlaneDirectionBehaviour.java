@@ -1,9 +1,9 @@
-package agents.intersection.behaviours;
+package agents.atc.behaviours;
 
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import model.AirwayIntersection;
+import model.ui_elements.Airport;
 
 import java.util.Objects;
 
@@ -14,7 +14,7 @@ public class ChangePlaneDirectionBehaviour extends CyclicBehaviour {
 
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(AGREE);
 
-    private final AirwayIntersection intersection;
+    private final Airport airport;
 
     @Override
     public void action() {
@@ -30,12 +30,12 @@ public class ChangePlaneDirectionBehaviour extends CyclicBehaviour {
         }
     }
 
-    public ChangePlaneDirectionBehaviour(AirwayIntersection intersection) {
-        this.intersection = intersection;
+    public ChangePlaneDirectionBehaviour(Airport airport) {
+        this.airport = airport;
     }
 
-    public static ChangePlaneDirectionBehaviour create(AirwayIntersection intersection) {
-        return new ChangePlaneDirectionBehaviour(intersection);
+    public static ChangePlaneDirectionBehaviour create(Airport airport) {
+        return new ChangePlaneDirectionBehaviour(airport);
     }
 
     private void checkIfFinalDestinationAndSetResponse(ACLMessage response, String segment) {
@@ -44,7 +44,7 @@ public class ChangePlaneDirectionBehaviour extends CyclicBehaviour {
             response.setContent(FINAL_DESTINATION);
         }
         else  {
-            intersection.setNextSegmentByName(segment);
+            airport.setNextSegmentByName(segment);
             System.out.println("[" + myAgent.getLocalName() + "] Switching to " + segment);
             response.setContent("Not final station");
         }

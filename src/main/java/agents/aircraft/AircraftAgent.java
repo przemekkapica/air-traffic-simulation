@@ -6,7 +6,7 @@ import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
-import model.Aircraft;
+import model.ui_elements.Aircraft;
 import planner.AirwaysManager;
 import simulation.Simulation;
 
@@ -21,7 +21,7 @@ public class AircraftAgent extends Agent {
 
         final Object[] params = getArguments();
         if (params.length < 4) {
-            System.out.println("Usage [aircraft name], [priority], [starting point], [pair <segment name, intersection name>]");
+            System.out.println("Usage [aircraft name], [priority], [starting point], [pair <segment name, airport name>]");
             doDelete();
         }
         String aircraftName = params[0].toString();
@@ -68,7 +68,7 @@ public class AircraftAgent extends Agent {
     private void setSegmentsAndDestination(Object[] params, Aircraft aircraft) {
         for (int i = 2; i < params.length; ++i) {
             if (i % 2 == 0) {
-                aircraft.intersections.add(params[i].toString());
+                aircraft.airports.add(params[i].toString());
                 finalDestination = params[i].toString();
             }
             else
@@ -77,7 +77,7 @@ public class AircraftAgent extends Agent {
     }
 
     private void addBehaviors(Aircraft aircraft, AirwaysManager.AirwayPriority priority, DFAgentDescription description) {
-        addBehaviour(ForwardArrivalInfoToIntersectionBehaviour.create(aircraft));
+        addBehaviour(ForwardArrivalInfoToAirportBehavior.create(aircraft));
         addBehaviour(ConfigureVelocityBehaviour.create(aircraft));
         addBehaviour(TakeOffBehaviour.create(aircraft));
         addBehaviour(AcceptNewAirwayProposalBehaviour.create(aircraft, finalDestination, priority));

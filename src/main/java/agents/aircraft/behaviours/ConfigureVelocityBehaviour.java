@@ -3,7 +3,7 @@ package agents.aircraft.behaviours;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import model.Aircraft;
+import model.ui_elements.Aircraft;
 
 import java.util.Objects;
 

@@ -1,34 +1,34 @@
-package agents.intersection;
+package agents.atc;
 
 import util.Constants;
-import agents.intersection.behaviours.ChangePlaneDirectionBehaviour;
-import agents.intersection.behaviours.ReceivePlaneArrivalBehaviour;
+import agents.atc.behaviours.ChangePlaneDirectionBehaviour;
+import agents.atc.behaviours.ReceivePlaneArrivalBehaviour;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
-import model.AirwayIntersection;
+import model.ui_elements.Airport;
 import simulation.Simulation;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class IntersectionAgent extends Agent {
+public class ATCAgent extends Agent {
     final private List<String> outgoing = new ArrayList<>();
 
     @Override
     protected void setup() {
         super.setup();
 
-        AirwayIntersection intersection = extractParams();
+        Airport airport = extractParams();
 
         DFAgentDescription dfDesc = new DFAgentDescription();
         dfDesc.setName(getAID());
 
         ServiceDescription serviceDescription = new ServiceDescription();
-        serviceDescription.setName(Constants.SERVICE_INTERSECTION);
-        serviceDescription.setType(Constants.SERVICE_INTERSECTION);
+        serviceDescription.setName(Constants.SERVICE_AIRPORT);
+        serviceDescription.setType(Constants.SERVICE_AIRPORT);
 
         dfDesc.addServices(serviceDescription);
 
@@ -38,7 +38,7 @@ public class IntersectionAgent extends Agent {
             exception.printStackTrace();
         }
 
-        addBehaviors(intersection);
+        addBehaviors(airport);
     }
 
     @Override
@@ -52,23 +52,23 @@ public class IntersectionAgent extends Agent {
         super.takeDown();
     }
 
-    private void addBehaviors(AirwayIntersection intersection) {
-        addBehaviour(ReceivePlaneArrivalBehaviour.create(intersection));
-        addBehaviour(ChangePlaneDirectionBehaviour.create(intersection));
+    private void addBehaviors(Airport airport) {
+        addBehaviour(ReceivePlaneArrivalBehaviour.create(airport));
+        addBehaviour(ChangePlaneDirectionBehaviour.create(airport));
     }
 
-    private AirwayIntersection extractParams() {
+    private Airport extractParams() {
         final Object[] params = getArguments();
         if (params.length < 2) {
-            System.out.println("Usage [intersection name ], [intersections separated by comas]");
+            System.out.println("Usage [airport name ], [airports separated by comas]");
             doDelete();
         }
-        String intersectionName = params[0].toString();
-        AirwayIntersection intersection = (AirwayIntersection) Simulation.getScene().getObject(intersectionName);
+        String airportName = params[0].toString();
+        Airport airport = (Airport) Simulation.getScene().getObject(airportName);
 
         for (int i = 1; i < params.length; ++i) {
             outgoing.add(params[i].toString());
         }
-        return intersection;
+        return airport;
     }
 }

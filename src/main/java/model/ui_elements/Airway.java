@@ -1,4 +1,4 @@
-package model;
+package model.ui_elements;
 
 import org.joml.Vector2f;
 import org.lwjgl.nanovg.NVGColor;
@@ -7,29 +7,29 @@ import simulation.IRenderableObject;
 
 import static org.lwjgl.nanovg.NanoVG.*;
 
-public class AirwaySegment extends AirwayElement implements IRenderableObject {
-    private static final NVGColor COlOR_WORKING = GraphicsContext.colorFromRgb(127, 195, 219);
+public class Airway extends UIElement implements IRenderableObject {
+    private static final NVGColor COlOR_WORKING = GraphicsContext.colorFromRgb(67, 138, 236);
     private static final NVGColor COLOR_BROKEN = GraphicsContext.colorFromRgb(70, 70, 70);
-    private final AirwayIntersection startIntersection;
-    private final AirwayIntersection endIntersection;
+    private final Airport startAirport;
+    private final Airport endAirport;
     private final Vector2f startPosition;
     private final Vector2f endPosition;
     private final float length;
     private boolean broken;
 
-    public AirwaySegment(String name, AirwayIntersection start, AirwayIntersection end) {
+    public Airway(String name, Airport start, Airport end) {
         super(name);
 
-        startIntersection = start;
-        endIntersection = end;
+        startAirport = start;
+        endAirport = end;
 
-        startPosition = startIntersection.getPosition();
-        endPosition = endIntersection.getPosition();
+        startPosition = startAirport.getPosition();
+        endPosition = endAirport.getPosition();
 
-        length = startIntersection.getPosition().distance(endIntersection.getPosition());
+        length = startAirport.getPosition().distance(endAirport.getPosition());
 
-        startIntersection.addOutboundSegment(this);
-        endIntersection.addInboundSegment(this);
+        startAirport.addOutboundSegment(this);
+        endAirport.addInboundSegment(this);
 
         broken = false;
     }
@@ -40,8 +40,8 @@ public class AirwaySegment extends AirwayElement implements IRenderableObject {
     }
 
     @Override
-    public AirwayElement getNextFragment() {
-        return endIntersection;
+    public UIElement getNextFragment() {
+        return endAirport;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class AirwaySegment extends AirwayElement implements IRenderableObject {
             nvgStrokeColor(nvg, COlOR_WORKING);
         }
 
-        nvgStrokeWidth(nvg, 5.0f);
+        nvgStrokeWidth(nvg, 2.0f);
         nvgStroke(nvg);
         nvgClosePath(nvg);
     }
@@ -69,12 +69,12 @@ public class AirwaySegment extends AirwayElement implements IRenderableObject {
         return pos.sub(startPosition).normalize();
     }
 
-    public AirwayIntersection getEndIntersection() {
-        return endIntersection;
+    public Airport getEndAirport() {
+        return endAirport;
     }
 
-    public AirwayIntersection getStartIntersection() {
-        return startIntersection;
+    public Airport getStartAirport() {
+        return startAirport;
     }
 
     public boolean isBroken() {

@@ -4,12 +4,12 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
-import model.AirwaySegment;
+import model.ui_elements.Airway;
 
 import static jade.lang.acl.ACLMessage.INFORM;
 
 public class CheckAircraftConditionBehavior extends TickerBehaviour {
-    private AirwaySegment segment;
+    private Airway segment;
 
     @Override
     protected void onTick() {
@@ -21,12 +21,12 @@ public class CheckAircraftConditionBehavior extends TickerBehaviour {
         }
     }
 
-    public CheckAircraftConditionBehavior(Agent agent, long period, AirwaySegment simulationSegment) {
+    public CheckAircraftConditionBehavior(Agent agent, long period, Airway simulationSegment) {
         super(agent, period);
         segment = simulationSegment;
     }
 
-    public static CheckAircraftConditionBehavior create(Agent agent, long period, AirwaySegment simulationSegment) {
+    public static CheckAircraftConditionBehavior create(Agent agent, long period, Airway simulationSegment) {
         return new CheckAircraftConditionBehavior(agent, period, simulationSegment);
     }
 

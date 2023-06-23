@@ -20,15 +20,15 @@ public class ScenarioEngine {
         containerController = runtime.createMainContainer(profile);
     }
 
-    public void runScenario(int scenario_id) throws FileNotFoundException, StaleProxyException {
-        Scanner sc = new Scanner(new File("src/main/resources/scenario" + scenario_id +".csv"));
+    public void runScenario() throws FileNotFoundException, StaleProxyException {
+        Scanner sc = new Scanner(new File("src/main/resources/scenarios/scenario.csv"));
         sc.useDelimiter(";");
         while(sc.hasNext())
         {
             String agentClass = sc.next();
             switch (agentClass) {
                 case "segment" -> CreateSegment(sc.next());
-                case "intersection" -> CreateIntersection(sc.next());
+                case "airport" -> CreateAirport(sc.next());
                 case "aircraft" -> CreateAircraft(sc.next());
                 case "airways_administrator" -> CreatePlanner(sc.next());
             }
@@ -39,12 +39,11 @@ public class ScenarioEngine {
     private void CreateSegment(String agentParams) throws StaleProxyException {
         Object[] params = GetAgentParams(agentParams);
         containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.segment.SegmentAgent", params ).start();
-
     }
 
-    private void CreateIntersection(String agentParams) throws StaleProxyException {
+    private void CreateAirport(String agentParams) throws StaleProxyException {
         Object[] params = GetAgentParams(agentParams);
-        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.intersection.IntersectionAgent", params ).start();
+        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.atc.ATCAgent", params ).start();
     }
     private void CreateAircraft(String agentParams) throws StaleProxyException {
         Object[] params = GetAgentParams(agentParams);

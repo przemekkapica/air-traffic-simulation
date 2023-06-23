@@ -3,12 +3,11 @@ package agents.aircraft.behaviours;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
-import model.AirwayIntersection;
-import model.Aircraft;
+import model.ui_elements.Airport;
+import model.ui_elements.Aircraft;
 import model.params.AirwayRegistrationParams;
-import model.params.AircraftToIntersectionParams;
+import model.params.AircraftToAirportParams;
 import simulation.Simulation;
-import util.Constants;
 
 import java.io.IOException;
 
@@ -39,19 +38,19 @@ public class TakeOffBehaviour extends OneShotBehaviour {
         aircraft.accelerate();
         //aircraft.ascend();
 
-        AirwayIntersection intersection = (AirwayIntersection) Simulation.getScene().getObject(aircraft.intersections.remove());
-        aircraft.setPreviousIntersection(intersection);
-        intersection.setNextSegmentByName(aircraft.segments.remove());
+        Airport airport = (Airport) Simulation.getScene().getObject(aircraft.airports.remove());
+        aircraft.setPreviousAirport(airport);
+        airport.setNextSegmentByName(aircraft.segments.remove());
 
-        System.out.println("Sending message to next intersection:" + aircraft.intersections.peek());
+        System.out.println("Sending message to next airport:" + aircraft.airports.peek());
 
         final ACLMessage proposal = new ACLMessage(ACLMessage.INFORM);
-        AircraftToIntersectionParams messageContent = new AircraftToIntersectionParams();
+        AircraftToAirportParams messageContent = new AircraftToAirportParams();
         messageContent.setMaxSpeed(aircraft.getMaxSpeed());
-        messageContent.setPreviousIntersection(aircraft.getPreviousIntersection().getName());
-        aircraft.setPreviousIntersection((AirwayIntersection) getScene().getObject(aircraft.intersections.peek()));
+        messageContent.setPreviousAirport(aircraft.getPreviousAirport().getName());
+        aircraft.setPreviousAirport((Airport) getScene().getObject(aircraft.airports.peek()));
 
-        proposal.addReceiver(new AID(aircraft.intersections.remove(), AID.ISLOCALNAME));
+        proposal.addReceiver(new AID(aircraft.airports.remove(), AID.ISLOCALNAME));
         try {
             proposal.setContentObject(messageContent);
         } catch (IOException e) {
@@ -64,7 +63,7 @@ public class TakeOffBehaviour extends OneShotBehaviour {
     private void sendMessage() throws IOException {
         ACLMessage message = new ACLMessage(ACCEPT_PROPOSAL);
         message.addReceiver(new AID("airways_administrator", AID.ISLOCALNAME));
-        AirwayRegistrationParams plannerParams = new AirwayRegistrationParams(aircraft.intersections.stream().toList(), aircraft.getName(), aircraft.getMaxSpeed());
+        AirwayRegistrationParams plannerParams = new AirwayRegistrationParams(aircraft.airports.stream().toList(), aircraft.getName(), aircraft.getMaxSpeed());
         message.setContentObject(plannerParams);
         myAgent.send(message);
     }

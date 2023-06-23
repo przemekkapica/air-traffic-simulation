@@ -8,7 +8,7 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
-import model.Aircraft;
+import model.ui_elements.Aircraft;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -36,7 +36,7 @@ public class SetNewAirwayBehaviour extends CyclicBehaviour {
                     return; //this message is displayed if there is no route available for our aircraft
                 }
 
-                aircraft.intersections = new LinkedList<>(route);
+                aircraft.airports = new LinkedList<>(route);
                 aircraft.segments = new LinkedList<>(parseAirway(route));
                 aircraft.setColor(0,180,0);
                 myAgent.addBehaviour(TakeOffBehaviour.create(aircraft));

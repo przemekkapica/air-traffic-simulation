@@ -4,7 +4,7 @@ import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import model.Aircraft;
+import model.ui_elements.Aircraft;
 import model.params.AirwayParams;
 import planner.AirwaysManager;
 
@@ -30,7 +30,7 @@ public class AcceptNewAirwayProposalBehaviour extends CyclicBehaviour {
             aircraft.setColor(9,143,53);
             AirwayParams responseParams = new AirwayParams(
                     aircraft.getMaxSpeed(),
-                    aircraft.getPreviousIntersection().getName(),
+                    aircraft.getPreviousAirport().getName(),
                     destination, priority
             );
             ACLMessage response = new ACLMessage(CONFIRM);

@@ -1,17 +1,17 @@
-package model;
+package model.ui_elements;
 
 import simulation.SimulationObject;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class AirwayElement extends SimulationObject {
+public abstract class UIElement extends SimulationObject {
     private final Set<Aircraft> aircrafts;
 
     public abstract float getLength();
-    public abstract AirwayElement getNextFragment();
+    public abstract UIElement getNextFragment();
 
-    protected AirwayElement(String name) {
+    protected UIElement(String name) {
         super(name);
         aircrafts = new HashSet<>();
     }
