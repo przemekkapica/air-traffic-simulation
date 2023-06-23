@@ -70,7 +70,7 @@ public class Simulation {
     }
 
     private void onKeyEvent (long window, int key, int scancode, int action, int mods) {
-        // todo: key handling
+        // todo: key handling np pause animation
     }
 
     public void initialize (int width, int height, String title) throws RuntimeException {

@@ -20,10 +20,11 @@ public class ScenarioManager {
                 new AirwayIntersection("INT_6", new Vector2f(400, 300)),
                 new AirwayIntersection("INT_7", new Vector2f(600, 500)),
                 new AirwayIntersection("INT_8", new Vector2f(800, 500)),
-                new AirwayIntersection("INT_9", new Vector2f(250, 600))
+                new AirwayIntersection("INT_9", new Vector2f(250, 600)),
+                new AirwayIntersection("INT_10", new Vector2f(400, 600))
         };
 
-        final String[] segments = { "1-2", "2-3", "3-4", "1-6", "3-6", "3-7", "4-8", "5-1", "5-6", "6-7", "7-8", "7-9", "8-3", "9-5", "8-7", "7-3" };
+        final String[] segments = { "1-2", "2-3", "3-4", "1-6", "3-6", "3-7", "4-8", "5-1", "5-6", "6-7", "7-8", "7-9", "8-3", "9-5", "8-7", "7-3", "6-10" };
 
 
         for (String segment : segments) {
@@ -40,10 +41,45 @@ public class ScenarioManager {
             Simulation.getScene().addObject(intersection);
         }
 
-        Aircraft aircraft = new Aircraft("A_1", 700.0f, 0.0f, intersections[0]);
+        Aircraft aircraft = new Aircraft("A_1", 300.0f, 0.0f, intersections[0]);
         aircraft.setSpeed(0.0f);
         aircraft.setColor(44, 16, 130);
         Simulation.getScene().addObject(aircraft);
+
+        Aircraft aircraft2 = new Aircraft("A_2", 550.0f, 0.0f, intersections[1]);
+        aircraft2.setSpeed(0.0f);
+        aircraft2.setColor(44, 16, 130);
+        Simulation.getScene().addObject(aircraft2);
+
+        Aircraft aircraft3 = new Aircraft("A_3", 320.0f, 0.0f, intersections[2]);
+        aircraft3.setSpeed(0.0f);
+        aircraft3.setColor(44, 16, 130);
+        Simulation.getScene().addObject(aircraft3);
+
+        Aircraft aircraft4 = new Aircraft("A_4", 400.0f, 0.0f, intersections[3]);
+        aircraft4.setSpeed(0.0f);
+        aircraft4.setColor(44, 16, 130);
+        Simulation.getScene().addObject(aircraft4);
+
+        Aircraft aircraft5 = new Aircraft("A_5", 330.0f, 0.0f, intersections[4]);
+        aircraft5.setSpeed(0.0f);
+        aircraft5.setColor(44, 16, 130);
+        Simulation.getScene().addObject(aircraft5);
+
+        Aircraft aircraft6 = new Aircraft("A_6", 320.0f, 0.0f, intersections[5]);
+        aircraft6.setSpeed(0.0f);
+        aircraft6.setColor(44, 16, 130);
+        Simulation.getScene().addObject(aircraft6);
+
+        Aircraft aircraft7 = new Aircraft("A_7", 300.0f, 0.0f, intersections[6]);
+        aircraft7.setSpeed(0.0f);
+        aircraft7.setColor(44, 16, 130);
+        Simulation.getScene().addObject(aircraft7);
+
+        Aircraft aircraft8 = new Aircraft("A_8", 300.0f, 0.0f, intersections[7]);
+        aircraft8.setSpeed(0.0f);
+        aircraft8.setColor(44, 16, 130);
+        Simulation.getScene().addObject(aircraft8);
     }
 
     public static void RunScenario2() {

@@ -36,7 +36,8 @@ public class TakeOffBehaviour extends OneShotBehaviour {
         }
 
         aircraft.setRoadStable(true);
-        aircraft.accelerate(Constants.TAKE_OFF_DESTINATION_SPEED);
+        aircraft.accelerate();
+        //aircraft.ascend();
 
         AirwayIntersection intersection = (AirwayIntersection) Simulation.getScene().getObject(aircraft.intersections.remove());
         aircraft.setPreviousIntersection(intersection);

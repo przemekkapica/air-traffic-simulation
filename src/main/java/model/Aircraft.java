@@ -5,6 +5,7 @@ import org.lwjgl.nanovg.NVGColor;
 import simulation.GraphicsContext;
 import simulation.IRenderableObject;
 import simulation.SimulationObject;
+import util.Constants;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -19,6 +20,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     private NVGColor color;
 
     private float attitude;
+    public Vector2f pos = new Vector2f();
 
     public Queue<String> intersections = new ArrayDeque<>();
 
@@ -36,6 +38,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     public void update(float deltaTime) {
         float deltaLocation = speed * deltaTime;
         location = location + deltaLocation;
+        //if (speed < maxSpeed) speed = speed+10;
 
         if (location >= airwayFragment.getLength ()) {
             location = 0.0f;
@@ -58,7 +61,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
     @Override
     public void nvgRender(long nvg) {
-        Vector2f pos = new Vector2f();
+
 
         if (airwayFragment instanceof AirwaySegment segment) {
             Vector2f dir = segment.getDirection();
@@ -100,11 +103,9 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         this.speed = Math.min(Math.abs(speed), maxSpeed);
     }
 
-    public void accelerate(float destinationSpeed) {
-        if (speed >= destinationSpeed) {
-            return;
-        }
-        while (speed < destinationSpeed) {
+
+    public void accelerate() {
+        while (speed < maxSpeed) {
             setSpeed(speed + 10);
             try {
                 TimeUnit.MILLISECONDS.sleep(50);
@@ -113,6 +114,66 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
             }
         }
     }
+    public void accelerate_decelerate() {
+
+        while (speed < maxSpeed) {
+            setSpeed(speed + 10);
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        try {
+            TimeUnit.MILLISECONDS.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        while (speed > 0) {
+            setSpeed(speed - 10);
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
+    public void decelerate() {
+
+    }
+
+    public void ascend_descend() {
+
+        while (attitude < Constants.MAX_ATTITUDE) {
+            setSpeed(attitude + 100);
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        try {
+            TimeUnit.MILLISECONDS.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        while (speed > 0) {
+            setSpeed(speed - 100);
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+    }
+
+    public void descent() {
+
+    }
+
+
 
     public boolean isRoadStable() {
         return isRoadStable;
