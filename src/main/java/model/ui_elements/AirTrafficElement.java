@@ -5,13 +5,13 @@ import simulation.SimulationObject;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class UIElement extends SimulationObject {
+public abstract class AirTrafficElement extends SimulationObject {
     private final Set<Aircraft> aircrafts;
 
     public abstract float getLength();
-    public abstract UIElement getNextFragment();
+    public abstract AirTrafficElement getNextFragment();
 
-    protected UIElement(String name) {
+    protected AirTrafficElement(String name) {
         super(name);
         aircrafts = new HashSet<>();
     }

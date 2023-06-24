@@ -24,16 +24,7 @@ public class GraphicsContext {
     private final GraphicsUtil graphicsUtil;
     private int bgImage;
 
-    public static NVGColor colorFromRgb(int r, int g, int b) {
-        NVGColor color = NVGColor.create();
 
-        color.r(r / 255f);
-        color.g(g / 255f);
-        color.b(b / 255f);
-        color.a(1.0f);
-
-        return color;
-    }
     public void loadFont(String name, String file) throws RuntimeException, IOException {
         byte[] fontBytes = null;
 

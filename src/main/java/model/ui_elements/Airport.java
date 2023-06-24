@@ -5,19 +5,20 @@ import org.lwjgl.nanovg.NVGColor;
 import simulation.GraphicsContext;
 import simulation.IPositionedObject;
 import simulation.IRenderableObject;
+import util.GraphicsUtil;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.lwjgl.nanovg.NanoVG.*;
 
-public class Airport extends UIElement implements IPositionedObject, IRenderableObject {
+public class Airport extends AirTrafficElement implements IPositionedObject, IRenderableObject {
 
     @Override
     public float getLength() {
         return 10.0f;
     }
-    private static final NVGColor COlOR = GraphicsContext.colorFromRgb(67, 138, 236);
+    private static final NVGColor COlOR = GraphicsUtil.colorFromRgb(67, 138, 236);
 
     private final Set<Airway> m_outbound;
     private final Set<Airway> inbound;
@@ -44,7 +45,7 @@ public class Airport extends UIElement implements IPositionedObject, IRenderable
 
         // render label
         nvgFontSize(nvg, 16.0f);
-        nvgFillColor(nvg,  GraphicsContext.colorFromRgb(0, 0, 0));
+        nvgFillColor(nvg,  GraphicsUtil.colorFromRgb(0, 0, 0));
         nvgFontFace(nvg, "font");
         nvgTextAlign(nvg, NVG_ALIGN_MIDDLE | NVG_ALIGN_BOTTOM);
         nvgText(nvg, position.x + 15, position.y + 2, String.format("%s", getName()));

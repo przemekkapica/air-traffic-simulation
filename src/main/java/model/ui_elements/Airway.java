@@ -4,12 +4,13 @@ import org.joml.Vector2f;
 import org.lwjgl.nanovg.NVGColor;
 import simulation.GraphicsContext;
 import simulation.IRenderableObject;
+import util.GraphicsUtil;
 
 import static org.lwjgl.nanovg.NanoVG.*;
 
-public class Airway extends UIElement implements IRenderableObject {
-    private static final NVGColor COlOR_WORKING = GraphicsContext.colorFromRgb(67, 138, 236);
-    private static final NVGColor COLOR_BROKEN = GraphicsContext.colorFromRgb(70, 70, 70);
+public class Airway extends AirTrafficElement implements IRenderableObject {
+    private static final NVGColor COlOR_WORKING = GraphicsUtil.colorFromRgb(67, 138, 236);
+    private static final NVGColor COLOR_BROKEN = GraphicsUtil.colorFromRgb(70, 70, 70);
     private final Airport startAirport;
     private final Airport endAirport;
     private final Vector2f startPosition;
@@ -40,7 +41,7 @@ public class Airway extends UIElement implements IRenderableObject {
     }
 
     @Override
-    public UIElement getNextFragment() {
+    public AirTrafficElement getNextFragment() {
         return endAirport;
     }
 
@@ -59,7 +60,7 @@ public class Airway extends UIElement implements IRenderableObject {
             nvgStrokeColor(nvg, COlOR_WORKING);
         }
 
-        nvgStrokeWidth(nvg, 2.0f);
+        nvgStrokeWidth(nvg, 1.5f);
         nvgStroke(nvg);
         nvgClosePath(nvg);
     }
