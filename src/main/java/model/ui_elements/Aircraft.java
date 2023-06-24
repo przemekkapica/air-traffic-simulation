@@ -145,7 +145,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         while (speed < maxSpeed) {
             setSpeed(speed + 10);
             try {
-                TimeUnit.MILLISECONDS.sleep(100);
+                TimeUnit.MILLISECONDS.sleep(50);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -176,7 +176,14 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     }
 
     public void decelerate() {
-
+        while (speed > 0) {
+            setSpeed(speed - 10);
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     public void ascend_descend() {

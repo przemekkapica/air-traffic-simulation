@@ -38,12 +38,13 @@ public class ConfigureVelocityBehaviour extends CyclicBehaviour {
 
             ACLMessage response =  new ACLMessage(ACLMessage.AGREE);
             response.addReceiver(message.getSender());
-            if (aircraft.segments.isEmpty())
+            if (aircraft.segments.isEmpty()) {
                 response.setContent(FINAL_DESTINATION);
-            else
+            } else {
                 response.setContent(aircraft.segments.remove());
-            myAgent.send(response);
+            }
 
+            myAgent.send(response);
         }
     }
 }

@@ -50,7 +50,7 @@ public class Airway extends AirTrafficElement implements IRenderableObject {
 
     @Override
     public String toString() {
-        return "In the air";
+        return String.format("-> %s", getNextFragment().toString());
     }
 
     @Override

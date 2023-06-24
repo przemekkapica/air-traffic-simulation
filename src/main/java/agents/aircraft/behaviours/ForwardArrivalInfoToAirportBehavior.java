@@ -25,7 +25,6 @@ public class ForwardArrivalInfoToAirportBehavior extends CyclicBehaviour {
         final ACLMessage message = myAgent.receive(messageTemplate);
 
         if (Objects.nonNull(message) && aircraft.isRoadStable()) {
-
             if (message.getContent().equals(FINAL_DESTINATION)) {
                 aircraft.setSpeed(0);
                 aircraft.setAttitude(0);
