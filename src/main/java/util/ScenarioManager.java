@@ -36,7 +36,7 @@ public class ScenarioManager {
         for (Airport airport : airports) {
             Simulation.getScene().addObject(airport);
         }
-        List<String> aircraftNames = new ArrayList<>(Arrays.asList("A_1", "A_2", "A_3", "A_4", "A_5", "A_6","A_7", "A_8"));
+        List<String> aircraftNames = new ArrayList<>(Arrays.asList("P1", "P2", "P3", "P4", "P5", "P6","P7", "P8", "P9", "P10", "P11"));
 
         AircraftsDetailsDisplay.createInstance(aircraftNames);
         AircraftsDetailsDisplay aircraftsDetailsDisplay = AircraftsDetailsDisplay.getInstance();
@@ -55,17 +55,23 @@ public class ScenarioManager {
         Aircraft aircraft5 = new Aircraft(aircraftNames.get(4), 330.0f, 0.0f, airports[4]);
         Aircraft aircraft6 = new Aircraft(aircraftNames.get(5), 320.0f, 0.0f, airports[5]);
         Aircraft aircraft7 = new Aircraft(aircraftNames.get(6), 300.0f, 0.0f, airports[6]);
-        Aircraft aircraft8 = new Aircraft(aircraftNames.get(7), 300.0f, 0.0f, airports[7]);
-
+        Aircraft aircraft8 = new Aircraft(aircraftNames.get(7), 480.0f, 0.0f, airports[7]);
+        Aircraft aircraft9 = new Aircraft(aircraftNames.get(8), 420.0f, 0.0f, airports[8]);
+        Aircraft aircraft10 = new Aircraft(aircraftNames.get(9), 380.0f, 0.0f, airports[9]);
+        Aircraft aircraft11 = new Aircraft(aircraftNames.get(10), 500.0f, 0.0f, airports[10]);
 //        return new Aircraft[]{aircraft1};
-        return new Aircraft[]{aircraft1, aircraft2, aircraft3, aircraft4, aircraft5, aircraft6, aircraft7, aircraft8};
+        return new Aircraft[]{
+                aircraft1, aircraft2, aircraft3, aircraft4, aircraft5, aircraft6,
+                aircraft7, aircraft8, aircraft9, aircraft10, aircraft11
+        };
     }
 
     private static String[] getSegments() {
         return new String[]{
                 "1-2", "2-3", "3-4", "1-6", "3-6", "3-7", "4-8", "5-1",
                 "5-6", "6-7", "7-8", "7-9", "8-3", "9-5", "8-7", "7-3", "6-10",
-                "9-11", "3-11", "1-11", "7-11", "9-2", "5-7", "8-5", "9-10", "4-9", "4-1"
+                "9-11", "3-11", "1-11", "7-11", "9-2", "5-7", "8-5", "9-10", "4-9",
+                "4-1", "11-1", "11-6", "10-9"
         };
     }
 

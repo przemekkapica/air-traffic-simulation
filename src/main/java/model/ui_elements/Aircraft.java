@@ -89,12 +89,11 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
             position = airport.getPosition();
         }
 
-        _renderIcon(nvg);
-
-        _renderLabel(nvg);
+        renderIcon(nvg);
+        renderLabel(nvg);
     }
 
-    private void _renderIcon(long nvg) {
+    private void renderIcon(long nvg) {
         final GraphicsUtil graphicsUtil = new GraphicsUtil();
 
         int aircraftIcon = -1;
@@ -119,14 +118,12 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         }
     }
 
-    private void _renderLabel(long nvg) {
+    private void renderLabel(long nvg) {
         nvgFillColor(nvg, GraphicsUtil.colorFromRgb(0, 0, 0));
         nvgFontSize(nvg, 13.0f);
         nvgFontFace(nvg, "font");
         nvgTextAlign(nvg, NVG_ALIGN_MIDDLE | NVG_ALIGN_BOTTOM);
         nvgText(nvg, position.x + 14, position.y, String.format("%s", getName()));
-//        nvgText(nvg, position.x + 14, position.y, String.format("speed: %.2f", speed));
-//        nvgText(nvg, position.x + 14, position.y + 15, String.format("attitude: %.2f", attitude));
     }
 
     public void setColor(int r, int g, int b) {
