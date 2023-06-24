@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 import static org.lwjgl.nanovg.NanoVG.*;
 
 public class Aircraft extends SimulationObject implements IRenderableObject {
-    private static final NVGColor COlOR = GraphicsContext.colorFromRgb(11, 102, 52);
+    private static final NVGColor COlOR = GraphicsUtil.colorFromRgb(11, 102, 52);
     private final float maxSpeed;
     private float speed;
     private NVGColor color;
@@ -30,10 +30,26 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     private  boolean isRoadStable = true;
 
     // location data
-    private UIElement airwayFragment;
+    private AirTrafficElement airwayFragment;
     private float location;
 
     private Airport previousAirport;
+
+    private final AircraftsDetailsDisplay detailsDisplay;
+
+    public Aircraft(String name, float maxSpeed, float initialAttitude, AirTrafficElement fragment) {
+        super(name);
+
+        attitude = initialAttitude;
+        this.maxSpeed = Math.abs(maxSpeed);
+        airwayFragment = fragment;
+        location = 0.0f;
+        color = Aircraft.COlOR;
+
+        airwayFragment.enter(this);
+
+        detailsDisplay = AircraftsDetailsDisplay.getInstance();
+    }
 
     @Override
     public void update(float deltaTime) {
@@ -54,6 +70,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
             airwayFragment.enter(this);
         }
+        detailsDisplay.update(getName(), speed, attitude);
     }
 
 
@@ -102,7 +119,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     }
 
     private void _renderLabel(long nvg) {
-        nvgFillColor(nvg, GraphicsContext.colorFromRgb(0, 0, 0));
+        nvgFillColor(nvg, GraphicsUtil.colorFromRgb(0, 0, 0));
         nvgFontSize(nvg, 13.0f);
         nvgFontFace(nvg, "font");
         nvgTextAlign(nvg, NVG_ALIGN_MIDDLE | NVG_ALIGN_BOTTOM);
@@ -112,7 +129,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     }
 
     public void setColor(int r, int g, int b) {
-        color = GraphicsContext.colorFromRgb(r, g, b);
+        color = GraphicsUtil.colorFromRgb(r, g, b);
     }
 
     public float getMaxSpeed() {
@@ -127,7 +144,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         while (speed < maxSpeed) {
             setSpeed(speed + 10);
             try {
-                TimeUnit.MILLISECONDS.sleep(50);
+                TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -208,18 +225,6 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
     public boolean isTraversingSegment() {
         return airwayFragment.getName().contains("segment");
-    }
-
-    public Aircraft(String name, float maxSpeed, float initialAttitude, UIElement fragment) {
-        super(name);
-
-        attitude = initialAttitude;
-        this.maxSpeed = Math.abs(maxSpeed);
-        airwayFragment = fragment;
-        location = 0.0f;
-        color = Aircraft.COlOR;
-
-        airwayFragment.enter(this);
     }
 
     public void setAttitude(float attitude) {

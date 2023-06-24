@@ -1,5 +1,6 @@
 package util;
 
+import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.system.MemoryUtil;
 
 import java.io.IOException;
@@ -36,5 +37,16 @@ public class GraphicsUtil {
             throw new RuntimeException(String.format("failed to add image %s%n", file));
         }
         return image;
+    }
+
+    public static NVGColor colorFromRgb(int r, int g, int b) {
+        NVGColor color = NVGColor.create();
+
+        color.r(r / 255f);
+        color.g(g / 255f);
+        color.b(b / 255f);
+        color.a(1.0f);
+
+        return color;
     }
 }

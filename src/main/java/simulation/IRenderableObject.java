@@ -1,7 +1,7 @@
 package simulation;
 
 public interface IRenderableObject {
-    void glRender (GraphicsContext context);
+    void glRender(GraphicsContext context);
 
-    void nvgRender (long nvg);
+    void nvgRender(long nvg);
 }

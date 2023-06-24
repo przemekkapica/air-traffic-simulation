@@ -35,8 +35,8 @@ public class Simulation {
         double mouseX = bufferPosX.get(0);
         double mouseY = bufferPosY.get(0);
 
-        boolean isShiftClick =(mods & GLFW_MOD_SHIFT) == GLFW_MOD_SHIFT;
-        boolean isAltClick =(mods & GLFW_MOD_ALT) == GLFW_MOD_ALT;
+        boolean isShiftClick = (mods & GLFW_MOD_SHIFT) == GLFW_MOD_SHIFT;
+        boolean isAltClick = (mods & GLFW_MOD_ALT) == GLFW_MOD_ALT;
 
 
         // lmb shift click deletes a segment
@@ -104,9 +104,9 @@ public class Simulation {
         }
 
         // setup context in this thread
-        glfwMakeContextCurrent (m_window);
-        glfwSwapInterval (1);
-        glfwShowWindow (m_window);
+        glfwMakeContextCurrent(m_window);
+        glfwSwapInterval(1);
+        glfwShowWindow(m_window);
 
         GL.createCapabilities ();
 
@@ -118,20 +118,21 @@ public class Simulation {
         // handle for nanovg
         long nvg;
 
-        GraphicsContext context = new GraphicsContext (m_window);
+        GraphicsContext context = new GraphicsContext(m_window);
         while (!glfwWindowShouldClose(m_window)) {
             // calculate delta time
             tick = System.currentTimeMillis();
             elapsed = tick - lastTick;
             lastTick = tick;
-            deltaTime = elapsed / 6000f;
+            deltaTime = elapsed / 7000f;
 
             getScene().update(deltaTime);
 
             context.startFrame();
             getScene().glRender(context);
 
-            nvg = context.nvgBegin ();
+            nvg = context.nvgBegin();
+
             getScene().nvgRender(nvg);
             context.nvgEnd();
 

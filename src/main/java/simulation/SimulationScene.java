@@ -60,7 +60,7 @@ public class SimulationScene {
     void nvgRender(long nvg) {
         for (SimulationObject object : simulationObjects.values ()) {
             if (object instanceof IRenderableObject) {
-                ((IRenderableObject)object).nvgRender (nvg);
+                ((IRenderableObject)object).nvgRender(nvg);
             }
         }
     }
