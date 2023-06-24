@@ -18,8 +18,11 @@ public class Airway extends AirTrafficElement implements IRenderableObject {
     private final float length;
     private boolean broken;
 
+    private final String name;
+
     public Airway(String name, Airport start, Airport end) {
         super(name);
+        this.name = name;
 
         startAirport = start;
         endAirport = end;
@@ -43,6 +46,11 @@ public class Airway extends AirTrafficElement implements IRenderableObject {
     @Override
     public AirTrafficElement getNextFragment() {
         return endAirport;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("-> %s", getNextFragment().toString());
     }
 
     @Override

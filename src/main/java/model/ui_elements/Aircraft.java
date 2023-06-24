@@ -42,6 +42,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
         attitude = initialAttitude;
         this.maxSpeed = Math.abs(maxSpeed);
+        speed = 0.0f;
         airwayFragment = fragment;
         location = 0.0f;
         color = Aircraft.COlOR;
@@ -70,7 +71,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
             airwayFragment.enter(this);
         }
-        detailsDisplay.update(getName(), speed, attitude);
+        detailsDisplay.update(getName(), speed, attitude, airwayFragment);
     }
 
 
@@ -144,7 +145,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         while (speed < maxSpeed) {
             setSpeed(speed + 10);
             try {
-                TimeUnit.MILLISECONDS.sleep(100);
+                TimeUnit.MILLISECONDS.sleep(50);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -175,7 +176,14 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     }
 
     public void decelerate() {
-
+        while (speed > 0) {
+            setSpeed(speed - 10);
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     public void ascend_descend() {

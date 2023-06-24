@@ -27,4 +27,6 @@ public abstract class AirTrafficElement extends SimulationObject {
             throw new RuntimeException(String.format("aircraft %s was not in %s%n", aircraft.getName(), getName()));
         }
     }
+
+    public abstract String toString();
 }

@@ -26,13 +26,13 @@ public class Main {
         // create a thread to run jade in
         // we want to keep the main thread for our simulation rendering
         // this is because glfw does not behave well when it is run in non-main thread apparently
-        Thread agentPlatformThread = new Thread (Main::jadeThread);
+        Thread agentPlatformThread = new Thread(Main::jadeThread);
         agentPlatformThread.start();
 
         // now, we want to start the simulation
         Simulation simulation = new Simulation();
-        simulation.initialize (1280, 800, "Air Traffic Simulation");
+        simulation.initialize(1280, 800, "Air Traffic Simulation");
 
-        simulation.run ();
+        simulation.run();
     }
 }

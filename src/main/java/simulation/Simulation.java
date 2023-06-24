@@ -12,18 +12,18 @@ import static org.lwjgl.opengl.GL33.GL_TRUE;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Simulation {
-    private static SimulationScene m_scene = new SimulationScene();
+    private static SimulationScene scene = new SimulationScene();
 
     public static void restartScene() {
-        m_scene = new SimulationScene();
+        scene = new SimulationScene();
     }
 
     public static SimulationScene getScene() {
-        return m_scene;
+        return scene;
     }
 
-    private long m_window;
-    private boolean m_initialized;
+    private long window;
+    private boolean isInitialized;
 
     private void onMouseClick(long window, int button, int action, int mods) {
         DoubleBuffer bufferPosX = BufferUtils.createDoubleBuffer(1);
@@ -43,7 +43,7 @@ public class Simulation {
         Vector2f p0 = new Vector2f((float) mouseX,(float) mouseY);
 
         if (button == GLFW_MOUSE_BUTTON_LEFT && (isShiftClick || isAltClick)) {
-            for (SimulationObject object : m_scene.getAllObjects ()) {
+            for (SimulationObject object : scene.getAllObjects ()) {
                 if (object instanceof Airway segment) {
                     Vector2f p1 = segment.getStartAirport().getPosition();
                     Vector2f p2 = segment.getEndAirport().getPosition();
@@ -74,7 +74,7 @@ public class Simulation {
     }
 
     public void initialize (int width, int height, String title) throws RuntimeException {
-        if (m_initialized) {
+        if (isInitialized) {
             throw new RuntimeException ("simulation was already initialized");
         }
 
@@ -89,24 +89,24 @@ public class Simulation {
 
         glfwWindowHint (GLFW_SAMPLES, 4);
 
-        m_window = glfwCreateWindow (width, height, title, NULL, NULL);
+        window = glfwCreateWindow (width, height, title, NULL, NULL);
 
         // initialize input callbacks
-        glfwSetMouseButtonCallback (m_window, this::onMouseClick);
-        glfwSetKeyCallback (m_window, this::onKeyEvent);
+        glfwSetMouseButtonCallback (window, this::onMouseClick);
+        glfwSetKeyCallback (window, this::onKeyEvent);
 
-        m_initialized = true;
+        isInitialized = true;
     }
 
     public void run () {
-        if (!m_initialized) {
+        if (!isInitialized) {
             throw new RuntimeException ("simulation not initialized");
         }
 
         // setup context in this thread
-        glfwMakeContextCurrent(m_window);
+        glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
-        glfwShowWindow(m_window);
+        glfwShowWindow(window);
 
         GL.createCapabilities ();
 
@@ -118,8 +118,8 @@ public class Simulation {
         // handle for nanovg
         long nvg;
 
-        GraphicsContext context = new GraphicsContext(m_window);
-        while (!glfwWindowShouldClose(m_window)) {
+        GraphicsContext context = new GraphicsContext(window);
+        while (!glfwWindowShouldClose(window)) {
             // calculate delta time
             tick = System.currentTimeMillis();
             elapsed = tick - lastTick;
@@ -145,7 +145,7 @@ public class Simulation {
     }
 
     private void terminate () {
-        glfwDestroyWindow (m_window);
+        glfwDestroyWindow (window);
         glfwTerminate();
     }
 }
