@@ -42,6 +42,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
         attitude = initialAttitude;
         this.maxSpeed = Math.abs(maxSpeed);
+        speed = 0.0f;
         airwayFragment = fragment;
         location = 0.0f;
         color = Aircraft.COlOR;

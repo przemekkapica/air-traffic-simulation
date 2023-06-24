@@ -23,38 +23,48 @@ public class ScenarioEngine {
     public void runScenario() throws FileNotFoundException, StaleProxyException {
         Scanner sc = new Scanner(new File("src/main/resources/scenarios/scenario.csv"));
         sc.useDelimiter(";");
-        while(sc.hasNext())
-        {
-            String agentClass = sc.next();
-            switch (agentClass) {
-                case "segment" -> CreateSegment(sc.next());
-                case "airport" -> CreateAirport(sc.next());
-                case "aircraft" -> CreateAircraft(sc.next());
-                case "airways_administrator" -> CreatePlanner(sc.next());
+        while(sc.hasNextLine())  {
+            String data = sc.nextLine();
+
+            int start = data.indexOf(";") + 1;
+            int stop = data.indexOf(";", data.indexOf(";") + 1);
+            String params = data.substring(start, stop);
+
+            if (data.contains("segment")) {
+                createSegment(params);
+            } else if (data.contains("airport")) {
+                createAirport(params);
+            } else if (data.contains("aircraft")) {
+                createAircraft(params);
+            } else if (data.contains("administrator")) {
+                createAdministrator(params);
             }
         }
         sc.close();
     }
 
-    private void CreateSegment(String agentParams) throws StaleProxyException {
-        Object[] params = GetAgentParams(agentParams);
-        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.segment.SegmentAgent", params ).start();
+    private void createSegment(String agentParams) throws StaleProxyException {
+        Object[] params = getAgentParams(agentParams);
+        System.out.println(Arrays.stream(params).findFirst().get().toString());
+        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.segment.SegmentAgent", params).start();
     }
 
-    private void CreateAirport(String agentParams) throws StaleProxyException {
-        Object[] params = GetAgentParams(agentParams);
-        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.atc.ATCAgent", params ).start();
+    private void createAirport(String agentParams) throws StaleProxyException {
+        Object[] params = getAgentParams(agentParams);
+        System.out.println(Arrays.stream(params).findFirst().get().toString());
+        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.atc.ATCAgent", params).start();
     }
-    private void CreateAircraft(String agentParams) throws StaleProxyException {
-        Object[] params = GetAgentParams(agentParams);
-        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.aircraft.AircraftAgent", params ).start();
+    private void createAircraft(String agentParams) throws StaleProxyException {
+        Object[] params = getAgentParams(agentParams);
+        System.out.println(Arrays.stream(params).findFirst().get().toString());
+        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.aircraft.AircraftAgent", params).start();
     }
-    private void CreatePlanner(String agentParams) throws StaleProxyException {
-        Object[] params = GetAgentParams(agentParams);
-        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.airways_administrator.AirwaysAdministratorAgent", params ).start();
+    private void createAdministrator(String agentParams) throws StaleProxyException {
+        Object[] params = getAgentParams(agentParams);
+        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.airways_administrator.AirwaysAdministratorAgent", params).start();
     }
 
-    private Object[] GetAgentParams(String agentParams) {
+    private Object[] getAgentParams(String agentParams) {
         return agentParams.split(",");
     }
 
