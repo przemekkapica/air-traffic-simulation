@@ -71,7 +71,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
             airwayFragment.enter(this);
         }
-        detailsDisplay.update(getName(), speed, attitude);
+        detailsDisplay.update(getName(), speed, attitude, airwayFragment);
     }
 
 

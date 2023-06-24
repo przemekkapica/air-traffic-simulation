@@ -16,19 +16,21 @@ import static org.lwjgl.nanovg.NanoVG.nvgText;
 public class AircraftsDetailsDisplay extends SimulationObject implements IRenderableObject {
     private static AircraftsDetailsDisplay instance = null;
     public static class AircraftDetails {
-        public AircraftDetails(float speed, float attitude) {
+        public AircraftDetails(float speed, float attitude, AirTrafficElement airTrafficElement) {
             this.speed = speed;
             this.attitude = attitude;
+            this.airTrafficElement = airTrafficElement;
         }
         public float speed;
         public float attitude;
+        public AirTrafficElement airTrafficElement;
     }
     private final HashMap<String, AircraftDetails> aircraftDetailsMap = new HashMap<>();
 
     public AircraftsDetailsDisplay(List<String> aircraftNames) {
         super("aircraftsDetailsDisplay");
         for (var name : aircraftNames) {
-            aircraftDetailsMap.put(name, new AircraftDetails(0, 0));
+            aircraftDetailsMap.put(name, new AircraftDetails(0, 0, null));
         }
     }
     @Override
@@ -36,8 +38,6 @@ public class AircraftsDetailsDisplay extends SimulationObject implements IRender
 
     @Override
     public void nvgRender(long nvg) {
-        nvgFontSize(nvg, 16.0f);
-        nvgFillColor(nvg,  GraphicsUtil.colorFromRgb(0, 0, 0));
         nvgFontFace(nvg, "font");
         nvgTextAlign(nvg, NVG_ALIGN_MIDDLE | NVG_ALIGN_BOTTOM);
 
@@ -57,28 +57,35 @@ public class AircraftsDetailsDisplay extends SimulationObject implements IRender
         return instance;
     }
 
-    public void update(String name, float speed, float attitude) {
-        aircraftDetailsMap.put(name, new AircraftDetails(speed, attitude));
+    public void update(String name, float speed, float attitude, AirTrafficElement airTrafficElement) {
+        aircraftDetailsMap.put(name, new AircraftDetails(speed, attitude, airTrafficElement));
     }
 
     private void _renderAircraftsDetails(long nvg) {
+        nvgFontSize(nvg, 16.0f);
+        nvgFillColor(nvg,  GraphicsUtil.colorFromRgb(0, 0, 0));
         int i = 1;
         for (Map.Entry<String, AircraftDetails> entry : aircraftDetailsMap.entrySet()) {
             String name = entry.getKey();
             float speed = entry.getValue().speed;
             float attitude = entry.getValue().attitude;
+            AirTrafficElement fragment = entry.getValue().airTrafficElement;
 
-            nvgText(nvg, 30, 420 + i*30 , name);
-            nvgText(nvg, 90, 420 + i*30 , String.valueOf(speed));
-            nvgText(nvg, 150, 420 + i*30, String.valueOf(attitude));
+            nvgText(nvg, 30, 460 + i*30 , name);
+            nvgText(nvg, 80, 460 + i*30 , String.valueOf(speed));
+            nvgText(nvg, 140, 460 + i*30, String.valueOf(attitude));
+            nvgText(nvg, 200, 460 + i*30, fragment.toString());
             i++;
         }
     }
 
     private static void _renderLabels(long nvg) {
-        nvgText(nvg, 30, 420, "Plane");
-        nvgText(nvg, 90, 420, "Speed");
-        nvgText(nvg, 150, 420, "Attitude");
+        nvgFontSize(nvg, 13.0f);
+        nvgFillColor(nvg,  GraphicsUtil.colorFromRgb(66, 138, 236));
+        nvgText(nvg, 30, 460, "Plane");
+        nvgText(nvg, 80, 460, "Speed");
+        nvgText(nvg, 140, 460, "Attitude");
+        nvgText(nvg, 200, 460, "Location");
     }
 
     private static void _renderTable(long nvg) {

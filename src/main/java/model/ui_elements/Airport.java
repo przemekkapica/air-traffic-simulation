@@ -20,11 +20,21 @@ public class Airport extends AirTrafficElement implements IPositionedObject, IRe
     }
     private static final NVGColor COlOR = GraphicsUtil.colorFromRgb(67, 138, 236);
 
-    private final Set<Airway> m_outbound;
+    private final Set<Airway> outbound;
     private final Set<Airway> inbound;
 
     private Airway nextSegment;
     private final Vector2f position;
+    private final String name;
+
+    public Airport(String name, Vector2f position) {
+        super(name);
+        this.name = name;
+        this.position = new Vector2f(position.x, position.y);
+
+        outbound = new HashSet<>();
+        inbound = new HashSet<>();
+    }
 
     @Override
     public Vector2f getPosition() {
@@ -56,8 +66,13 @@ public class Airport extends AirTrafficElement implements IPositionedObject, IRe
         return nextSegment;
     }
 
+    @Override
+    public String toString() {
+        return name.substring(1);
+    }
+
     void addOutboundSegment(Airway segment) {
-        m_outbound.add(segment);
+        outbound.add(segment);
 
         if (nextSegment == null) {
             nextSegment = segment;
@@ -69,7 +84,7 @@ public class Airport extends AirTrafficElement implements IPositionedObject, IRe
     }
 
     public void setNextSegmentByName(String name) {
-        for (Airway segment : m_outbound) {
+        for (Airway segment : outbound) {
             if (segment.getName().equals("segment_" + name)) {
                 nextSegment = segment;
                 return;
@@ -78,11 +93,5 @@ public class Airport extends AirTrafficElement implements IPositionedObject, IRe
         System.out.println("ERROR You cannot go in that direction");
     }
 
-    public Airport(String name, Vector2f position) {
-        super(name);
-        this.position = new Vector2f(position.x, position.y);
 
-        m_outbound = new HashSet<>();
-        inbound = new HashSet<>();
-    }
 }
