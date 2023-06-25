@@ -24,7 +24,7 @@ public class AcceptNewAirwayProposalBehaviour extends CyclicBehaviour {
         final ACLMessage message = myAgent.receive(messageTemplate);
 
         if (Objects.nonNull(message)) {
-            _sendMessage();
+            sendMessage();
 
             aircraft.setSpeed(0);
             aircraft.setColor(9,143,53);
@@ -56,7 +56,7 @@ public class AcceptNewAirwayProposalBehaviour extends CyclicBehaviour {
         return new AcceptNewAirwayProposalBehaviour(aircraft,  destination, priority);
     }
 
-    private void _sendMessage() {
+    private void sendMessage() {
         ACLMessage disqualifyRoute = new ACLMessage(INFORM_IF);
         disqualifyRoute.addReceiver(new AID("airways_administrator", AID.ISLOCALNAME));
         disqualifyRoute.setContent(aircraft.getName());

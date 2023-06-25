@@ -37,7 +37,7 @@ public class ScenarioManager {
             Simulation.getScene().addObject(airport);
         }
         List<String> aircraftNames = new ArrayList<>(Arrays.asList("P1", "P2", "P3", "P4", "P5", "P6","P7", "P8", "P9", "P10", "P11"));
-
+//        List<String> aircraftNames = new ArrayList<>(Arrays.asList("P1"));
         AircraftsDetailsDisplay.createInstance(aircraftNames);
         AircraftsDetailsDisplay aircraftsDetailsDisplay = AircraftsDetailsDisplay.getInstance();
         Simulation.getScene().addObject(aircraftsDetailsDisplay);

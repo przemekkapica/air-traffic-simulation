@@ -11,6 +11,7 @@ import util.GraphicsUtil;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import static org.lwjgl.nanovg.NanoVG.*;
 
@@ -208,8 +209,26 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
     }
 
-    public void descent() {
+    public void ascend() {
+        while (altitude < 400.0f) {
+            setAltitude(altitude + 10);
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
 
+    public void descend() {
+        while (altitude > 0) {
+            setAltitude(altitude - 10);
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     public boolean isRoadStable() {
@@ -250,6 +269,9 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         }
     }
 
+    public Vector2f getPosition() {
+        return position;
+    }
 
     public boolean isTooClose(Aircraft other) {
         // Calculate the Euclidean distance between this aircraft and the other aircraft
@@ -262,5 +284,17 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         // Assume that an "altitude" attribute exists and it's a float.
         // "ALTITUDE_CHANGE" is the amount by which to change the altitude.
         this.altitude += Constants.ALTITUDE_CHANGE;
+    }
+
+    public void takeoff() {
+        while (altitude < 400.0f || speed < maxSpeed) {
+            setAltitude(altitude + ThreadLocalRandom.current().nextInt(30, 80));
+            setSpeed(speed + ThreadLocalRandom.current().nextInt(8, 16));
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 }
