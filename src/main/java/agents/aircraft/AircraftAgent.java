@@ -82,5 +82,7 @@ public class AircraftAgent extends Agent {
         addBehaviour(TakeOffBehaviour.create(aircraft));
         addBehaviour(AcceptNewAirwayProposalBehaviour.create(aircraft, finalDestination, priority));
         addBehaviour(SetNewAirwayBehaviour.create(aircraft, description));
+        addBehaviour(LocationTickerBehaviour.create(this, aircraft, 1000));
+        addBehaviour(AdjustAltitudeBehaviour.create(aircraft));
     }
 }

@@ -1,10 +1,7 @@
 package agents.airways_administrator;
 
+import agents.airways_administrator.behaviours.*;
 import util.Constants;
-import agents.airways_administrator.behaviours.AcceptAirwayBehaviour;
-import agents.airways_administrator.behaviours.HandleMalfunctionBehaviour;
-import agents.airways_administrator.behaviours.HandlePlaneArrivalBehaviour;
-import agents.airways_administrator.behaviours.ProposeNewAirwayBehaviour;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -65,6 +62,7 @@ public class AirwaysAdministratorAgent extends Agent {
         addBehaviour(ProposeNewAirwayBehaviour.create(planner));
         addBehaviour(AcceptAirwayBehaviour.create(planner));
         addBehaviour(HandlePlaneArrivalBehaviour.create(planner));
+        addBehaviour(CheckProximityBehaviour.create());
     }
 
     private void extractParams() {
