@@ -27,7 +27,7 @@ public class ForwardArrivalInfoToAirportBehavior extends CyclicBehaviour {
         if (Objects.nonNull(message) && aircraft.isRoadStable()) {
             if (message.getContent().equals(FINAL_DESTINATION)) {
                 aircraft.setSpeed(0);
-                aircraft.setAttitude(0);
+                aircraft.setAltitude(0);
                 aircraft.setColor(9,143,53);
 
                 ACLMessage disqualifyRoute = new ACLMessage(INFORM_IF);

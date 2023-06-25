@@ -20,7 +20,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     private float speed;
     private NVGColor color;
 
-    private float attitude;
+    private float altitude;
     public Vector2f position = new Vector2f();
 
     public Queue<String> airports = new ArrayDeque<>();
@@ -37,10 +37,10 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
     private final AircraftsDetailsDisplay detailsDisplay;
 
-    public Aircraft(String name, float maxSpeed, float initialAttitude, AirTrafficElement fragment) {
+    public Aircraft(String name, float maxSpeed, float initialAltitude, AirTrafficElement fragment) {
         super(name);
 
-        attitude = initialAttitude;
+        altitude = initialAltitude;
         this.maxSpeed = Math.abs(maxSpeed);
         speed = 0.0f;
         airwayFragment = fragment;
@@ -71,7 +71,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
             airwayFragment.enter(this);
         }
-        detailsDisplay.update(getName(), speed, attitude, airwayFragment);
+        detailsDisplay.update(getName(), speed, altitude, airwayFragment);
     }
 
 
@@ -184,8 +184,8 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     }
 
     public void ascend_descend() {
-        while (attitude < Constants.MAX_ATTITUDE) {
-            setSpeed(attitude + 100);
+        while (altitude < Constants.MAX_ALTITUDE) {
+            setSpeed(altitude + 100);
             try {
                 TimeUnit.MILLISECONDS.sleep(50);
             } catch (InterruptedException e) {
@@ -232,8 +232,8 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         return airwayFragment.getName().contains("segment");
     }
 
-    public void setAttitude(float attitude) {
-        this.attitude = attitude;
+    public void setAltitude(float altitude) {
+        this.altitude = altitude;
     }
 
     public void updatePositionFrom(String positionString) {
@@ -261,6 +261,6 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     public void adjustAltitude() {
         // Assume that an "altitude" attribute exists and it's a float.
         // "ALTITUDE_CHANGE" is the amount by which to change the altitude.
-        this.attitude += Constants.ATTITUDE_CHANGE;
+        this.altitude += Constants.ALTITUDE_CHANGE;
     }
 }
