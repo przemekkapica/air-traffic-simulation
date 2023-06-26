@@ -3,7 +3,6 @@ package agents.aircraft.behaviours;
 import agents.aircraft.AircraftAgent;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -38,12 +37,14 @@ public class ConfigureVelocityBehaviour extends TickerBehaviour {
         final ACLMessage message = myAgent.receive(messageTemplate);
 
         if (Objects.nonNull(message)) {
-            float speed = Float.parseFloat(message.getContent());
+//            float speed = Float.parseFloat(message.getContent());
 //          aircraft.setSpeed(Float.parseFloat(speed));
 //            aircraft.accelerate(speed);
 
-            while (!aircraft.isTraversingSegment()) {System.out.print("");}
-            while (aircraft.isTraversingSegment()) {System.out.print("");}
+            while (!aircraft.isTraversingSegment()) {
+                aircraft.alternate();
+            }
+            while (aircraft.isTraversingSegment()) {aircraft.alternate();}
 
             ACLMessage response = new ACLMessage(ACLMessage.AGREE);
             response.addReceiver(message.getSender());

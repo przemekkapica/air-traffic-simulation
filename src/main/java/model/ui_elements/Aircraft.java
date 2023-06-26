@@ -52,7 +52,6 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
         detailsDisplay = AircraftsDetailsDisplay.getInstance();
     }
-
     @Override
     public void update(float deltaTime) {
         float deltaLocation = speed * deltaTime;
@@ -183,7 +182,6 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
             }
         }
     }
-
     public void ascend_descend() {
         while (altitude < Constants.MAX_ALTITUDE) {
             setSpeed(altitude + 100);
@@ -297,4 +295,18 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
             }
         }
     }
+
+    public void alternate() {
+            float altitude_change = ThreadLocalRandom.current().nextInt(-5, 5);
+            float speed_change = ThreadLocalRandom.current().nextInt(-9, 9);
+            altitude += altitude_change;
+            speed += speed_change;
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+
 }

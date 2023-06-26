@@ -50,6 +50,7 @@ public class ReceivePlaneArrivalBehaviour extends CyclicBehaviour {
                     time = System.currentTimeMillis() + (long)(arrivalTime * 1000);
                     if (checkForCollision(time))
                         break;
+
                 }
 
                 scheduledAircrafts.add(new Pair<>(message.getSender().getName(), time));

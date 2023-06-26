@@ -8,7 +8,6 @@ import jade.lang.acl.ACLMessage;
 import model.ui_elements.Aircraft;
 
 import static jade.lang.acl.ACLMessage.INFORM;
-import static jade.lang.acl.ACLMessage.INFORM_REF;
 
 public class LocationTickerBehaviour extends TickerBehaviour {
     private final Aircraft aircraft;
@@ -24,7 +23,7 @@ public class LocationTickerBehaviour extends TickerBehaviour {
 
     @Override
     protected void onTick() {
-        ACLMessage locationMessage = new ACLMessage(INFORM_REF);
+        ACLMessage locationMessage = new ACLMessage(INFORM);
         locationMessage.setContent(aircraft.position.toString()); // sending position as a string
         locationMessage.addReceiver(new AID("airways_administrator", AID.ISLOCALNAME));
         myAgent.send(locationMessage);

@@ -14,22 +14,26 @@ import java.util.Map;
 import java.util.Objects;
 
 import static jade.lang.acl.ACLMessage.INFORM;
-import static jade.lang.acl.ACLMessage.INFORM_REF;
 
 public class CheckProximityBehaviour extends CyclicBehaviour {
-    private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(INFORM_REF);
+    private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(INFORM);
+    private final AirwaysManager airwaysManager;
     private final Map<AID, Aircraft> aircrafts = new HashMap<>();
 
-    public static CheckProximityBehaviour create() {
-        return new CheckProximityBehaviour();
+    public static CheckProximityBehaviour create(AirwaysManager airwayPlan) {
+        return new CheckProximityBehaviour(airwayPlan);
     }
-    private CheckProximityBehaviour() {}
+    private CheckProximityBehaviour(AirwaysManager airwaysManager) {
+        this.airwaysManager = airwaysManager;
+    }
 
     @Override
     public void action() {
         final ACLMessage message = myAgent.receive(messageTemplate);
 
-        if (message != null) {
+
+//        if (message != null) {
+        if (Objects.nonNull(message)) {
             // AID of the message sender is the identifier of the Aircraft
             AID senderAID = message.getSender();
 
@@ -46,8 +50,6 @@ public class CheckProximityBehaviour extends CyclicBehaviour {
             // check if this aircraft is too close to any other aircraft
             for (Aircraft other : aircrafts.values()) {
                 if (!other.equals(aircraft) && other.isTooClose(aircraft)) {
-                    // TODO: Handle the case when the two aircraft are too close
-
 //                    if (other.getPosition(). )
                     ACLMessage warning = new ACLMessage(INFORM);
                     warning.addReceiver(senderAID);
@@ -57,10 +59,8 @@ public class CheckProximityBehaviour extends CyclicBehaviour {
             }
         }
     }
-
     private float calculateDistance(Vector2f aircraft1, Vector2f aircraft2) {
         return 0.0f;
     }
-
 }
 
