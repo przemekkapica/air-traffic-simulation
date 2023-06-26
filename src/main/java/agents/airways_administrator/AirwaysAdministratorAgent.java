@@ -62,7 +62,7 @@ public class AirwaysAdministratorAgent extends Agent {
         addBehaviour(ProposeNewAirwayBehaviour.create(planner));
         addBehaviour(AcceptAirwayBehaviour.create(planner));
         addBehaviour(HandlePlaneArrivalBehaviour.create(planner));
-        addBehaviour(CheckProximityBehaviour.create());
+        addBehaviour(CheckProximityBehaviour.create(planner));
     }
 
     private void extractParams() {

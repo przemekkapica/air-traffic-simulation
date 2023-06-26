@@ -23,9 +23,9 @@ public class LocationTickerBehaviour extends TickerBehaviour {
 
     @Override
     protected void onTick() {
-        ACLMessage msg = new ACLMessage(INFORM);
-        msg.setContent(aircraft.position.toString()); // sending position as a string
-        msg.addReceiver(new AID("airways_administrator", AID.ISLOCALNAME));
-        myAgent.send(msg);
+        ACLMessage locationMessage = new ACLMessage(INFORM);
+        locationMessage.setContent(aircraft.position.toString()); // sending position as a string
+        locationMessage.addReceiver(new AID("airways_administrator", AID.ISLOCALNAME));
+        myAgent.send(locationMessage);
     }
 }

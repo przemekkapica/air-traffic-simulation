@@ -16,13 +16,13 @@ import static org.lwjgl.nanovg.NanoVG.nvgText;
 public class AircraftsDetailsDisplay extends SimulationObject implements IRenderableObject {
     private static AircraftsDetailsDisplay instance = null;
     public static class AircraftDetails {
-        public AircraftDetails(float speed, float attitude, AirTrafficElement airTrafficElement) {
+        public AircraftDetails(float speed, float altitude, AirTrafficElement airTrafficElement) {
             this.speed = speed;
-            this.attitude = attitude;
+            this.altitude = altitude;
             this.airTrafficElement = airTrafficElement;
         }
         public float speed;
-        public float attitude;
+        public float altitude;
         public AirTrafficElement airTrafficElement;
     }
     private final HashMap<String, AircraftDetails> aircraftDetailsMap = new HashMap<>();
@@ -57,8 +57,8 @@ public class AircraftsDetailsDisplay extends SimulationObject implements IRender
         return instance;
     }
 
-    public void update(String name, float speed, float attitude, AirTrafficElement airTrafficElement) {
-        aircraftDetailsMap.put(name, new AircraftDetails(speed, attitude, airTrafficElement));
+    public void update(String name, float speed, float altitude, AirTrafficElement airTrafficElement) {
+        aircraftDetailsMap.put(name, new AircraftDetails(speed, altitude, airTrafficElement));
     }
 
     private void _renderAircraftsDetails(long nvg) {
@@ -68,13 +68,13 @@ public class AircraftsDetailsDisplay extends SimulationObject implements IRender
         for (Map.Entry<String, AircraftDetails> entry : aircraftDetailsMap.entrySet()) {
             String name = entry.getKey();
             float speed = entry.getValue().speed;
-            float attitude = entry.getValue().attitude;
+            float altitude = entry.getValue().altitude;
             AirTrafficElement fragment = entry.getValue().airTrafficElement;
 
-            nvgText(nvg, 30, 460 + i*30 , name);
-            nvgText(nvg, 80, 460 + i*30 , String.valueOf(speed));
-            nvgText(nvg, 140, 460 + i*30, String.valueOf(attitude));
-            nvgText(nvg, 200, 460 + i*30, fragment.toString());
+            nvgText(nvg, 10, 400 + i*30 , name);
+            nvgText(nvg, 60, 400 + i*30 , String.valueOf(speed));
+            nvgText(nvg, 120, 400 + i*30, String.valueOf(altitude));
+            nvgText(nvg, 180, 400 + i*30, fragment.toString());
             i++;
         }
     }
@@ -82,10 +82,10 @@ public class AircraftsDetailsDisplay extends SimulationObject implements IRender
     private static void _renderLabels(long nvg) {
         nvgFontSize(nvg, 13.0f);
         nvgFillColor(nvg,  GraphicsUtil.colorFromRgb(66, 138, 236));
-        nvgText(nvg, 30, 460, "Plane");
-        nvgText(nvg, 80, 460, "Speed");
-        nvgText(nvg, 140, 460, "Attitude");
-        nvgText(nvg, 200, 460, "Location");
+        nvgText(nvg, 10, 400, "Plane");
+        nvgText(nvg, 60, 400, "Speed");
+        nvgText(nvg, 120, 400, "Altitude");
+        nvgText(nvg, 180, 400, "Location");
     }
 
     private static void _renderTable(long nvg) {

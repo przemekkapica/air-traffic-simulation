@@ -78,7 +78,7 @@ public class AircraftAgent extends Agent {
 
     private void addBehaviors(Aircraft aircraft, AirwaysManager.AirwayPriority priority, DFAgentDescription description) {
         addBehaviour(ForwardArrivalInfoToAirportBehavior.create(aircraft));
-        addBehaviour(ConfigureVelocityBehaviour.create(aircraft));
+        addBehaviour(ConfigureVelocityBehaviour.create(this, aircraft, 1000));
         addBehaviour(TakeOffBehaviour.create(aircraft));
         addBehaviour(AcceptNewAirwayProposalBehaviour.create(aircraft, finalDestination, priority));
         addBehaviour(SetNewAirwayBehaviour.create(aircraft, description));

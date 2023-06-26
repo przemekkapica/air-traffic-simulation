@@ -11,6 +11,7 @@ import util.GraphicsUtil;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import static org.lwjgl.nanovg.NanoVG.*;
 
@@ -20,7 +21,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     private float speed;
     private NVGColor color;
 
-    private float attitude;
+    private float altitude;
     public Vector2f position = new Vector2f();
 
     public Queue<String> airports = new ArrayDeque<>();
@@ -37,10 +38,10 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
     private final AircraftsDetailsDisplay detailsDisplay;
 
-    public Aircraft(String name, float maxSpeed, float initialAttitude, AirTrafficElement fragment) {
+    public Aircraft(String name, float maxSpeed, float initialAltitude, AirTrafficElement fragment) {
         super(name);
 
-        attitude = initialAttitude;
+        altitude = initialAltitude;
         this.maxSpeed = Math.abs(maxSpeed);
         speed = 0.0f;
         airwayFragment = fragment;
@@ -51,7 +52,6 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
         detailsDisplay = AircraftsDetailsDisplay.getInstance();
     }
-
     @Override
     public void update(float deltaTime) {
         float deltaLocation = speed * deltaTime;
@@ -71,7 +71,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
             airwayFragment.enter(this);
         }
-        detailsDisplay.update(getName(), speed, attitude, airwayFragment);
+        detailsDisplay.update(getName(), speed, altitude, airwayFragment);
     }
 
 
@@ -89,12 +89,11 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
             position = airport.getPosition();
         }
 
-        _renderIcon(nvg);
-
-        _renderLabel(nvg);
+        renderIcon(nvg);
+        renderLabel(nvg);
     }
 
-    private void _renderIcon(long nvg) {
+    private void renderIcon(long nvg) {
         final GraphicsUtil graphicsUtil = new GraphicsUtil();
 
         int aircraftIcon = -1;
@@ -119,14 +118,12 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         }
     }
 
-    private void _renderLabel(long nvg) {
+    private void renderLabel(long nvg) {
         nvgFillColor(nvg, GraphicsUtil.colorFromRgb(0, 0, 0));
         nvgFontSize(nvg, 13.0f);
         nvgFontFace(nvg, "font");
         nvgTextAlign(nvg, NVG_ALIGN_MIDDLE | NVG_ALIGN_BOTTOM);
         nvgText(nvg, position.x + 14, position.y, String.format("%s", getName()));
-//        nvgText(nvg, position.x + 14, position.y, String.format("speed: %.2f", speed));
-//        nvgText(nvg, position.x + 14, position.y + 15, String.format("attitude: %.2f", attitude));
     }
 
     public void setColor(int r, int g, int b) {
@@ -185,10 +182,9 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
             }
         }
     }
-
     public void ascend_descend() {
-        while (attitude < Constants.MAX_ATTITUDE) {
-            setSpeed(attitude + 100);
+        while (altitude < Constants.MAX_ALTITUDE) {
+            setSpeed(altitude + 100);
             try {
                 TimeUnit.MILLISECONDS.sleep(50);
             } catch (InterruptedException e) {
@@ -211,8 +207,26 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
     }
 
-    public void descent() {
+    public void ascend() {
+        while (altitude < 400.0f) {
+            setAltitude(altitude + 10);
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
 
+    public void descend() {
+        while (altitude > 0) {
+            setAltitude(altitude - 10);
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     public boolean isRoadStable() {
@@ -235,8 +249,8 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         return airwayFragment.getName().contains("segment");
     }
 
-    public void setAttitude(float attitude) {
-        this.attitude = attitude;
+    public void setAltitude(float altitude) {
+        this.altitude = altitude;
     }
 
     public void updatePositionFrom(String positionString) {
@@ -253,6 +267,9 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         }
     }
 
+    public Vector2f getPosition() {
+        return position;
+    }
 
     public boolean isTooClose(Aircraft other) {
         // Calculate the Euclidean distance between this aircraft and the other aircraft
@@ -264,6 +281,32 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     public void adjustAltitude() {
         // Assume that an "altitude" attribute exists and it's a float.
         // "ALTITUDE_CHANGE" is the amount by which to change the altitude.
-        this.attitude += Constants.ATTITUDE_CHANGE;
+        this.altitude += Constants.ALTITUDE_CHANGE;
     }
+
+    public void takeoff() {
+        while (altitude < 400.0f || speed < maxSpeed) {
+            setAltitude(altitude + ThreadLocalRandom.current().nextInt(30, 80));
+            setSpeed(speed + ThreadLocalRandom.current().nextInt(8, 16));
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
+    public void alternate() {
+            float altitude_change = ThreadLocalRandom.current().nextInt(-5, 5);
+            float speed_change = ThreadLocalRandom.current().nextInt(-9, 9);
+            altitude += altitude_change;
+            speed += speed_change;
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+
 }

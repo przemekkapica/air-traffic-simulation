@@ -54,7 +54,6 @@ public class HandleMalfunctionBehaviour extends CyclicBehaviour {
             }
 
             sendNewRouteProposals(parsedSegment, affectedAircrafts);
-
         }
     }
 
