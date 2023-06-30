@@ -90,7 +90,4 @@ public class HandleMalfunctionBehaviour extends CyclicBehaviour {
 
         return affectedAircrafts;
     }
-
-
-
 }

@@ -35,7 +35,6 @@ public class CheckProximityBehaviour extends CyclicBehaviour {
 
             Aircraft aircraft = aircrafts.get(senderAID);
 
-
             // The message content updates the current location of the aircraft
             if (aircraft != null) {
                 aircraft.updatePositionFrom(message.getContent());
@@ -58,6 +57,7 @@ public class CheckProximityBehaviour extends CyclicBehaviour {
         }
     }
 
+    
     private float calculateDistance(Vector2f aircraft1, Vector2f aircraft2) {
         return 0.0f;
     }

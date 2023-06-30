@@ -20,6 +20,7 @@ public class AirwaysAdministratorAgent extends Agent {
 
     @Override
     protected void setup() {
+
         super.setup();
 
         extractParams();
