@@ -15,24 +15,27 @@ import static util.Constants.AIRPORT_PREFIX;
 public class GraphDescriptor {
     public static Map<String, List<AirwaysManager.RouteDescription>> describeAirway(List<String> segments, List<String> costs) {
         Map<String, List<AirwaysManager.RouteDescription>> plan = new HashMap<>();
+
         int counter = 0;
-        for (String s : segments) {
+        for (String segment : segments) {
+            Pair<String, String> parsed = SegmentParser.parse(segment);
+            String sourceAirport = AIRPORT_PREFIX + parsed.getValue0();
+            String destinationAirport = AIRPORT_PREFIX + parsed.getValue1();
 
-            Pair<String, String> parsed = SegmentParser.parse(s);
+            plan.putIfAbsent(sourceAirport, new ArrayList<>());
 
-            if (!plan.containsKey(AIRPORT_PREFIX + parsed.getValue0()))
-                plan.put(AIRPORT_PREFIX + parsed.getValue0(), new ArrayList<>() {});
-
-            Airway segment = (Airway)Simulation.getScene().getObject("segment_" + s);
+            Airway segmentObject = (Airway) Simulation.getScene().getObject("segment_" + segment);
 
             AirwaysManager.RouteDescription description = new AirwaysManager.RouteDescription(
-                    AIRPORT_PREFIX + parsed.getValue1(),
+                    destinationAirport,
                     Float.parseFloat(costs.get(counter)),
-                    segment.getLength()
+                    segmentObject.getLength()
             );
-            plan.get(AIRPORT_PREFIX + parsed.getValue0()).add(description);
+            plan.get(sourceAirport).add(description);
+
             counter++;
         }
+
         return plan;
     }
 }

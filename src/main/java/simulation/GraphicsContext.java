@@ -21,9 +21,28 @@ public class GraphicsContext {
     private final long nvg;
     private final IntBuffer bufferWidth;
     private final IntBuffer bufferHeight;
-    private final GraphicsUtil graphicsUtil;
     private int bgImage;
 
+    public GraphicsContext(long window) {
+        this.window = window;
+
+        // allocate buffers for window width and height
+        bufferWidth = BufferUtils.createIntBuffer(1);
+        bufferHeight = BufferUtils.createIntBuffer(1);
+
+        GraphicsUtil graphicsUtil = new GraphicsUtil();
+
+        nvg = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
+
+        try {
+            loadFont("font", "/font.otf");
+            bgImage = graphicsUtil.loadImage("/images/map.jpg", nvg);  // Load the background image
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        nvgFontFace(nvg, "font");
+    }
 
     public void loadFont(String name, String file) throws RuntimeException, IOException {
         byte[] fontBytes = null;
@@ -49,26 +68,7 @@ public class GraphicsContext {
         }
     }
 
-    public GraphicsContext(long window) {
-        this.window = window;
 
-        // allocate buffers for window width and height
-        bufferWidth = BufferUtils.createIntBuffer(1);
-        bufferHeight = BufferUtils.createIntBuffer(1);
-
-        graphicsUtil = new GraphicsUtil();
-
-        nvg = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
-
-        try {
-            loadFont("font", "/font.otf");
-            bgImage = graphicsUtil.loadImage("/images/map.jpg", nvg);  // Load the background image
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        nvgFontFace(nvg, "font");
-    }
 
     // private for this package
     void startFrame() {

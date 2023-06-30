@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 import static org.lwjgl.nanovg.NanoVG.*;
 
 public class Aircraft extends SimulationObject implements IRenderableObject {
-    private static final NVGColor COlOR = GraphicsUtil.colorFromRgb(11, 102, 52);
+    private static final NVGColor COLOR = GraphicsUtil.colorFromRgb(11, 102, 52);
     private final float maxSpeed;
     private float speed;
     private NVGColor color;
@@ -28,7 +28,7 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
     public Queue<String> segments = new ArrayDeque<>();
 
-    private  boolean isRoadStable = true;
+    private boolean isRoadStable = true;
 
     // location data
     private AirTrafficElement airwayFragment;
@@ -46,19 +46,19 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
         speed = 0.0f;
         airwayFragment = fragment;
         location = 0.0f;
-        color = Aircraft.COlOR;
+        color = Aircraft.COLOR;
 
         airwayFragment.enter(this);
 
         detailsDisplay = AircraftsDetailsDisplay.getInstance();
     }
+
     @Override
     public void update(float deltaTime) {
         float deltaLocation = speed * deltaTime;
         location = location + deltaLocation;
-        //if (speed < maxSpeed) speed = speed+10;
 
-        if (location >= airwayFragment.getLength ()) {
+        if (location >= airwayFragment.getLength()) {
             location = 0.0f;
 
             // leave and go to the next fragment
@@ -66,26 +66,30 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
             airwayFragment = airwayFragment.getNextFragment();
 
             if (airwayFragment == null) {
-                throw new RuntimeException(String.format("aircraft %s out of bounds", getName()));
+                throw new RuntimeException(String.format("Aircraft %s out of bounds", getName()));
             }
 
             airwayFragment.enter(this);
         }
+
         detailsDisplay.update(getName(), speed, altitude, airwayFragment);
     }
 
+    @Override
+    public void glRender(GraphicsContext context) {
+        // Render using OpenGL
+    }
 
     @Override
-    public void glRender(GraphicsContext context) { }
-
-    @Override
-    public void nvgRender(long nvg)  {
-        if (airwayFragment instanceof Airway segment) {
+    public void nvgRender(long nvg) {
+        if (airwayFragment instanceof Airway) {
+            Airway segment = (Airway) airwayFragment;
             Vector2f dir = segment.getDirection();
 
             position = segment.getStartAirport().getPosition();
             position = position.add(dir.mul(location));
-        } else if (airwayFragment instanceof Airport airport) {
+        } else if (airwayFragment instanceof Airport) {
+            Airport airport = (Airport) airwayFragment;
             position = airport.getPosition();
         }
 
@@ -98,11 +102,11 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
 
         int aircraftIcon = -1;
         try {
-             aircraftIcon = graphicsUtil.loadImage("/images/aircraft.png", nvg);
+            aircraftIcon = graphicsUtil.loadImage("/images/aircraft.png", nvg);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // render aircraft icon
+
         try (NVGPaint paint = NVGPaint.calloc()) {
             nvgImagePattern(nvg, position.x - 8, position.y - 16, 30, 30, 0, aircraftIcon, 1, paint);
             nvgBeginPath(nvg);
@@ -148,29 +152,6 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
             }
         }
     }
-    public void accelerate_decelerate() {
-        while (speed < maxSpeed) {
-            setSpeed(speed + 10);
-            try {
-                TimeUnit.MILLISECONDS.sleep(50);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-        try {
-            TimeUnit.MILLISECONDS.sleep(500);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        while (speed > 0) {
-            setSpeed(speed - 10);
-            try {
-                TimeUnit.MILLISECONDS.sleep(50);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-    }
 
     public void decelerate() {
         while (speed > 0) {
@@ -181,30 +162,6 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
                 Thread.currentThread().interrupt();
             }
         }
-    }
-    public void ascend_descend() {
-        while (altitude < Constants.MAX_ALTITUDE) {
-            setSpeed(altitude + 100);
-            try {
-                TimeUnit.MILLISECONDS.sleep(50);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-        try {
-            TimeUnit.MILLISECONDS.sleep(500);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        while (speed > 0) {
-            setSpeed(speed - 100);
-            try {
-                TimeUnit.MILLISECONDS.sleep(50);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-
     }
 
     public void ascend() {
@@ -297,16 +254,14 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     }
 
     public void alternate() {
-            float altitude_change = ThreadLocalRandom.current().nextInt(-5, 5);
-            float speed_change = ThreadLocalRandom.current().nextInt(-9, 9);
-            altitude += altitude_change;
-            speed += speed_change;
-            try {
-                TimeUnit.MILLISECONDS.sleep(50);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+        float altitudeChange = ThreadLocalRandom.current().nextInt(-5, 5);
+        float speedChange = ThreadLocalRandom.current().nextInt(-9, 9);
+        altitude += altitudeChange;
+        speed += speedChange;
+        try {
+            TimeUnit.MILLISECONDS.sleep(50);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
-
-
+    }
 }

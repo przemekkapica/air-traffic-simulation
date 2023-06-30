@@ -33,7 +33,6 @@ public class Airway extends AirTrafficElement implements IRenderableObject {
         length = startAirport.getPosition().distance(endAirport.getPosition());
 
         startAirport.addOutboundSegment(this);
-        endAirport.addInboundSegment(this);
 
         broken = false;
     }
@@ -78,19 +77,8 @@ public class Airway extends AirTrafficElement implements IRenderableObject {
         return pos.sub(startPosition).normalize();
     }
 
-    public Airport getEndAirport() {
-        return endAirport;
-    }
-
     public Airport getStartAirport() {
         return startAirport;
     }
 
-    public boolean isBroken() {
-        return broken;
-    }
-
-    public void setBroken(boolean newStatus) {
-        broken = newStatus;
-    }
 }

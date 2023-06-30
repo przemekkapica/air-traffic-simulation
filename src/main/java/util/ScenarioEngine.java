@@ -21,53 +21,39 @@ public class ScenarioEngine {
     }
 
     public void runScenario() throws FileNotFoundException, StaleProxyException {
-        Scanner sc = new Scanner(new File("src/main/resources/scenarios/scenario.csv"));
-        sc.useDelimiter(";");
-        while(sc.hasNextLine())  {
-            String data = sc.nextLine();
-
-            int start = data.indexOf(";") + 1;
-            int stop = data.indexOf(";", data.indexOf(";") + 1);
-            String params = data.substring(start, stop);
-
-            if (data.contains("segment")) {
-                createSegment(params);
-            } else if (data.contains("airport")) {
-                createAirport(params);
-            } else if (data.contains("aircraft")) {
-                createAircraft(params);
-            } else if (data.contains("administrator")) {
-                createAdministrator(params);
+        File file = new File("src/main/resources/scenarios/scenario.csv");
+        try (Scanner sc = new Scanner(file)) {
+            sc.useDelimiter(";");
+            while (sc.hasNextLine()) {
+                String data = sc.nextLine();
+                processScenarioData(data);
             }
         }
-        sc.close();
         //containerController.createNewAgent("Gui Guy", "jade.tools.rma.rma", null).start();
     }
 
-    private void createSegment(String agentParams) throws StaleProxyException {
-        Object[] params = getAgentParams(agentParams);
-        System.out.println(Arrays.stream(params).findFirst().get().toString());
-        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.segment.SegmentAgent", params).start();
+    private void processScenarioData(String data) throws StaleProxyException {
+        int start = data.indexOf(";") + 1;
+        int stop = data.indexOf(";", data.indexOf(";") + 1);
+        String params = data.substring(start, stop);
+
+        if (data.contains("airport")) {
+            createAgent("agents.atc.ATCAgent", params);
+        } else if (data.contains("aircraft")) {
+            createAgent("agents.aircraft.AircraftAgent", params);
+        } else if (data.contains("administrator")) {
+            createAgent("agents.airways_administrator.AirwaysAdministratorAgent", params);
+        }
     }
 
-    private void createAirport(String agentParams) throws StaleProxyException {
+    private void createAgent(String agentClass, String agentParams) throws StaleProxyException {
         Object[] params = getAgentParams(agentParams);
-        System.out.println(Arrays.stream(params).findFirst().get().toString());
-        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.atc.ATCAgent", params).start();
-    }
-    private void createAircraft(String agentParams) throws StaleProxyException {
-        Object[] params = getAgentParams(agentParams);
-        System.out.println(Arrays.stream(params).findFirst().get().toString());
-        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.aircraft.AircraftAgent", params).start();
-    }
-    private void createAdministrator(String agentParams) throws StaleProxyException {
-        Object[] params = getAgentParams(agentParams);
-        containerController.createNewAgent(Arrays.stream(params).findFirst().get().toString(), "agents.airways_administrator.AirwaysAdministratorAgent", params).start();
+        String agentName = Arrays.stream(params).findFirst().get().toString();
+        System.out.println(agentName);
+        containerController.createNewAgent(agentName, agentClass, params).start();
     }
 
     private Object[] getAgentParams(String agentParams) {
         return agentParams.split(",");
     }
-
 }
-

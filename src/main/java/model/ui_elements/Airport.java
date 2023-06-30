@@ -21,7 +21,6 @@ public class Airport extends AirTrafficElement implements IPositionedObject, IRe
     private static final NVGColor COlOR = GraphicsUtil.colorFromRgb(67, 138, 236);
 
     private final Set<Airway> outbound;
-    private final Set<Airway> inbound;
 
     private Airway nextSegment;
     private final Vector2f position;
@@ -33,7 +32,6 @@ public class Airport extends AirTrafficElement implements IPositionedObject, IRe
         this.position = new Vector2f(position.x, position.y);
 
         outbound = new HashSet<>();
-        inbound = new HashSet<>();
     }
 
     @Override
@@ -79,10 +77,6 @@ public class Airport extends AirTrafficElement implements IPositionedObject, IRe
         }
     }
 
-    void addInboundSegment(Airway segment) {
-        inbound.add(segment);
-    }
-
     public void setNextSegmentByName(String name) {
         for (Airway segment : outbound) {
             if (segment.getName().equals("segment_" + name)) {
@@ -92,6 +86,4 @@ public class Airport extends AirTrafficElement implements IPositionedObject, IRe
         }
         System.out.println("ERROR You cannot go in that direction");
     }
-
-
 }

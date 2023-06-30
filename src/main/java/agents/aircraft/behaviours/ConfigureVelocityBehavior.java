@@ -13,33 +13,25 @@ import java.util.Objects;
 import static util.Constants.FINAL_DESTINATION;
 import static jade.lang.acl.ACLMessage.ACCEPT_PROPOSAL;
 
-public class ConfigureVelocityBehaviour extends TickerBehaviour {
+public class ConfigureVelocityBehavior extends TickerBehaviour {
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(ACCEPT_PROPOSAL);
     private final Aircraft aircraft;
 
-    public ConfigureVelocityBehaviour(Agent agent, Aircraft aircraft, long period) {
+    public ConfigureVelocityBehavior(Agent agent, Aircraft aircraft, long period) {
         super(agent, period);
         this.aircraft = aircraft;
     }
 
     public static Behaviour create(AircraftAgent agent, Aircraft aircraft, int period) {
-        return new ConfigureVelocityBehaviour(agent, aircraft, period);
+        return new ConfigureVelocityBehavior(agent, aircraft, period);
     }
 
-
-//    @Override
-//    public void action() {
-//
-//    }
 
     @Override
     protected void onTick() {
         final ACLMessage message = myAgent.receive(messageTemplate);
 
         if (Objects.nonNull(message)) {
-//            float speed = Float.parseFloat(message.getContent());
-//          aircraft.setSpeed(Float.parseFloat(speed));
-//            aircraft.accelerate(speed);
 
             while (!aircraft.isTraversingSegment()) {
                 aircraft.alternate();

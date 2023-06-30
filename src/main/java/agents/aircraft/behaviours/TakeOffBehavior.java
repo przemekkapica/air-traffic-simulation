@@ -14,16 +14,15 @@ import java.io.IOException;
 import static jade.lang.acl.ACLMessage.ACCEPT_PROPOSAL;
 import static simulation.Simulation.getScene;
 
-public class TakeOffBehaviour extends OneShotBehaviour {
-
+public class TakeOffBehavior extends OneShotBehaviour {
     private final Aircraft aircraft;
 
-    public TakeOffBehaviour(Aircraft aircraft) {
+    public TakeOffBehavior(Aircraft aircraft) {
         this.aircraft = aircraft;
     }
 
-    public static TakeOffBehaviour create(Aircraft aircraft) {
-        return new TakeOffBehaviour(aircraft);
+    public static TakeOffBehavior create(Aircraft aircraft) {
+        return new TakeOffBehavior(aircraft);
     }
 
     @Override
@@ -36,29 +35,22 @@ public class TakeOffBehaviour extends OneShotBehaviour {
 
         aircraft.setRoadStable(true);
         aircraft.takeoff();
-//        aircraft.accelerate(aircraft.getMaxSpeed());
-//        aircraft.ascend();
 
         Airport airport = (Airport) Simulation.getScene().getObject(aircraft.airports.remove());
         aircraft.setPreviousAirport(airport);
         airport.setNextSegmentByName(aircraft.segments.remove());
 
-        System.out.println("Sending message to next airport:" + aircraft.airports.peek());
+        System.out.println("Sending message to next airport: " + aircraft.airports.peek());
 
-        final ACLMessage proposal = new ACLMessage(ACLMessage.INFORM);
-        AircraftToAirportParams messageContent = new AircraftToAirportParams();
-        messageContent.setMaxSpeed(aircraft.getMaxSpeed());
-        messageContent.setPreviousAirport(aircraft.getPreviousAirport().getName());
-        aircraft.setPreviousAirport((Airport) getScene().getObject(aircraft.airports.peek()));
+        ACLMessage proposal = createProposalMessage();
 
-        proposal.addReceiver(new AID(aircraft.airports.remove(), AID.ISLOCALNAME));
         try {
-            proposal.setContentObject(messageContent);
+            proposal.setContentObject(createMessageContent());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        myAgent.send(proposal);
 
+        myAgent.send(proposal);
     }
 
     private void sendMessage() throws IOException {
@@ -68,4 +60,19 @@ public class TakeOffBehaviour extends OneShotBehaviour {
         message.setContentObject(plannerParams);
         myAgent.send(message);
     }
+
+    private ACLMessage createProposalMessage() {
+        ACLMessage proposal = new ACLMessage(ACLMessage.INFORM);
+        proposal.addReceiver(new AID(aircraft.airports.remove(), AID.ISLOCALNAME));
+        return proposal;
+    }
+
+    private AircraftToAirportParams createMessageContent() {
+        AircraftToAirportParams messageContent = new AircraftToAirportParams();
+        messageContent.setMaxSpeed(aircraft.getMaxSpeed());
+        messageContent.setPreviousAirport(aircraft.getPreviousAirport().getName());
+        aircraft.setPreviousAirport((Airport) getScene().getObject(aircraft.airports.peek()));
+        return messageContent;
+    }
 }
+

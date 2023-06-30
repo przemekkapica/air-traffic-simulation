@@ -7,13 +7,11 @@ import org.javatuples.Pair;
 import org.joml.Vector2f;
 import model.ui_elements.AircraftsDetailsDisplay;
 import simulation.Simulation;
-import simulation.SimulationObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 
 public class ScenarioManager {
 
@@ -53,7 +51,7 @@ public class ScenarioManager {
         Aircraft aircraft3 = new Aircraft(aircraftNames.get(2), 320.0f, 0.0f, airports[2]);
         Aircraft aircraft4 = new Aircraft(aircraftNames.get(3), 400.0f, 0.0f, airports[3]);
         Aircraft aircraft5 = new Aircraft(aircraftNames.get(4), 330.0f, 0.0f, airports[4]);
-        Aircraft aircraft6 = new Aircraft(aircraftNames.get(5), 320.0f, 0.0f, airports[5]);
+        Aircraft aircraft6 = new Aircraft(aircraftNames.get(5), 520.0f, 0.0f, airports[5]);
         Aircraft aircraft7 = new Aircraft(aircraftNames.get(6), 300.0f, 0.0f, airports[6]);
         Aircraft aircraft8 = new Aircraft(aircraftNames.get(7), 480.0f, 0.0f, airports[7]);
         Aircraft aircraft9 = new Aircraft(aircraftNames.get(8), 420.0f, 0.0f, airports[8]);

@@ -9,16 +9,16 @@ import model.ui_elements.Aircraft;
 
 import static jade.lang.acl.ACLMessage.INFORM;
 
-public class LocationTickerBehaviour extends TickerBehaviour {
+public class LocationTickerBehavior extends TickerBehaviour {
     private final Aircraft aircraft;
 
-    public LocationTickerBehaviour(Agent agent, Aircraft aircraft, long period) {
+    public LocationTickerBehavior(Agent agent, Aircraft aircraft, long period) {
         super(agent, period);
         this.aircraft = aircraft;
     }
 
-    public static LocationTickerBehaviour create(Agent agent, Aircraft aircraft, long period) {
-        return new LocationTickerBehaviour(agent, aircraft, period);
+    public static LocationTickerBehavior create(Agent agent, Aircraft aircraft, long period) {
+        return new LocationTickerBehavior(agent, aircraft, period);
     }
 
     @Override

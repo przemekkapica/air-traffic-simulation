@@ -9,7 +9,7 @@ import java.util.Objects;
 
 import static jade.lang.acl.ACLMessage.INFORM_IF;
 
-public class HandlePlaneArrivalBehaviour extends CyclicBehaviour {
+public class HandlePlaneArrivalBehavior extends CyclicBehaviour {
 
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(INFORM_IF);
 
@@ -25,11 +25,11 @@ public class HandlePlaneArrivalBehaviour extends CyclicBehaviour {
         }
     }
 
-    public static HandlePlaneArrivalBehaviour create(AirwaysManager airwayPlan) {
-        return new HandlePlaneArrivalBehaviour(airwayPlan);
+    public static HandlePlaneArrivalBehavior create(AirwaysManager airwayPlan) {
+        return new HandlePlaneArrivalBehavior(airwayPlan);
     }
 
-    private HandlePlaneArrivalBehaviour(AirwaysManager airwaysManager) {
+    private HandlePlaneArrivalBehavior(AirwaysManager airwaysManager) {
         this.airwaysManager = airwaysManager;
     }
 }

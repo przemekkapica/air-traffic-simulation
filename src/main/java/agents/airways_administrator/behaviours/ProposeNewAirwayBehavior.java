@@ -15,11 +15,11 @@ import java.util.Objects;
 import static jade.lang.acl.ACLMessage.CONFIRM;
 import static jade.lang.acl.ACLMessage.PROPAGATE;
 
-public class ProposeNewAirwayBehaviour extends CyclicBehaviour {
+public class ProposeNewAirwayBehavior extends CyclicBehaviour {
 
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(CONFIRM);
 
-    private AirwaysManager airwaysManager;
+    private final AirwaysManager airwaysManager;
 
     @Override
     public void action() {
@@ -29,14 +29,10 @@ public class ProposeNewAirwayBehaviour extends CyclicBehaviour {
             try {
                 AirwayParams aircraftParams = (AirwayParams)message.getContentObject();
 
-                List<String> newRoute = airwaysManager.findRoute(
-                        aircraftParams.getBeginning(),
-                        aircraftParams.getEnd(),
-                        aircraftParams.getMaxSpeed(),
-                        aircraftParams.getPriority()
-                );
+                List<String> newRoute = airwaysManager.findRoute(aircraftParams.beginning(), aircraftParams.end());
+
                 ACLMessage routeProposal = new ACLMessage(PROPAGATE);
-                System.out.println(message.getSender().getName());
+
                 routeProposal.addReceiver(message.getSender());
                 routeProposal.setContentObject((Serializable) newRoute);
 
@@ -47,11 +43,11 @@ public class ProposeNewAirwayBehaviour extends CyclicBehaviour {
         }
     }
 
-    public static ProposeNewAirwayBehaviour create(AirwaysManager manager) {
-        return new ProposeNewAirwayBehaviour(manager);
+    public static ProposeNewAirwayBehavior create(AirwaysManager manager) {
+        return new ProposeNewAirwayBehavior(manager);
     }
 
-    private ProposeNewAirwayBehaviour(AirwaysManager manager) {
+    private ProposeNewAirwayBehavior(AirwaysManager manager) {
         airwaysManager = manager;
     }
 }

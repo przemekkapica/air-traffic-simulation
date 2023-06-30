@@ -7,7 +7,6 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import model.ui_elements.Aircraft;
-import planner.AirwaysManager;
 import simulation.Simulation;
 
 import static util.Constants.PASSING;
@@ -21,16 +20,13 @@ public class AircraftAgent extends Agent {
 
         final Object[] params = getArguments();
         if (params.length < 4) {
-            System.out.println("Usage [aircraft name], [priority], [starting point], [pair <segment name, airport name>]");
+            System.out.println("Usage [aircraft name], [starting point], [pair <segment name, airport name>]");
             doDelete();
         }
         String aircraftName = params[0].toString();
-        String priorityName = params[1].toString();
 
         Aircraft aircraft = (Aircraft)Simulation.getScene().getObject(aircraftName);
         //aircraft.pos.x
-
-        AirwaysManager.AirwayPriority priority = getPriority(priorityName);
 
         setSegmentsAndDestination(params, aircraft);
 
@@ -39,16 +35,7 @@ public class AircraftAgent extends Agent {
 
         addServicesForSegments(aircraft, description);
 
-        addBehaviors(aircraft, priority, description);
-    }
-
-    private static AirwaysManager.AirwayPriority getPriority(String priorityName) {
-        return switch (priorityName) {
-            case "DISTANCE" -> AirwaysManager.AirwayPriority.DISTANCE;
-            case "COST" -> AirwaysManager.AirwayPriority.COST;
-            case "LOAD" -> AirwaysManager.AirwayPriority.LOAD;
-            default -> AirwaysManager.AirwayPriority.DEFAULT;
-        };
+        addBehaviors(aircraft, description);
     }
 
     private void addServicesForSegments(Aircraft aircraft, DFAgentDescription description) {
@@ -76,13 +63,13 @@ public class AircraftAgent extends Agent {
         }
     }
 
-    private void addBehaviors(Aircraft aircraft, AirwaysManager.AirwayPriority priority, DFAgentDescription description) {
+    private void addBehaviors(Aircraft aircraft, DFAgentDescription description) {
         addBehaviour(ForwardArrivalInfoToAirportBehavior.create(aircraft));
-        addBehaviour(ConfigureVelocityBehaviour.create(this, aircraft, 1000));
-        addBehaviour(TakeOffBehaviour.create(aircraft));
-        addBehaviour(AcceptNewAirwayProposalBehaviour.create(aircraft, finalDestination, priority));
-        addBehaviour(SetNewAirwayBehaviour.create(aircraft, description));
-        addBehaviour(LocationTickerBehaviour.create(this, aircraft, 1000));
-        addBehaviour(AdjustAltitudeBehaviour.create(aircraft));
+        addBehaviour(ConfigureVelocityBehavior.create(this, aircraft, 1000));
+        addBehaviour(TakeOffBehavior.create(aircraft));
+        addBehaviour(AcceptNewAirwayProposalBehavior.create(aircraft, finalDestination));
+        addBehaviour(SetNewAirwayBehavior.create(aircraft, description));
+        addBehaviour(LocationTickerBehavior.create(this, aircraft, 1000));
+        addBehaviour(AdjustAltitudeBehavior.create(aircraft));
     }
 }

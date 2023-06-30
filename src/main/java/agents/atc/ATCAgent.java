@@ -1,8 +1,8 @@
 package agents.atc;
 
 import util.Constants;
-import agents.atc.behaviours.ChangePlaneDirectionBehaviour;
-import agents.atc.behaviours.ReceivePlaneArrivalBehaviour;
+import agents.atc.behaviours.ChangePlaneDirectionBehavior;
+import agents.atc.behaviours.ReceivePlaneArrivalBehavior;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -21,6 +21,7 @@ public class ATCAgent extends Agent {
     protected void setup() {
         super.setup();
 
+        // Extract airport and register as an airport agent
         Airport airport = extractParams();
 
         DFAgentDescription dfDesc = new DFAgentDescription();
@@ -38,6 +39,7 @@ public class ATCAgent extends Agent {
             exception.printStackTrace();
         }
 
+        // Add behaviors for receiving plane arrivals and changing plane direction
         addBehaviors(airport);
     }
 
@@ -53,8 +55,11 @@ public class ATCAgent extends Agent {
     }
 
     private void addBehaviors(Airport airport) {
-        addBehaviour(ReceivePlaneArrivalBehaviour.create(airport));
-        addBehaviour(ChangePlaneDirectionBehaviour.create(airport));
+        // Add behavior for receiving plane arrivals
+        addBehaviour(ReceivePlaneArrivalBehavior.create(airport));
+
+        // Add behavior for changing plane direction
+        addBehaviour(ChangePlaneDirectionBehavior.create(airport));
     }
 
     private Airport extractParams() {
@@ -63,12 +68,19 @@ public class ATCAgent extends Agent {
             System.out.println("Usage [airport name ], [airports separated by comas]");
             doDelete();
         }
+
+        // Extract airport name
         String airportName = params[0].toString();
+
+        // Get airport object from simulation scene
         Airport airport = (Airport) Simulation.getScene().getObject(airportName);
 
+        // Extract outgoing airports
         for (int i = 1; i < params.length; ++i) {
             outgoing.add(params[i].toString());
         }
+
         return airport;
     }
 }
+

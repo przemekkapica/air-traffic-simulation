@@ -10,16 +10,16 @@ import java.util.Objects;
 
 import static jade.lang.acl.ACLMessage.INFORM;
 
-public class AdjustAltitudeBehaviour extends CyclicBehaviour {
+public class AdjustAltitudeBehavior extends CyclicBehaviour {
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(INFORM);
     private final Aircraft aircraft;
 
-    public AdjustAltitudeBehaviour(Aircraft aircraft) {
+    public AdjustAltitudeBehavior(Aircraft aircraft) {
         this.aircraft = aircraft;
     }
 
-    public static AdjustAltitudeBehaviour create(Aircraft aircraft) {
-        return new AdjustAltitudeBehaviour(aircraft);
+    public static AdjustAltitudeBehavior create(Aircraft aircraft) {
+        return new AdjustAltitudeBehavior(aircraft);
     }
 
     @Override

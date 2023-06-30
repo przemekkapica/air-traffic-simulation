@@ -11,11 +11,11 @@ import java.util.Objects;
 
 import static jade.lang.acl.ACLMessage.ACCEPT_PROPOSAL;
 
-public class AcceptAirwayBehaviour extends CyclicBehaviour {
+public class AcceptAirwayBehavior extends CyclicBehaviour {
 
     private final MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(ACCEPT_PROPOSAL);
 
-    private AirwaysManager airwaysManager;
+    private final AirwaysManager airwaysManager;
 
     @Override
     public void action() {
@@ -25,18 +25,18 @@ public class AcceptAirwayBehaviour extends CyclicBehaviour {
             try {
                 AirwayRegistrationParams aircraft = (AirwayRegistrationParams)message.getContentObject();
 
-                airwaysManager.acceptRoute(aircraft.route(), aircraft.name(), aircraft.maxSpeed());
+                airwaysManager.acceptRoute(aircraft.route(), aircraft.name());
             } catch (UnreadableException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    public static AcceptAirwayBehaviour create(AirwaysManager manager) {
-        return new AcceptAirwayBehaviour(manager);
+    public static AcceptAirwayBehavior create(AirwaysManager manager) {
+        return new AcceptAirwayBehavior(manager);
     }
 
-    private AcceptAirwayBehaviour(AirwaysManager manager) {
+    private AcceptAirwayBehavior(AirwaysManager manager) {
         airwaysManager = manager;
     }
 }
