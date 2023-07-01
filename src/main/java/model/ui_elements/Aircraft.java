@@ -216,7 +216,6 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
             throw new IllegalArgumentException("Expected two coordinates, got: " + positionString);
         }
         try {
-            // Update the pos attribute, which is a Vector2f object
             this.position.x = Float.parseFloat(split[0]);
             this.position.y = Float.parseFloat(split[1]);
         } catch (NumberFormatException e) {
@@ -231,13 +230,10 @@ public class Aircraft extends SimulationObject implements IRenderableObject {
     public boolean isTooClose(Aircraft other) {
         // Calculate the Euclidean distance between this aircraft and the other aircraft
         double distance = Math.sqrt(Math.pow(this.position.x - other.position.x, 2) + Math.pow(this.position.y - other.position.y, 2));
-        // Compare the distance with the minimum allowed distance
         return distance < Constants.MINIMUM_DISTANCE;
     }
 
     public void adjustAltitude() {
-        // Assume that an "altitude" attribute exists and it's a float.
-        // "ALTITUDE_CHANGE" is the amount by which to change the altitude.
         this.altitude += Constants.ALTITUDE_CHANGE;
     }
 

@@ -29,7 +29,6 @@ public class ScenarioEngine {
                 processScenarioData(data);
             }
         }
-        //containerController.createNewAgent("Gui Guy", "jade.tools.rma.rma", null).start();
     }
 
     private void processScenarioData(String data) throws StaleProxyException {
